@@ -1,0 +1,311 @@
+#profil-content .box-profil {
+    width: 50vw;
+    height: 250px;
+    transform: translateY(-45%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#profil-content .avatars {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    margin-right: 20px;
+}
+
+#profil-content .avatars img {
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#profil-content .box-profil .avatars .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#profil-content .box-profil .avatars:hover .overlay {
+    opacity: 1;
+}
+
+#profil-content .box-profil .overlay label {
+    color: white;
+    cursor: pointer;
+    font-size: 50px;
+}
+
+#profil-content .user-info {
+    flex: 1;
+    color: var(--text-color);
+    box-sizing: border-box;
+    width: calc(100% - 250px);
+    height: 50%;
+}
+
+#profil-content .username-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+}
+
+#username-profil {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+#profil-content .user_data {
+    display: flex;
+    width: 80%;
+    height: 50%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#profil-content .data-element {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 18%;
+    height: 70%;
+    border-bottom: 1px solid var(--text-color);
+}
+
+#profil-content .elo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#profil-content .data-element i{
+    color: var(--text-color);
+    margin-right: 10px;
+}
+
+#profil-content .edit-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    margin-left: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline;
+}
+
+/* EDIT PANEL */
+
+#profil-content .edit-panel {
+    position: fixed;
+    left: -100%;
+    top: 8%;
+    width: 300px;
+    height: 100%;
+    background-color: var(--to-teal-2-rgba);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    padding: 20px;
+    z-index: 1000;
+    color: var(--text-color);
+}
+
+#profil-content .edit-panel.active {
+    left: 0;
+}
+
+#profil-content .top-panel {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+
+#profil-content .bot-panel {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+
+#profil-content .line-edit-profil {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+#profil-content .valid-indicator {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#profil-content .warp-input {
+    position: relative;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+#profil-content .warp-input input {
+    width: calc(100% - 40px);
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    background: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    color: var(--text-color);
+}
+
+#profil-content .input-label {
+    position: absolute;
+    top: -15px;
+    left: 0px;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    color: var(--text-color);
+    font-size: 15px;
+    transition: all 0.3s;
+    pointer-events: none;
+}
+
+#profil-content .form-btn {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#profil-content .form-btn button {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--to-teal-4-rgba);
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+    transition: ease-in-out 0.3s;
+}
+
+#profil-content .form-btn button:hover {
+    background-color: var(--text-color);
+    color: var(--to-teal-4-rgba);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+#profil-content .valid-indicator {
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#profil-content .warp-input input:focus+.input-label+.valid-indicator,
+#profil-content .warp-input input.filled+.input-label+.valid-indicator {
+    opacity: 1;
+}
+
+#profil-content .valid-indicator i {
+    font-size: 16px;
+}
+
+#profil-content .valid {
+    color: #00cc00;
+}
+
+#profil-content .invalid {
+    color: #cc0000;
+}
+
+
+#edit-password-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+#edit-password-container button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#edit-password-panel {
+    position: fixed;
+    left: 0%;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: var(--to-teal-2-rgba);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    padding: 20px;
+    z-index: 1000;
+    color: var(--text-color);
+    display: none;
+}
+
+#edit-password-panel.active {
+    display: block;
+}
+
+#edit-password-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+    transition: ease-in-out 0.3s;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+#edit-password-btn:hover {
+    background-color: var(--text-color);
+    color: var(--to-teal-2-rgba);
+}

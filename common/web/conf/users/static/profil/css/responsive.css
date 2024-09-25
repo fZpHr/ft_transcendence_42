@@ -1,0 +1,140 @@
+@media screen and (min-width: 1024px) and (max-width: 1400px)  {
+    #username-profil {
+        font-size: 2rem;
+    }
+
+    #profil-content .user_data {
+        width: 100%;
+    }
+    
+    #profil-content .data-element {
+        width: 20%;
+    }
+
+    #profil-content .box-profil {
+        height: 200px;
+    }
+
+    #profil-content .avatars {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    #profil-content .banner-content {
+        height: 30vh;
+    }
+
+    #profil-content .user_data {
+        width: 100%;
+    }
+
+    #profil-content .data-element {
+        width: 20%;
+    }
+
+    #profil-content .box-profil {
+        height: fit-content;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #profil-content .data-element {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #profil-content .box-skill {
+        width: 70%;
+        margin-top: -90px;
+    }
+
+    #profil-content .avatars {
+        margin: 0;
+    }
+
+    #profil-content .user-info {
+        margin: 0;
+        width: 75%;
+        text-align: center;
+    }
+
+    #profil-content .username-container {
+        justify-content: center;
+    }
+
+    #username-profil {
+        font-size: 1.75rem;
+    }
+
+    #profil-content .match-winner {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    #profil-content .box-profil {
+        width: 60%;
+    }
+
+    #profil-content .avatars {
+        width: 180px;
+        height: 180px;
+    }
+
+    #profil-content .user-info {
+        width: 100%;
+    }
+
+    #profil-content .box-skill {
+        width: 80%;
+    }
+
+    #username-profil {
+        font-size: 1.60rem;
+    }
+
+    #profil-content .match {
+        flex-direction: column;
+        width: 80%;
+        padding: 10px;
+    }
+
+    #profil-content .box-skill span.title {
+        font-size: 1.5rem;
+    }
+
+    #profil-content .player-info {
+        width: 80%;
+    }
+
+    #profil-content .match-elo {
+        width: 80%;
+        justify-content: space-around;
+    }
+
+    #profil-content .split-match,
+    #profil-content .match-winner,
+    #profil-content .match-info,
+    #profil-content .legend-item {
+        display: none;
+    }
+
+    #profil-content .box-profil {
+        width: 80%;
+    }
+
+    #profil-content .box-skill {
+        width: 90%;
+    }
+
+    #profil-content .box-skill span.title {
+        font-size: 1.2rem;
+    }
+
+}

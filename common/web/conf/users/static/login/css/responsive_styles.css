@@ -1,0 +1,90 @@
+/* responsive_styles#login-content .css */
+@media screen and (min-width: 1024px) and (max-width: 1400px) {
+    #login-content .warp-login {
+        width: 50vw;
+    }
+
+    .demo {
+        width: 50vw;
+    }
+
+    #login-content .container-login {
+        width: 100%;
+    }
+
+    #login-content .warp-form {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    #login-content .warp-login {
+        width: 100vw;
+    }
+
+    .demo {
+        display: none;
+    }
+
+    #login-content .container-login {
+        width: 90%;
+    }
+
+    #login-content .warp-form {
+        width: 70%;
+    }
+
+    #login-content .form-title h1 {
+        font-size: 40px;
+    }
+
+    #login-content .chose-form button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    #login-content .form-btn button {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    #login-content .warp-login {
+        align-items: start;
+        padding-top: 100px;
+    }
+
+    #login-content .container-login {
+        width: 100%;
+    }
+
+    #login-content .warp-input {
+        width: 100%;
+    }
+
+    #login-content .form-title h1 {
+        font-size: 30px;
+    }
+
+    #login-content .chose-form {
+        flex-direction: column;
+    }
+
+    #login-content .chose-form button {
+        margin-bottom: 10px;
+    }
+
+    #login-content .warp-input input {
+        font-size: 12px;
+    }
+
+    #login-content .form-btn button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #login-content .connexion-btn {
+        padding: 5px 20px;
+        font-size: 16px;
+    }
+}

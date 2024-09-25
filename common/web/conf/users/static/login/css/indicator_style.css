@@ -1,0 +1,42 @@
+/* indicator_styles#login-content .css */
+#login-content .valid-indicator {
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#login-content .warp-input input:focus+.input-label+.valid-indicator,
+#login-content .warp-input input.filled+.input-label+.valid-indicator {
+    opacity: 1;
+}
+
+#login-content .valid-indicator i {
+    font-size: 16px;
+}
+
+#login-content .valid {
+    color: #00cc00;
+}
+
+#login-content .invalid {
+    color: #cc0000;
+}
+
+#login-content .warp-error {
+    font-size: 12px;
+}
+
+button[type="submit"]:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    filter: blur(1px);
+}
