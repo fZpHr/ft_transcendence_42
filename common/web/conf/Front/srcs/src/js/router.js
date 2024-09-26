@@ -1,7 +1,19 @@
-console.log('router.js');
+export class Router {
+    constructor(target, routes) {
+        this.target = target;
+        this.routes = routes;
+    }
 
-export async function fetchUSERAPI() {
-    const response = await fetch('https://localhost:8002/users');
-    const data = await response.json();
-    return data;
+    async init() {
+        console.log('router init');
+        const route = window.location.pathname;
+        console.log(this.routes[route]);
+        console.log(this.routes[route].component);
+        this.target.innerHTML = this.routes[route].component.render();
+    }
+
+    async findRoute() {
+        const route = window.location.pathname;
+        return this.routes[route];
+    }
 }

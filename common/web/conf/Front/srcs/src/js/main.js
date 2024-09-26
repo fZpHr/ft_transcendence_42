@@ -1,16 +1,14 @@
-import { fetchUSERAPI } from "@js/router";
+import { Router } from "@js/router";
+import { Route } from "@js/routes";
 
-document.querySelector('#main-content').innerHTML = `
-  <div>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn
-    </p>
-  </div>
-`
-fetchUSERAPI().then(data => {
-  console.log(data);
+//Sert a appele export_components.js
+import component from '@components/export_components';
+
+const target = document.getElementById('main-content')
+const router = new Router(target, {
+  '/truc': new Route('/truc', component.truc),
+  '/autretruc': new Route('/autretruc', component.autretruc)
 });
+
+router.init();
+window.router = router;
