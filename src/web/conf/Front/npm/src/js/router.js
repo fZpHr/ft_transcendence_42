@@ -1,8 +1,15 @@
 console.log('router.js');
 
-export async function register42() {
-    const response = await fetch('https://localhost:8003/register42');
+export async function register42(userData) {
+    const response = await fetch('https://localhost/users/register-42/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    });
     const data = await response.json();
-    if (data.json )
     return data;
 }
+
+window.register42 = register42;
