@@ -15,6 +15,7 @@ __pycache__/
 /data/postgres
 /data/prometheus
 /data/
+/data/vault
 
 # Django specific
 *.log
@@ -128,3 +129,5 @@ celerybeat-schedule
 
 # VSCode
 .vscode/
+
+node_modules/
