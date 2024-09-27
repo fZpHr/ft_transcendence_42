@@ -6,11 +6,10 @@ export class Router {
 
     async init() {
         console.log('router init');
-        const route = window.location.pathname;
+        let route = window.location.pathname;
         this.target.innerHTML = ''
         if (!this.routes[route]) {
-            this.target.innerHTML = '404';
-            return;
+            route = '/404/';
         }
         const customElement = document.createElement(this.routes[route].component);
         this.target.append(customElement);
@@ -36,7 +35,10 @@ export class Router {
     async popStateHandler() {
         window.addEventListener('popstate', async (event) => {
             console.log('popstate');
-            const route = await this.findRoute();
+            let route = await this.findRoute();
+            if (!route) {
+                route = this.routes['/404/'];
+            }
             this.target.innerHTML = '';
             const customElement = document.createElement(route.component);
             this.target.append(customElement);
