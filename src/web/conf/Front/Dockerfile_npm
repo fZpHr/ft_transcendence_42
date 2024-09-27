@@ -1,0 +1,10 @@
+FROM node:21-bookworm AS build
+
+WORKDIR /app
+
+COPY npm/package*.json ./
+RUN npm install
+
+COPY ./npm .
+
+CMD ["sh", "-c", "npm install && npm run dev"]
