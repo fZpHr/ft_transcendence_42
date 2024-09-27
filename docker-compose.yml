@@ -1,259 +1,293 @@
-services:
-  portainer:
-    build: common/portainer/.
-    container_name: portainer
-    ports:
-      - "8001:8001"
-      - "9443:9443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/portainer:/data
-    environment:
-      TZ: "Europe/Paris"
-    # restart: on-failure
-    networks:
-      transcendence:
+# services:
+#   web-entry:
+#     extends:
+#       file: common/web/docker-compose.yaml
+#       service: web
+#       depends_on:
+#         - 
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    depends_on:
-      - postgres
-    ports:
-      - "9000:8080"
-    environment:
-      TZ: "Europe/Paris"
-    # restart: on-failure
-    networks:
-      transcendence:
+#   web-GameServer:
+#     extends:
+#       file: common/web/docker-compose.yaml
+#       service: web
 
-  nginx:
-    build: common/nginx/.
-    container_name: nginx
-    depends_on:
-      - logstash
-      - adminer
-      - web
-    environment:
-      TZ: "Europe/Paris"
-    volumes:
-      - ./common/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./data/logs/nginx/:/var/log/nginx/
-      - ./common/nginx/certs:/etc/nginx/certs
-      - ./data/logs/modsecurity:/var/log/modsecurity/
-    ports:
-      - "443:443"
-    env_file:
-      - .env
-    # restart: on-failure
-    networks:
-      - transcendence
+#   web-TournamentManagement:
+#     extends:
+#       file: common/web/docker-compose.yaml
+#       service: web
 
-  postgres:
-    image: postgres:13
-    hostname: postgres_network
-    container_name: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      TZ: "Europe/Paris"
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    # restart: on-failure
-    networks:
-      transcendence:
+#   web-UserManagement:
+#     extends:
+#       file: common/web/docker-compose.yaml
+#       service: web
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    container_name: elasticsearch
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - ./data/elasticsearch:/usr/share/elasticsearch/data
-    environment:
-      TZ: "Europe/Paris"
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      discovery.type: "single-node"
-      cluster.name: "elasticsearch"
-      ELASTIC_USER: elastic
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      xpack.security.enabled: "true"
-    depends_on:
-      - web
-    # restart: on-failure
-    networks:
-      transcendence:
+#   portainer:
+#     build: common/portainer/.
+#     container_name: portainer
+#     ports:
+#       - "8001:8001"
+#       - "9443:9443"
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
+#       - ./data/portainer:/data
+#     environment:
+#       TZ: "Europe/Paris"
+#     # restart: on-failure
+#     networks:
+#       transcendence:
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.10.2
-    container_name: kibana
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    volumes:
-      - ./devops/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-    environment:
-      TZ: "Europe/Paris"
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD}
-    env_file:
-      - .env
-    # restart: on-failure
-    networks:
-      transcendence:
+#   adminer:
+#     image: adminer
+#     container_name: adminer
+#     depends_on:
+#       - postgres
+#     ports:
+#       - "9000:8080"
+#     environment:
+#       TZ: "Europe/Paris"
+#     # restart: on-failure
+#     networks:
+#       transcendence:
+
+#   nginx:
+#     build: common/nginx/.
+#     container_name: nginx
+#     depends_on:
+#       - logstash
+#       - adminer
+#       - web-front
+#       - web-GameServer
+#       - web-TournamentManagement
+#       - web-UserManagement
+#     environment:
+#       TZ: "Europe/Paris"
+#     volumes:
+#       - ./common/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+#       - ./data/logs/nginx/:/var/log/nginx/
+#       - ./common/nginx/certs:/etc/nginx/certs
+#       - ./data/logs/modsecurity:/var/log/modsecurity/
+#     ports:
+#       - "443:443"
+#     env_file:
+#       - .env
+#     # restart: on-failure
+#     networks:
+#       - transcendence
+
+#   postgres:
+#     image: postgres:13
+#     hostname: postgres_network
+#     container_name: postgres
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       POSTGRES_DB: ${POSTGRES_DB}
+#       POSTGRES_USER: ${POSTGRES_USER}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#       TZ: "Europe/Paris"
+#     volumes:
+#       - ./data/postgres:/var/lib/postgresql/data
+#     # restart: on-failure
+#     networks:
+#       transcendence:
+
+#   elasticsearch:
+#     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+#     container_name: elasticsearch
+#     ports:
+#       - "9200:9200"
+#       - "9300:9300"
+#     volumes:
+#       - ./data/elasticsearch:/usr/share/elasticsearch/data
+#     environment:
+#       TZ: "Europe/Paris"
+#       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#       discovery.type: "single-node"
+#       cluster.name: "elasticsearch"
+#       ELASTIC_USER: elastic
+#       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+#       xpack.security.enabled: "true"
+#     depends_on:
+#       - web-front
+#       - web-GameServer
+#       - web-TournamentManagement
+#       - web-UserManagement      
+#     # restart: on-failure
+#     networks:
+#       transcendence:
+
+#   kibana:
+#     image: docker.elastic.co/kibana/kibana:7.10.2
+#     container_name: kibana
+#     depends_on:
+#       - elasticsearch
+#     ports:
+#       - "5601:5601"
+#     volumes:
+#       - ./devops/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+#     environment:
+#       TZ: "Europe/Paris"
+#       ELASTICSEARCH_USERNAME: elastic
+#       ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD}
+#     env_file:
+#       - .env
+#     # restart: on-failure
+#     networks:
+#       transcendence:
   
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.10.2
-    container_name: logstash
-    depends_on:
-      - web
-      - elasticsearch
-    ports:
-      - "5000:5000"
-    environment:
-      TZ: "Europe/Paris"
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-      xpack.monitoring.elasticsearch.username: elastic
-      xpack.monitoring.elasticsearch.password: ${ELASTIC_PASSWORD}
-      DEBUG: "true"
-    env_file:
-      - .env
-    volumes:
-      - ./data/logs/web/:/usr/share/logstash/logs/web
-      - ./data/logs/nginx/:/usr/share/logstash/logs/nginx
-      - ./devops/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    # restart: on-failure
-    networks:
-      transcendence:
+#   logstash:
+#     image: docker.elastic.co/logstash/logstash:7.10.2
+#     container_name: logstash
+#     depends_on:
+#       - web-front
+#       - web-GameServer
+#       - web-TournamentManagement
+#       - web-UserManagement
+#       - elasticsearch
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       TZ: "Europe/Paris"
+#       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#       xpack.monitoring.elasticsearch.username: elastic
+#       xpack.monitoring.elasticsearch.password: ${ELASTIC_PASSWORD}
+#       DEBUG: "true"
+#     env_file:
+#       - .env
+#     volumes:
+#       - ./data/logs/web/:/usr/share/logstash/logs/web
+#       - ./data/logs/nginx/:/usr/share/logstash/logs/nginx
+#       - ./devops/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+#     # restart: on-failure
+#     networks:
+#       transcendence:
     
-  web:
-    build: common/web/.
-    container_name: web
-    depends_on:
-      - postgres
-    ports:
-      - "80:8000"
-    env_file:
-      - .env
-    volumes:
-      - ./data/logs/web/:/usr/src/app/logs/
-      - ./common/web/conf/:/usr/src/app/
-    # restart: on-failure
-    networks:
-      transcendence:
+#   # web:
+#   #   build: common/web/.
+#   #   container_name: web
+#   #   depends_on:
+#   #     - postgres
+#   #   ports:
+#   #     - "80:8000"
+#   #   env_file:
+#   #     - .env
+#   #   volumes:
+#   #     - ./data/logs/web/:/usr/src/app/logs/
+#   #     - ./common/web/conf/:/usr/src/app/
+#   #   # restart: on-failure
+#   #   networks:
+#   #     transcendence:
 
-  grafana:
-    image: grafana/grafana:9.5.2
-    container_name: grafana
-    depends_on:
-      - prometheus
-      - alertmanager
-      - node-exporter
-      - cadvisor
-      - web
-      - postgres
-      - elasticsearch
-      - kibana
-      - logstash
-      - nginx
-      - adminer
-      - portainer
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SMTP_ENABLED=true
-      - GF_SMTP_HOST=${SMTP_HOST}
-      - GF_SMTP_USER=${SMTP_USER}
-      - GF_SMTP_PASSWORD=${SMTP_PASSWORD}
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - ./data/grafana:/var/lib/grafana
-    # restart: on-failure
-    networks:
-      - transcendence
+#   grafana:
+#     image: grafana/grafana:9.5.2
+#     container_name: grafana
+#     depends_on:
+#       - prometheus
+#       - alertmanager
+#       - node-exporter
+#       - cadvisor
+#       - web-front
+#       - web-GameServer
+#       - web-TournamentManagement
+#       - web-UserManagement
+#       - postgres
+#       - elasticsearch
+#       - kibana
+#       - logstash
+#       - nginx
+#       - adminer
+#       - portainer
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - GF_SMTP_ENABLED=true
+#       - GF_SMTP_HOST=${SMTP_HOST}
+#       - GF_SMTP_USER=${SMTP_USER}
+#       - GF_SMTP_PASSWORD=${SMTP_PASSWORD}
+#       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+#       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+#       - GF_USERS_ALLOW_SIGN_UP=false
+#     volumes:
+#       - ./data/grafana:/var/lib/grafana
+#     # restart: on-failure
+#     networks:
+#       - transcendence
 
-  prometheus:
-    image: prom/prometheus:v2.44.0
-    container_name: prometheus
-    env_file:
-      - .env
-    depends_on:
-      - node-exporter
-      - cadvisor
-    # ports:
-    #   - "9090:9090"
-    volumes:
-      - ./data/prometheus:/prometheus
-      - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./devops/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
-      - ./data/logs/prometheus:/var/log/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=30d'
-      - '--storage.tsdb.retention.size=10GB'
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    # restart: on-failure
-    networks:
-      - transcendence
+#   prometheus:
+#     image: prom/prometheus:v2.44.0
+#     container_name: prometheus
+#     env_file:
+#       - .env
+#     depends_on:
+#       - node-exporter
+#       - cadvisor
+#     # ports:
+#     #   - "9090:9090"
+#     volumes:
+#       - ./data/prometheus:/prometheus
+#       - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#       - ./devops/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+#       - ./data/logs/prometheus:/var/log/prometheus
+#     command:
+#       - '--config.file=/etc/prometheus/prometheus.yml'
+#       - '--storage.tsdb.path=/prometheus'
+#       - '--storage.tsdb.retention.time=30d'
+#       - '--storage.tsdb.retention.size=10GB'
+#     logging:
+#       driver: "json-file"
+#       options:
+#         max-size: "10m"
+#         max-file: "3"
+#     # restart: on-failure
+#     networks:
+#       - transcendence
 
-  alertmanager:
-    image: prom/alertmanager:v0.23.0
-    container_name: alertmanager
-    env_file:
-      - .env
-    ports:
-      - "9093:9093"
-    volumes:
-      - ./devops/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-    # restart: on-failure
-    networks:
-      - transcendence
+#   alertmanager:
+#     image: prom/alertmanager:v0.23.0
+#     container_name: alertmanager
+#     env_file:
+#       - .env
+#     ports:
+#       - "9093:9093"
+#     volumes:
+#       - ./devops/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+#     command:
+#       - '--config.file=/etc/alertmanager/alertmanager.yml'
+#     # restart: on-failure
+#     networks:
+#       - transcendence
 
-  node-exporter:
-    image: prom/node-exporter:v1.5.0
-    container_name: node-exporter
-    command:
-      - '--path.sysfs=/host/sys'
-      - '--path.procfs=/host/proc'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-      - '--no-collector.ipvs'
-    volumes:
-      - /proc:/host/proc
-      - /sys:/host/sys
-    # restart: on-failure
-    networks:
-      - transcendence
+#   node-exporter:
+#     image: prom/node-exporter:v1.5.0
+#     container_name: node-exporter
+#     command:
+#       - '--path.sysfs=/host/sys'
+#       - '--path.procfs=/host/proc'
+#       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+#       - '--no-collector.ipvs'
+#     volumes:
+#       - /proc:/host/proc
+#       - /sys:/host/sys
+#     # restart: on-failure
+#     networks:
+#       - transcendence
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
-    container_name: cadvisor
-    command: -logtostderr -docker_only
-    depends_on:
-      - node-exporter
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-      - /dev/disk:/dev/disk:ro
-    # restart: on-failure
-    networks:
-      - transcendence
+#   cadvisor:
+#     image: gcr.io/cadvisor/cadvisor:v0.47.0
+#     container_name: cadvisor
+#     command: -logtostderr -docker_only
+#     depends_on:
+#       - node-exporter
+#     volumes:
+#       - /:/rootfs:ro
+#       - /var/run:/var/run:ro
+#       - /sys:/sys:ro
+#       - /var/lib/docker:/var/lib/docker:ro
+#       - /dev/disk:/dev/disk:ro
+#     # restart: on-failure
+#     networks:
+#       - transcendence
   
-networks:
-  transcendence:
-    driver: bridge
+# networks:
+#   transcendence:
+#     driver: bridge

@@ -1,0 +1,99 @@
+services:  
+  web-npm:
+    build:
+      context: ./conf/Front
+      dockerfile: Dockerfile_npm
+    container_name: web-npm
+    volumes:
+      - ./conf/Front/npm/:/app
+    ports:
+      - "8080"
+    environment:
+      TZ: "Europe/Paris"
+    depends_on:
+      - web-game_server
+      - web-tournament_management
+      - web-user_management
+    networks:
+      - transcendence
+  
+  web-nginx:
+    build:
+      context: ./conf/Front
+      dockerfile: Dockerfile_nginx
+    container_name: web-nginx
+    volumes:
+      - ./conf/Front/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ../../data/logs/nginx/:/var/log/nginx/
+      - ./conf/Front/nginx/certs:/etc/nginx/certs
+      - ../../data/logs/modsecurity:/var/log/modsecurity/
+      - ./conf/Front/npm/dist:/usr/share/nginx/html
+    ports:
+      - "443:443"
+    environment:
+      TZ: "Europe/Paris"
+    depends_on:
+      - web-npm
+      - web-game_server
+      - web-tournament_management
+      - web-user_management
+    networks:
+      - transcendence
+
+  web-game_server:
+    build:
+      context: conf/GameServer
+      dockerfile: Dockerfile
+    container_name: web-game_server
+    depends_on:
+      - postgres
+    ports:
+      - "8001"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/GameServer/:/usr/src/app/logs/
+      - ./conf/GameServer/conf/:/usr/src/app/
+    # restart: on-failure
+    networks:
+      transcendence:
+
+  web-tournament_management:
+    build:
+      context: conf/TournamentManagement
+      dockerfile: Dockerfile
+    container_name: web-tournament_management
+    depends_on:
+      - postgres
+    ports:
+      - "8002"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/TournamentManagement/:/usr/src/app/logs/
+      - ./conf/TournamentManagement/conf/:/usr/src/app/
+    # restart: on-failure
+    networks:
+      transcendence:
+
+  web-user_management:
+    build:
+      context: conf/UserManagement
+      dockerfile: Dockerfile
+    container_name: web-user_management
+    depends_on:
+      - postgres
+    ports:
+      - "8003"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/UserManagement/:/usr/src/app/logs/
+      - ./conf/UserManagement/conf/:/usr/src/app/
+    # restart: on-failure
+    networks:
+      transcendence:
+
+
+  
+
