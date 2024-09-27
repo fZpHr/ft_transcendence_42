@@ -1,8 +1,8 @@
 import { autretruc } from "@components/autretruc";
 import { truc } from "@components/truc";
 
-customElements.define('truc-component', truc);
-customElements.define('autretruc-component', autretruc);
+window.customElements.define('truc-component', truc);
+window.customElements.define('autretruc-component', autretruc);
 
 export default {
     truc,

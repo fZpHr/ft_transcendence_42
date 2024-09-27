@@ -5,8 +5,8 @@ export class truc extends Component{
         super();
     }
 
-    render(){
-        this.innerHTML = `
+    render() {
+        return `
             <h1>truc</h1>
             <p>Un truc</p>
         `;
