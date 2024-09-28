@@ -20,7 +20,7 @@ export class Component extends HTMLElement {
     disconnectedCallback() {
         console.log("Custom element removed from page.");
         this.isRendered = false;
-        this.CustomDomContentUnload();
+        this.CustomDOMContentUnload();
         this.removeExtraEventListeners();
         //remove all function
     }
@@ -40,7 +40,7 @@ export class Component extends HTMLElement {
     CustomDOMContentLoaded() {
     }
 
-    CustomDomContentUnload() {
+    CustomDOMContentUnload() {
     }
 
     addExtraEventListener(eventType, callback) {

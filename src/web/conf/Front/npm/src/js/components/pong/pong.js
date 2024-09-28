@@ -102,6 +102,7 @@ export class Pong extends Component{
         let wPressed = false;
         let sPressed = false;
         const speedPaddle = 7;
+        let intervalGameStart = null;
 
         function movePaddleUp(which) {
             const paddle = document.getElementById(`player_${which}_paddle`);
@@ -172,24 +173,17 @@ export class Pong extends Component{
         };
         document.addEventListener("keyup", movePaddleKeyDown, true);
         document.addEventListener("keydown", movePaddleKeyUp, true);
-        
 
-        let gameRunning = false;
-        let gameInterval;
-
-        this.gameReset = function resetGame() {
+        function resetGame() {
             console.log("Game reset");
-            clearInterval(gameInterval);
-            gameRunning = false;
             // Réinitialiser les variables globales ici
+            clearInterval(intervalGameStart);
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
-            ballSpeedX = initialBallSpeedX;
-            ballSpeedY = initialBallSpeedY;
+            ballSpeedX = 0;
+            ballSpeedY = 0;
             score_1 = 0;
             score_2 = 0;
-            document.getElementById("player_1_score").textContent = score_1;
-            document.getElementById("player_2_score").textContent = score_2;
             wPressed = false;
             sPressed = false;
             upPressed = false;
@@ -199,6 +193,8 @@ export class Pong extends Component{
             cancelAnimationFrame(gameLoop);
             cancelAnimationFrame(moveBall);
         }
+
+        this.gameReset = resetGame;
 
         function getBallPosition() {
             const ball = document.getElementById('ball');
@@ -210,7 +206,6 @@ export class Pong extends Component{
                 width: rect.width,
                 height: rect.height
             };
-
             return position;
         }
 
@@ -254,7 +249,8 @@ export class Pong extends Component{
                 ballSpeedX = -ballSpeedX;
                 var score = document.getElementById("player_1_score")
                 score_1 += 1;
-                score.textContent = score_1;
+                if (score !== null)
+                    score.textContent = score_1;
             }
 
             if (ballRect.right > window.innerWidth - 1) {
@@ -265,27 +261,30 @@ export class Pong extends Component{
                 ballSpeedX = -ballSpeedX;
                 var score = document.getElementById("player_2_score")
                 score_2 += 1;
-                score.textContent = score_2;
+                if (score !== null)
+                    score.textContent = score_2;
             }
         }
 
-        function myFunction(text) {
+        function counter(text) {
             var message = document.getElementById("message");
             if (text == 0) text = "GO!";
             if (text == -1) text = "";
-            message.textContent = text;
+            if (message !== null)
+                message.textContent = text;
         }
         
         function startGame() {
             return new Promise((resolve) => {
-                for (let i = 0; i <= 4; i++) {
-                    setTimeout(() => {
-                        myFunction(3 - i);
-                        if (i === 4) {
-                            resolve();
-                        }
-                    }, i * 1000);
-                }
+                let i = 0;
+                intervalGameStart = setInterval(() => {
+                    counter(3 - i);
+                    if (i === 4) {
+                        clearInterval(intervalGameStart);
+                        resolve();
+                    }
+                    i++;
+                }, 1000);
             });
         }
 
@@ -306,6 +305,9 @@ export class Pong extends Component{
             if (ballPositionY >= window.innerHeight - ball.offsetHeight || ballPositionY <= 0) {
                 ballSpeedY *= -1;
             }
+            if (score_1 === 5 || score_2 === 5) {
+                return;
+            }
 
             requestAnimationFrame(moveBall);
     }
@@ -316,11 +318,9 @@ export class Pong extends Component{
             if (wPressed) movePaddleUp('1');
             if (sPressed) movePaddleDown('1');
             
-
-            // how to stop animation frame
             if (score_1 === 5 || score_2 === 5) {
-                myFunction("Player " + (score_1 === 5 ? 1 : 2) + " wins!");
-                this.gameReset()
+                counter("Player " + (score_1 === 5 ? 1 : 2) + " wins!");
+                resetGame();
                 return;
             }
             requestAnimationFrame(gameLoop);
@@ -336,7 +336,7 @@ export class Pong extends Component{
     }
 
     CustomDOMContentUnload(){
-        console.log("Custom element removed from page.");
+        console.log("DOM CONTENT UNLOAD.");
         this.gameReset();
     }
 }
