@@ -2,7 +2,9 @@ from django.http import JsonResponse
 import requests
 import os
 import json
+import logging
 
+logger = logging.getLogger('print')
 def register_42(request, format=None):
     hostname = request.get_host()
     redirect_uri = f"https://{hostname}/api/register-42/"
@@ -14,6 +16,7 @@ def register_42(request, format=None):
         "code": request.query_params["code"],
         "redirect_uri": redirect_uri
     }
+    logger.info(f'body: {body}')
     headers = {"Content-Type": "application/json; charset=utf-8"}
     r = requests.post('https://api.intra.42.fr/oauth/token', headers=headers, json=body)
     token = r.json()["access_token"]

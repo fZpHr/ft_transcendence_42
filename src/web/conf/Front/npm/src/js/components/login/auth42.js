@@ -29,13 +29,14 @@ export class Auth42 extends Component{
         console.log("Autre truc added to page.");
         const loginButton = this.querySelector("#loginButton");
         loginButton.addEventListener("click", async () => {
-            const response = await fetch('https://localhost/users/register-42/', {
+            const response = await fetch(`https://${window.location.hostname}/users/register-42/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 },
             });
             const data = await response.json();
+            console.log(data)
             return data;
         });
     }
