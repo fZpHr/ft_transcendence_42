@@ -8,9 +8,18 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
-
 from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from Connect4Handler.routing import websocket_urlpatterns as Connect4Handler_websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GameServer.settings')
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            Connect4Handler_websocket_urlpatterns
+        )
+    ),
+})

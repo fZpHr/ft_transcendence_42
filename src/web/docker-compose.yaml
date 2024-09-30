@@ -38,7 +38,7 @@ services:
       - web-tournament_management
       - web-user_management
     networks:
-      - transcendence
+      transcendence:
 
   web-game_server:
     build:
