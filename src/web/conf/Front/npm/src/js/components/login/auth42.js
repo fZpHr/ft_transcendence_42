@@ -1,5 +1,4 @@
 import { Component } from "@js/component";
-
 export class Auth42 extends Component{
     constructor(){
         super();
@@ -29,9 +28,9 @@ export class Auth42 extends Component{
         console.log("Autre truc added to page.");
         const loginButton = this.querySelector("#loginButton");
         loginButton.addEventListener("click", () => {
-            const clientId = 'u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28';
             const redirectUri = encodeURIComponent('https://localhost/users/register-42/');
-            const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+
+            const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28&redirect_uri=${redirectUri}&response_type=code`;
             
             window.location.href = authUrl;
         });

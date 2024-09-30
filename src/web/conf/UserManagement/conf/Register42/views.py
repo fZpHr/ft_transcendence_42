@@ -2,7 +2,6 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 import requests
 import os
-import json
 import logging
 
 logger = logging.getLogger('print')
