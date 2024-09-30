@@ -16,6 +16,10 @@ export class NavBar extends Component{
                         <li class="nav-item">
                             <a class="nav-link" id="autretruc-navlink">autre truc</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" id="pong-navlink">pong</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -38,6 +42,11 @@ export class NavBar extends Component{
         const autreTrucNavLink = this.querySelector("#autretruc-navlink");
         autreTrucNavLink.addEventListener("click", () => {
             window.router.navigate("/autretruc/");
+        });
+
+        const pongNavLink = this.querySelector("#pong-navlink");
+        pongNavLink.addEventListener("click", () => {
+            window.router.navigate("/pong/");
         });
     }
 }

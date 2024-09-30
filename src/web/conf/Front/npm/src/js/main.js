@@ -9,7 +9,9 @@ const router = new Router(target, {
   '/': new Route('/', 'auth42-component'),
   '/truc/': new Route('/truc/', 'truc-component'),
   '/autretruc/': new Route('/autretruc/', 'autretruc-component'),
-  '/404/': new Route('/404/', 'not-found')
+  '/pong/': new Route('/pong/', 'pong-component'),
+  '/connect4/': new Route('/connect4/', 'connect4-component'),
+  '/404/': new Route('/404/', 'not-found'),
 });
 
 router.init();
