@@ -5,6 +5,7 @@ import { NotFound } from "@components/404";
 import { Auth42 } from "@components/login/auth42";
 import { Index } from "@components/index/index";
 
+
 window.customElements.define('truc-component', truc);
 window.customElements.define('autretruc-component', autretruc);
 window.customElements.define('navbar-component', NavBar);
