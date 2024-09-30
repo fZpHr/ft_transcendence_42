@@ -11,6 +11,12 @@ env-modif:
 	@docker compose -f gen_env/docker-compose-expose-vault.yml up --build -d
 	@sudo docker inspect vault | grep "\"IPAddress\": \"1" | awk '{print $$2}' | sed 's/^\"//;s/\",$$//' | awk '{print "http://" $$0 ":8200"}'
 
+env-down:
+	@-docker compose -f gen_env/docker-compose-expose-vault.yml down
+	@docker system prune -a -f
+	@docker volume prune -f
+	@docker network prune -f
+
 down:
 	@-docker compose -f docker-compose-dev.yml down
 	@docker system prune -a -f
@@ -19,12 +25,6 @@ down:
 
 down-mandatory:
 	@-docker compose -f docker-compose.yml down
-	@docker system prune -a -f
-	@docker volume prune -f
-	@docker network prune -f
-
-down-env:
-	@-docker compose -f gen_env/docker-compose-expose-vault.yml down
 	@docker system prune -a -f
 	@docker volume prune -f
 	@docker network prune -f
