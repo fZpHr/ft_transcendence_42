@@ -70,9 +70,6 @@ env:
     fi
 
 
-
-.PHONY: all down re prod down-prod env dev down-dev env-modif env-down req check-config options
-
 ### Development part ###
 
 env-modif:
@@ -140,3 +137,8 @@ options:
 	@$(MAKE) -s options-details
 	@echo "Options enregistrées dans $(CONFIG_FILE)."
 	@echo "Pour modifier les options ultérieurement, veuillez exécuter 'make options' ou modifier directement le fichier $(CONFIG_FILE)."
+
+
+
+
+.PHONY: all down re start env env-modif env-down req check-config options options-version options-details
