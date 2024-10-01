@@ -48,7 +48,8 @@ services:
       dockerfile: Dockerfile
     container_name: web-game_server
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8001"
     env_file:
@@ -66,7 +67,8 @@ services:
       dockerfile: Dockerfile
     container_name: web-tournament_management
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8002"
     env_file:
@@ -84,7 +86,8 @@ services:
       dockerfile: Dockerfile
     container_name: web-user_management
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8003"
     env_file:
