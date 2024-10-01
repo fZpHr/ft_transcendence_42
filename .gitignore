@@ -1,5 +1,6 @@
 
 transcendence/transcendence/settings.py
+.make_config
 
 # Python cache files
 __pycache__/
