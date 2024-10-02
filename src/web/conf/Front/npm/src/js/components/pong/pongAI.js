@@ -1,6 +1,6 @@
 import { Component } from "@js/component";
 
-export class PongLocal extends Component{
+export class PongAI extends Component{
     constructor(){
         super();
         this.gameReset = null;
@@ -24,14 +24,8 @@ export class PongLocal extends Component{
                     <div class="controls">
                         <div class="text-before">Are you ready?</div>
                         <div class="player-controls">
-                            <div class="player-name">Player 1</div>
                             <div class="key">W</div>
                             <div class="key">S</div>
-                        </div>
-                        <div class="player-controls">
-                            <div class="player-name">Player 2</div>
-                            <div class="key">ArrowUp</div>
-                            <div class="key">ArrowDown</div>
                         </div>
                     </div>
                     <button id="start-button">Start</button>
@@ -158,8 +152,9 @@ export class PongLocal extends Component{
                 width: 100%;
                 margin-bottom: 20px;
             }
-
             .player-controls {
+                position: absolute;
+                top: 30%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -236,11 +231,19 @@ export class PongLocal extends Component{
                     paddle.style.top = (currentTop + speedPaddle) + "px";
             }
         }
-    
+        
+        let aiControlsArrows = true;
+
         function handleKey(event, isKeyDown) {
             const keyMap = {
-                "ArrowUp": () => upPressed = isKeyDown,
-                "ArrowDown": () => downPressed = isKeyDown,
+                "ArrowUp": () => {
+                    console.log("ArrowUp");
+                    upPressed = isKeyDown;
+                },
+                "ArrowDown": () => {
+                    console.log("ArrowDown");
+                    downPressed = isKeyDown;
+                },
                 "KeyW": () => wPressed = isKeyDown,
                 "KeyS": () => sPressed = isKeyDown
             };
@@ -255,6 +258,7 @@ export class PongLocal extends Component{
             }
         }
         
+        // Add the event listener using the defined function
         document.addEventListener("click", handleClick);
         document.addEventListener("keyup", (e) => handleKey(e, false), true);
         document.addEventListener("keydown", (e) => handleKey(e, true), true);
@@ -264,8 +268,8 @@ export class PongLocal extends Component{
             clearInterval(intervalGameStart);
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
-            ball.style.left = ballPositionX + "px";
-            ball.style.top = ballPositionY + "px";
+            // ball.style.left = ballPositionX + "px";
+            // ball.style.top = ballPositionY + "px";
             ballSpeedX = 10;
             ballSpeedY = 2;
             score_1 = 0;
@@ -326,12 +330,14 @@ export class PongLocal extends Component{
                     
                     ballSpeedY = normalizedRelativeIntersectionY;
             
+                    // Scale the paddle by 1.1
                     const paddleElement = paddle.rect === paddle1Rect ? paddle_1 : paddle_2;
                     paddleElement.style.transform = "scale(1.1)";
             
+                    // Optionally, reset the scale after a short delay
                     setTimeout(() => {
                         paddleElement.style.transform = "scale(1)";
-                    }, 100);
+                    }, 100); // Reset after 200 milliseconds
                 }
             }
             console.log(ballRect.left);
@@ -433,11 +439,40 @@ export class PongLocal extends Component{
             }
             requestAnimationFrame(gameLoop);
         }
-    
+        
+        function AI() {
+            const paddle = document.getElementById("player_2_paddle");
+            const ball = document.getElementById("ball");
+            const paddleRect = paddle.getBoundingClientRect();
+            const ballRect = ball.getBoundingClientRect();
+            const ballY = ballRect.top + ballRect.height / 2;
+        
+            if (aiControlsArrows) {
+                if (paddleRect.top + paddleRect.height / 4 < ballY) {
+                    const arrowDown = new KeyboardEvent("keydown", { code: "ArrowDown", key: "ArrowDown", keyCode: 40, which: 40, bubbles: true });
+                    document.dispatchEvent(arrowDown);
+                    setTimeout(() => {
+                        const arrowDownUp = new KeyboardEvent("keyup", { code: "ArrowDown", key: "ArrowDown", keyCode: 40, which: 40, bubbles: true });
+                        document.dispatchEvent(arrowDownUp);
+                    }, 50);
+                } else {
+                    const arrowUp = new KeyboardEvent("keydown", { code: "ArrowUp", key: "ArrowUp", keyCode: 38, which: 38, bubbles: true });
+                    document.dispatchEvent(arrowUp);
+                    setTimeout(() => {
+                        const arrowUpUp = new KeyboardEvent("keyup", { code: "ArrowUp", key: "ArrowUp", keyCode: 38, which: 38, bubbles: true });
+                        document.dispatchEvent(arrowUpUp);
+                    }, 50);
+                }
+            }
+        
+            requestAnimationFrame(AI);
+        }
+        
         async function initGame() {
             await   startGame();
             gameLoop();
             moveBall();
+            AI();
         } 
 
         
