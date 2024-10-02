@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 import requests
 import os
 import logging
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout
 
 logger = logging.getLogger('print')
 
@@ -49,11 +51,29 @@ def register_42(request):
     if r.status_code != 200:
         logger.error(f'Failed to get user info: {r.status_code} {r.text}')
         return JsonResponse({"error": "Invalid access token"}, status=400)
+    
+    user, created = User.objects.get_or_create(username=r.json()["login"])
+    if created:
+        user.set_unusable_password()
+        user.save()
+    
+    login(request, user)
+
     if (extern):
         response = redirect('https://localhost:42424/')
     else:
         response = redirect('https://localhost/')
+
+    response.set_cookie('token', token)
+    response.set_cookie('user42', r.json()["login"])
+    response.set_cookie('connected', 'true')
     
-    response.set_cookie('token_user42', token, httponly=True)
-    
+    return response
+
+def logout_view(request):
+    logout(request)
+    response = redirect('https://localhost/')
+    response.delete_cookie('token')
+    response.delete_cookie('user42')
+    response.delete_cookie('connected')
     return response

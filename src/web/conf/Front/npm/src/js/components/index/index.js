@@ -18,11 +18,11 @@ export class Index extends Component{
 
     render(){
         let html;
-        // this.setCookie("user", "test", 1);
-        let isUserConnected = document.cookie.includes("user=");
+        let isUserConnected = document.cookie.includes("connected=true");
         if (isUserConnected)
             html = `
             <div id="container">
+                <navbar-component></navbar-component>
                 <div class="leftPolygon" id="connect4">Connect4</div>
                 <div class="rightPolygon" id="pong">Pong</div>
                 <div class="bottomPolygon" id="tournaments">Tournaments</div>
