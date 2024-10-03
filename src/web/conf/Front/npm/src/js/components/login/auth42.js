@@ -1,5 +1,4 @@
 import { Component } from "@js/component";
-
 export class Auth42 extends Component{
     constructor(){
         super();
@@ -28,15 +27,15 @@ export class Auth42 extends Component{
     CustomDOMContentLoaded(){
         console.log("Autre truc added to page.");
         const loginButton = this.querySelector("#loginButton");
-        loginButton.addEventListener("click", async () => {
-            const response = await fetch('https://localhost/users/register-42/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-            const data = await response.json();
-            return data;
+        loginButton.addEventListener("click", () => {
+            let authUrl;
+            if (window.origin.includes('42424')) {
+                authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28&redirect_uri=https%3A%2F%2Flocalhost%3A42424%2Fusers%2Fregister-42%2F&response_type=code`;
+            } else {
+                authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28&redirect_uri=https%3A%2F%2Flocalhost%2Fusers%2Fregister-42%2F&response_type=code`;
+            }
+    
+            window.location.href = authUrl;
         });
     }
 }

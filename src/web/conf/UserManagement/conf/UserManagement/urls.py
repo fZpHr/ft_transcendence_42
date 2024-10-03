@@ -21,4 +21,5 @@ from Register42 import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/register-42/', views.register_42),
+    path('users/logout/', views.logout_view),
 ]
