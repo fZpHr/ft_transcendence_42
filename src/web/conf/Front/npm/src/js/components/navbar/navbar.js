@@ -66,23 +66,22 @@ export class NavBar extends Component{
 
         const logoutNavLink = this.querySelector("#logout-navlink");
         logoutNavLink.addEventListener("click", () => {
-            let authUrl = `https://${window.location.hostname}/users/logout`;
-            console.log(authUrl);
+            let authUrl = `https://${window.location.hostname}:${window.location.port}/users/logout/`;
+            const csrftoken = getCookie('csrftoken'); // Function to get CSRF token from cookies
             fetch(authUrl, {
-                method: 'GET',
+                method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken, // Include CSRF token in headers
+                    'Access-Control-Allow-Origin': '*',
                 },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                window.router.navigate("/");
-            })
-            .catch(error => {
-                console.error('Error:', error);
+            }).then((response) => {
+                console.log(response)
+                if (response.ok) {
+                    window.location.reload();
+                }
             });
         });
     }
-
 }
