@@ -17,9 +17,9 @@ export class Router {
     }
 
     async navigate(path) {
-        if (path === window.location.pathname) {
-            return;
-        }
+        // if (path === window.location.pathname) {
+        //     return;
+        // }
         const route = this.routes[path];
         window.history.pushState({}, path, window.location.origin + path);
         this.target.innerHTML = ''

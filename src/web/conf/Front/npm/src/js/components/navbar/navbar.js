@@ -66,8 +66,22 @@ export class NavBar extends Component{
 
         const logoutNavLink = this.querySelector("#logout-navlink");
         logoutNavLink.addEventListener("click", () => {
-            let authUrl = "https://localhost/users/logout";
-            window.location.href = authUrl;
+            let authUrl = `https://${window.location.hostname}/users/logout`;
+            console.log(authUrl);
+            fetch(authUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                window.router.navigate("/");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     }
 

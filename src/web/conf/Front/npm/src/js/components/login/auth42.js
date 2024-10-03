@@ -28,13 +28,16 @@ export class Auth42 extends Component{
         console.log("Autre truc added to page.");
         const loginButton = this.querySelector("#loginButton");
         loginButton.addEventListener("click", () => {
-            let authUrl;
-            if (window.origin.includes('42424')) {
-                authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28&redirect_uri=https%3A%2F%2Flocalhost%3A42424%2Fusers%2Fregister-42%2F&response_type=code`;
-            } else {
-                authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28&redirect_uri=https%3A%2F%2Flocalhost%2Fusers%2Fregister-42%2F&response_type=code`;
-            }
+            const hostname = window.location.hostname;
+            const port = window.location.port ? `:${window.location.port}` : '';
+            const redirectUri = `https://${hostname}${port}/users/register-42/`;
+            const encodedRedirectUri = encodeURIComponent(redirectUri);
+            console.log(`Redirect URI: ${redirectUri}`);
+            console.log(`Encoded Redirect URI: ${encodedRedirectUri}`);
+            const clientId = 'u-s4t2ud-74438314e8cff2be68aee7a119f4c95bff6ba35b11a2bf5c2627a31a869c9f28';
+            const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${encodedRedirectUri}&response_type=code`;
     
+            console.log(`Auth URL: ${authUrl}`);
             window.location.href = authUrl;
         });
     }
