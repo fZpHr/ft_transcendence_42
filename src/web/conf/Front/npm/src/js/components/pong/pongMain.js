@@ -74,9 +74,9 @@ export class PongMain extends Component{
             if (e.target.id === "pong-local") {
                 window.router.navigate("/pong/local");
             }
-            if (e.target.id === "pong-ai") {
-                window.router.navigate("/pong/ai");
-            }
+            // if (e.target.id === "pong-ai") {
+                // window.router.navigate("/pong/ai");
+            // }
             if (e.target.id === "reset-button") {
             }
         });

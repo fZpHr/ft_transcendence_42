@@ -1,13 +1,13 @@
 import { Component } from "@js/component";
 
-export class PongLocal extends Component{
-    constructor(){
+export class PongLocal extends Component {
+    constructor() {
         super();
         this.gameReset = null;
     }
 
-    render(){
-        return`
+    render() {
+        return `
             <div id="basePong">
                 <div id="middleLine"></div>
                 <div class="ball" id="ball">
@@ -36,21 +36,26 @@ export class PongLocal extends Component{
                     </div>
                     <button id="start-button">Start</button>
                 </div>
+                <div id="overlay">
+                    <div id="overlay-title">PONG</div>
+                    <div id="overlay-text"></div>
+                    <div id="overlay-score"></div>
+                </div>
             </div>
         `;
     }
 
-    style(){
-        // MON CSS
+    style() {
         return `
         <style>
             #basePong {
-                height: 831px;
+                height: 831px; /* If you modify the size u have to modify the condition in JS */
                 width: 1920px;
                 position: relative;
                 background: black;
                 font-family: 'Press Start 2P', cursive;
                 user-select: none;
+                overflow: hidden;
             }
 
             .paddle_1,
@@ -196,47 +201,75 @@ export class PongLocal extends Component{
                 transform: translateX(-50%);
             }
             
+            #overlay {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: black;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Press Start 2P', cursive;
+                font-size: 30px;
+                color: white;
+                display: none;
+                user-select: none;
+                text-align: center;
+            }
+
+            #overlay-message {
+                margin-bottom: 20px; 
+            }
+
+            #overlay-title {
+                font-size: 50px;
+                margin-bottom: 100px;
+                border-bottom: 5px solid white;
+            }
+
         </style>
         `;
-        
     }
 
-    CustomDOMContentLoaded(){
-        let ballSpeedX = 10; 
-        let ballSpeedY = 1;
-        let ball = document.getElementById("ball");
-        let paddle_1 = document.getElementById("player_1_paddle");
-        let paddle_2 = document.getElementById("player_2_paddle");
+    CustomDOMContentLoaded() {
+        const BALL_SPEED_X = 10;
+        const BALL_SPEED_Y = 1;
+        const PADDLE_SPEED = 7;
+        const WINNING_SCORE = 5;
+        const OVERLAY_DISPLAY_TIME = 3000;
+
+        const ball = document.getElementById("ball");
+        const paddle_1 = document.getElementById("player_1_paddle");
+        const paddle_2 = document.getElementById("player_2_paddle");
+
+        let ballScored = false;
+        let ballSpeedX = BALL_SPEED_X; 
+        let ballSpeedY = BALL_SPEED_Y;
     
         let ballPositionX = getBallPosition().left;
         let ballPositionY = getBallPosition().top;
         const initialBallPos = { left: ballPositionX, top: ballPositionY };
+        
         let score_1 = 0;
         let score_2 = 0;
     
         let upPressed = false, downPressed = false, wPressed = false, sPressed = false;
-        const speedPaddle = 7;
         let intervalGameStart = null;
-        function movePaddleUp(which) {
-            const paddle = document.getElementById(`player_${which}_paddle`);
-            if (paddle) {
-                let currentTop = parseFloat(window.getComputedStyle(paddle).top);
-                if (currentTop > 3)
-                    paddle.style.top = (currentTop - speedPaddle) + "px";
-            }
-        }
-    
-        function movePaddleDown(which) {
+        
+        function movePaddle(which, direction) {
             const paddle = document.getElementById(`player_${which}_paddle`);
             if (paddle) {
                 let currentTop = parseFloat(window.getComputedStyle(paddle).top);
                 const parent = paddle.parentElement;
                 const maxBottom = parent.clientHeight - paddle.clientHeight - 5;
-                if (currentTop < maxBottom - 10)
-                    paddle.style.top = (currentTop + speedPaddle) + "px";
+                const newTop = currentTop + direction * PADDLE_SPEED;
+                if (newTop > 3 && newTop < maxBottom - 10) {
+                    paddle.style.top = newTop + "px";
+                }
             }
         }
-    
+        
         function handleKey(event, isKeyDown) {
             const keyMap = {
                 "ArrowUp": () => upPressed = isKeyDown,
@@ -247,6 +280,14 @@ export class PongLocal extends Component{
             if (keyMap[event.code]) keyMap[event.code]();
         }
 
+        function handleKeyUp(e) {
+            handleKey(e, false);
+        }
+        
+        function handleKeyDown(e) {
+            handleKey(e, true);
+        }
+
         function handleClick(e) {
             const overlay = document.getElementById("overlay-before-start");
             if (e.target.id === "start-button") {
@@ -255,63 +296,75 @@ export class PongLocal extends Component{
             }
         }
         
+        // Event listeners for key presses
+        // Dont forget to remove the event listeners when the game is over for performance reasons and for SPA
         document.addEventListener("click", handleClick);
-        document.addEventListener("keyup", (e) => handleKey(e, false), true);
-        document.addEventListener("keydown", (e) => handleKey(e, true), true);
-    
+        document.addEventListener("keyup", handleKeyUp, true);
+        document.addEventListener("keydown", handleKeyDown, true);
+        
         function resetGame() {
-            console.log("Game reset");
             clearInterval(intervalGameStart);
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
             ball.style.left = ballPositionX + "px";
             ball.style.top = ballPositionY + "px";
-            ballSpeedX = 10;
-            ballSpeedY = 2;
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
             score_1 = 0;
             score_2 = 0;
-            const score1 = document.getElementById("player_1_score");
-            const score2 = document.getElementById("player_2_score");
-            if (score1 !== null) score1.textContent = "0";
-            if (score2 !== null) score2.textContent = "0";
-            var message = document.getElementById("message");
-            if (message !== null) message.textContent = "";
             wPressed = false;
             sPressed = false;
             upPressed = false;
             downPressed = false;
-            document.removeEventListener("keyup", (e) => handleKey(e, false), true);
-            document.removeEventListener("keydown", (e) => handleKey(e, true), true);
+            document.removeEventListener("keyup", handleKeyUp, true);
+            document.removeEventListener("keydown", handleKeyDown, true);
             document.removeEventListener("click", handleClick);
             cancelAnimationFrame(gameLoop);
             cancelAnimationFrame(moveBall);
         }
     
         this.gameReset = resetGame;
-    
+        
         function getBallPosition() {
             const ball = document.getElementById('ball');
             const rect = ball.getBoundingClientRect();
-    
-            const position = {
+        
+            return {
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX,
                 width: rect.width,
                 height: rect.height
             };
-            return position;
         }
-    
-    
+
+        function resetBall() {
+            ballPositionX = initialBallPos.left;
+            ballPositionY = initialBallPos.top;
+            ball.style.left = ballPositionX + "px";
+            ball.style.top = ballPositionY + "px";
+            ballSpeedX = ballSpeedX > 0 ? -BALL_SPEED_X : BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+        }
+        
+        function showOverlay(message, score1, score2) {
+            const overlay = document.getElementById("overlay");
+            document.getElementById("overlay-text").textContent = message;
+            document.getElementById("overlay-score").textContent = `Score: ${score1}-${score2}`;
+            overlay.style.display = "block";
+        }
+        
+        function hideOverlay() {
+            document.getElementById("overlay").style.display = "none";
+        }
+        
         function checkCollision() {
             const ballRect = ball.getBoundingClientRect();
             const paddle1Rect = paddle_1.getBoundingClientRect();
             const paddle2Rect = paddle_2.getBoundingClientRect();
             
-
             const paddles = [
-            { rect: paddle1Rect, speedMultiplier: -1.10, positionX: paddle1Rect.right },
-            { rect: paddle2Rect, speedMultiplier: -1.10, positionX: paddle2Rect.left - ballRect.width }
+                { rect: paddle1Rect, speedMultiplier: -1, positionX: paddle1Rect.right },
+                { rect: paddle2Rect, speedMultiplier: -1, positionX: paddle2Rect.left - ballRect.width }
             ];
 
             for (const paddle of paddles) {
@@ -334,33 +387,33 @@ export class PongLocal extends Component{
                     }, 100);
                 }
             }
-            console.log(ballRect.left);
-            console.log(ballRect.right);
-        
-            if (ballRect.left < 1) {
-                ballPositionX = initialBallPos.left;
-                ballPositionY = initialBallPos.top;
-                ball.style.left = ballPositionX + "px";
-                ball.style.top = ballPositionY + "px";
-                ballSpeedX = ballSpeedX > 0 ? -10 : 10;
-                ballSpeedY = 1;
-                var score = document.getElementById("player_1_score")
-                score_1 += 1;
-                if (score !== null)
-                    score.textContent = score_1;
-            }
-        
-            if (ballRect.right > 1920) {
-                ballPositionX = initialBallPos.left;
-                ballPositionY = initialBallPos.top;
-                ball.style.left = ballPositionX + "px";
-                ball.style.top = ballPositionY + "px";
-                ballSpeedX = ballSpeedX > 0 ? -10 : 10;
-                ballSpeedY = 1;
-                var score = document.getElementById("player_2_score")
+            
+            if (ballRect.left < 1 && !ballScored) {
                 score_2 += 1;
-                if (score !== null)
-                    score.textContent = score_2;
+                ballScored = true;
+                var score = document.getElementById("player_2_score");
+                if (score !== null) score.textContent = score_2;
+                
+                showOverlay("Player 2 scores!", score_1, score_2);
+                setTimeout(function() {
+                    hideOverlay();
+                    resetBall();
+                    ballScored = false;
+                }, OVERLAY_DISPLAY_TIME);
+            }
+            
+            if (ballRect.right > 1920 && !ballScored) {
+                score_1 += 1;
+                ballScored = true;
+                var score = document.getElementById("player_1_score");
+                if (score !== null) score.textContent = score_1;
+                
+                showOverlay("Player 1 scores!", score_1, score_2);
+                setTimeout(function() {
+                    hideOverlay();
+                    resetBall();
+                    ballScored = false;
+                }, OVERLAY_DISPLAY_TIME);
             }
         }
     
@@ -368,8 +421,7 @@ export class PongLocal extends Component{
             var message = document.getElementById("message");
             if (text == 0) text = "GO!";
             if (text == -1) text = "";
-            if (message !== null)
-                message.textContent = text;
+            if (message !== null) message.textContent = text;
         }
         
         function startGame() {
@@ -385,8 +437,7 @@ export class PongLocal extends Component{
                 }, 1000);
             });
         }
-    
-    
+        
         function moveBall() {
             ballPositionX += ballSpeedX;
             ballPositionY += ballSpeedY;
@@ -397,55 +448,45 @@ export class PongLocal extends Component{
             if (basePong === null) return;
     
             checkCollision();
-    
-            if (ballPositionX >= basePong.clientWidth - ball.offsetWidth || ballPositionX <= 0) {
+            if (ballPositionX >= 1920 - ball.offsetWidth || ballPositionX <= 0) {
                 ballSpeedX *= -1;
             }
     
-            if (ballPositionY >= basePong.clientHeight - ball.offsetHeight - 1 || ballPositionY <= 0) {
+            if (ballPositionY >= 831 - ball.offsetHeight - 1 || ballPositionY <= 0) {
                 ballSpeedY *= -1;
             }
-            if (score_1 === 5 || score_2 === 5) {
+            if (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE) {
                 return;
             }
     
             requestAnimationFrame(moveBall);
-    }
-    
+        }
+        
         function gameLoop() {
-            if (upPressed) movePaddleUp('2');
-            if (downPressed) movePaddleDown('2');
-            if (wPressed) movePaddleUp('1');
-            if (sPressed) movePaddleDown('1');
+            if (upPressed) movePaddle('2', -1);
+            if (downPressed) movePaddle('2', 1);
+            if (wPressed) movePaddle('1', -1);
+            if (sPressed) movePaddle('1', 1);
             
-            if (score_1 === 5 || score_2 === 5) {
-                counter("Player " + (score_1 === 5 ? 1 : 2) + " wins!");
-                const message = document.getElementById("message");
-                const blinkInterval = setInterval(() => {
-                    message.style.color = message.style.color === "white" ? "red" : "white";
-                }, 500);
+            if (!ballScored && (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE)) {
+                showOverlay(`Player ${score_1 === WINNING_SCORE ? "1" : "2"} wins!`, score_1, score_2);
                 setTimeout(() => {
                     resetGame();
-                    clearInterval(blinkInterval);
                     window.router.navigate("/pong/");
-                }, 5000);
+                }, OVERLAY_DISPLAY_TIME);
                 return;
             }
             requestAnimationFrame(gameLoop);
         }
-    
+        
         async function initGame() {
-            await   startGame();
+            await startGame();
             gameLoop();
             moveBall();
         } 
-
-        
-
     }
 
-    CustomDOMContentUnload(){
-        console.log("DOM CONTENT UNLOAD.");
+    CustomDOMContentUnload() {
         this.gameReset();
     }
 }

@@ -11,7 +11,7 @@ const router = new Router(target, {
   '/autretruc/': new Route('/autretruc/', 'autretruc-component'),
   '/pong/': new Route('/pong/', 'pong-main-component'),
   '/pong/local': new Route('/pong/local', 'pong-local-component'),
-  '/pong/ai': new Route('/pong/ai', 'pong-ai-component'),
+  // '/pong/ai': new Route('/pong/ai', 'pong-ai-component'),
   '/404/': new Route('/404/', 'not-found'),
 });
 
