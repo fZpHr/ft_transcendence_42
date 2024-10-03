@@ -9,8 +9,9 @@ const router = new Router(target, {
   '/': new Route('/', 'index-component'),
   '/truc/': new Route('/truc/', 'truc-component'),
   '/autretruc/': new Route('/autretruc/', 'autretruc-component'),
-  '/pong/': new Route('/pong/', 'pong-component'),
-  '/connect4/': new Route('/connect4/', 'connect4-component'),
+  '/pong/': new Route('/pong/', 'pong-main-component'),
+  '/pong/local': new Route('/pong/local', 'pong-local-component'),
+  // '/pong/ai': new Route('/pong/ai', 'pong-ai-component'),
   '/404/': new Route('/404/', 'not-found'),
 });
 
