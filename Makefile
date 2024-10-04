@@ -19,10 +19,17 @@ all:
 
 down: 
 	@if [ "$(VERSION)" = "dev" ]; then \
-        if [ "$(SHOW_DETAILS)" = "1" ]; then \
+	if [ "$(SHOW_DETAILS)" = "1" ]; then \
             docker compose --env-file .env -f dev_tools/docker-compose-dev.yml down; \
+			docker system prune -a -f; \
+			docker volume prune -f; \
+			docker network prune -f; \
         else \
+			echo "Arrêt des services..."; \
             docker compose --env-file .env -f dev_tools/docker-compose-dev.yml down > /dev/null 2>&1; \
+			docker system prune -a -f > /dev/null 2>&1; \
+			docker volume prune -f > /dev/null 2>&1; \
+			docker network prune -f > /dev/null 2>&1; \
         fi \
 	elif [ "$(VERSION)" = "prod" ]; then \
         if [ "$(SHOW_DETAILS)" = "1" ]; then \
