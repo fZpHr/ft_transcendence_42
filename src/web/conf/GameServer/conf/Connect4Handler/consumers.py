@@ -1,31 +1,33 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+import logging
+import json
+from django.contrib.auth import get_user_model
+from asgiref.sync import sync_to_async
+from urllib.parse import parse_qs
 
+logger = logging.getLogger('print')
 class Connect4GameConsumer(AsyncWebsocketConsumer):
+    games = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.room_name = None
+        self.room_group_name = None
+
     async def connect(self):
-        # Called when the websocket is handshaking as part of the connection process
-        # Accept the connection
         await self.accept()
-        # Add the user to the group
-        await self.channel_layer.group_add(
-            'connect4',
-            self.channel_name
-        )
+
 
     async def disconnect(self, close_code):
-        # Called when the websocket closes for any reason
-        # Leave the group
         await self.channel_layer.group_discard(
             'connect4',
             self.channel_name
         )
 
     async def receive(self, text_data):
-        # Called when a message is received from the websocket
-        # Send the message to the group
-        await self.channel_layer.group_send(
-            'connect4',
-            {
-                'type': 'game_message',
-                'message': text_data
-            }
-        )
+        message = json.loads(text_data)
+        logger.info(f"Message: {message}")
+        # if message['type'] == 'create':
+        # logger.info(f"Player: {Player}")
+        # logger.info(f"RECEIVE called for room {self.room_name}")
+        # Player = await sync_to_async(get_user_model)()

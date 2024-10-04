@@ -64,7 +64,7 @@ export class MatchMaking extends Component{
                     clearInterval(this.interval);
                     document.getElementById("overlay-text").innerText = "Opponent found";
                     this.redirection = setTimeout(() => {
-                        window.router.navigate(`/connect4/?id=${message.game_id}`);
+                        window.router.navigate(`/connect4?id=${message.game_id}`);
                     }, 3000);
                     break;
                 case "match_failed":
