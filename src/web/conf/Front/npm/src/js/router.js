@@ -17,11 +17,28 @@ export class Router {
     }
 
     async navigate(path) {
-        // if (path === window.location.pathname) {
-        //     return;
-        // }
+        if (path === window.location.pathname) {
+            return;
+        }
+        let regex = null;
+        if (path.includes('?')) {
+            regex = path.split('?')[1];
+            path = path.split('?')[0];
+        }
         const route = this.routes[path];
-        window.history.pushState({}, path, window.location.origin + path);
+        if (!route) {
+            this.navigate('/404/');
+            return;
+        }
+        if (regex && route.extraRegex) {
+            const regexPattern = new RegExp(route.extraRegex);
+            if (!regexPattern.test(regex)) {
+                console.log('Regex does not match');
+                this.navigate('/404/');
+                return;
+            }
+        }
+        window.history.pushState({}, path, window.location.origin + path + (regex ? '?' + regex : ''));
         this.target.innerHTML = ''
         const customElement = document.createElement(route.component);
         this.target.append(customElement);

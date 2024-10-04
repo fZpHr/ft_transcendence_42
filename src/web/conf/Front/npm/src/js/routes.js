@@ -1,7 +1,9 @@
 export class Route {
-    constructor(path, component) {
+    constructor(path, component, extraRegex = null) {
         this.path = path;
+        if (extraRegex)
+            this.path += '?';
         this.component = component;
-        // customElements.get(component) ? this.component = customElements.get(component) : console.error(`Component ${component} not found`);
+        this.extraRegex = extraRegex;
     }
 }
