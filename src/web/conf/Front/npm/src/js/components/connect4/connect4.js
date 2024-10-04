@@ -8,6 +8,7 @@ export class Connect4 extends Component{
 
     render(){
         return`
+            <h1>Connect4</h1>
         `;
     }
 

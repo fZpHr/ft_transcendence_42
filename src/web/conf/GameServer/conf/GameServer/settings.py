@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Connect4Handler',
+    'MatchMakingHandler',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,51 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/usr/src/app/logs/django.log',
+            'formatter': 'simple',
+        },
+        'debug_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/usr/src/app/logs/debug.log',
+            'formatter': 'simple',
+        },
+        'print_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/usr/src/app/logs/print.log',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['django_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['debug_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'print': {
+            'handlers': ['print_file'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    },
+}
