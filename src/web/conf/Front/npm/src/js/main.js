@@ -13,6 +13,8 @@ const router = new Router(target, {
   '/pong/local': new Route('/pong/local', 'pong-local-component'),
   // '/pong/ai': new Route('/pong/ai', 'pong-ai-component'),
   '/404/': new Route('/404/', 'not-found'),
+  '/auth42/': new Route('/auth42/', 'auth42-component'),
+  '/tournament/': new Route(`/tournament/`, 'tournament-component'),
 });
 
 router.init();
