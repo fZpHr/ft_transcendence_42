@@ -14,6 +14,8 @@ const router = new Router(target, {
   '/pong/remote': new Route('/pong/remote', 'pong-remote-component', "^id=[A-Z0-9]{7}$"),
   '/connect4': new Route('/connect4', 'connect4-component', "^id=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"),
   '/404/': new Route('/404/', 'not-found'),
+  '/auth42/': new Route('/auth42/', 'auth42-component'),
+  '/tournament/': new Route(`/tournament/`, 'tournament-component'),
 });
 
 router.init();
