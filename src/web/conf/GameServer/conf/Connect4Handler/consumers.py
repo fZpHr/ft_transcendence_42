@@ -4,6 +4,7 @@ import json
 from django.contrib.auth import get_user_model
 from asgiref.sync import sync_to_async
 from urllib.parse import parse_qs
+import asyncio
 
 logger = logging.getLogger('print')
 class Connect4Game:
@@ -14,6 +15,9 @@ class Connect4Game:
         self.winner = None
         self.moves = 0
         self.players = []
+        self.timer_started = False
+        self.timer = 30
+        self.gameFinished = False
 
     def __str__(self):
         return f"Player 1: {self.player1}, Player 2: {self.player2}, Turn: {self.turn}, Winner: {self.winner}, Moves: {self.moves}"
@@ -82,7 +86,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
-            'connect4',
+            self.room_group_name,
             self.channel_name
         )
 
@@ -97,9 +101,20 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 self.channel_name
             )
-            Connect4GameConsumer.games[self.room_name] = Connect4Game(message['room'])
+            if self.room_name not in Connect4GameConsumer.games:
+                Connect4GameConsumer.games[self.room_name] = Connect4Game(message['room'])
+            if self.player_id in Connect4GameConsumer.games[self.room_name].players:
+                return
+            if len(Connect4GameConsumer.games[self.room_name].players) == 2:
+                await self.send(text_data=json.dumps({
+                    'type': 'game_full',
+                    'message': 'Game is full'
+                }))
+                self.disconnect()
+                return
             Connect4GameConsumer.games[self.room_name].players.append(self.player_id)
-            Connect4GameConsumer.games[self.room_name].players.append("random")
+            logger.info(f"Player {self.player_id} joined room {self.room_name}")
+            logger.info(f"Players: {Connect4GameConsumer.games[self.room_name].players}")
             if len(Connect4GameConsumer.games[self.room_name].players) == 2:
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -112,23 +127,38 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                     }
                 )
             #start timer ?
+            if not Connect4GameConsumer.games[self.room_name].timer_started:
+                Connect4GameConsumer.games[self.room_name].timer_started = True
+                asyncio.create_task(self.start_timer()) # Start timer for the game
             return
         if message['type'] == 'move':
+            Connect4GameConsumer.games[self.room_name].timer = 30
             if self.player_id != Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].get_turn() - 1]:
                 return
             column = message['column']
             if Connect4GameConsumer.games[self.room_name].make_move(column):
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'move',
-                        'message': 'Move made',
-                        'board': Connect4GameConsumer.games[self.room_name].get_board(),
-                        'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
-                        'winner': Connect4GameConsumer.games[self.room_name].get_winner(),
-                        'moves': Connect4GameConsumer.games[self.room_name].get_moves()
-                    }
-                )
+                if Connect4GameConsumer.games[self.room_name].get_winner():
+                    Connect4GameConsumer.games[self.room_name].gameFinished = True
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'game_finished',
+                            'message': 'Game finished',
+                            'winner': Connect4GameConsumer.games[self.room_name].get_winner()
+                        }
+                    )
+                else:
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'move',
+                            'message': 'Move made',
+                            'board': Connect4GameConsumer.games[self.room_name].get_board(),
+                            'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
+                            'winner': Connect4GameConsumer.games[self.room_name].get_winner(),
+                            'moves': Connect4GameConsumer.games[self.room_name].get_moves()
+                        }
+                    )
         
     async def game_start(self, event):
         await self.send(text_data=json.dumps({
@@ -147,4 +177,51 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             'player_turn': event['player_turn'],
             'winner': event['winner'],
             'moves': event['moves']
+        }))
+
+    async def game_full(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'game_full',
+            'message': event['message']
+        }))
+
+    async def start_timer(self):
+        while Connect4GameConsumer.games[self.room_name].gameFinished == False:
+            await asyncio.sleep(1)
+            if Connect4GameConsumer.games[self.room_name].timer == 0:
+                Connect4GameConsumer.games[self.room_name].gameFinished = True
+                Connect4GameConsumer.games[self.room_name].winner = 1 if Connect4GameConsumer.games[self.room_name].get_turn() == 2 else 2
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_finished',
+                        'message': 'Game finished',
+                        'winner': Connect4GameConsumer.games[self.room_name].get_winner()
+                    }
+                )
+            else:   
+                Connect4GameConsumer.games[self.room_name].timer -= 1
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'timer',
+                        'timer': Connect4GameConsumer.games[self.room_name].timer
+                    }
+                )
+
+    async def timer(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'update',
+            'timer': event['timer'],
+            'board' : Connect4GameConsumer.games[self.room_name].get_board(),
+            'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
+            'player1': Connect4GameConsumer.games[self.room_name].players[0],
+            'player2': Connect4GameConsumer.games[self.room_name].players[1],
+        }))
+
+    async def game_finished(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'game_over',
+            'message': event['message'],
+            'winner': event['winner']
         }))

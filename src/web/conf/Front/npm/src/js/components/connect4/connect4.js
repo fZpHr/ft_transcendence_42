@@ -16,25 +16,16 @@ export class Connect4 extends Component{
 
     render(){
         return`
-        <div id="player-info">
-            <div id="player1-info">
-                <img id="player1-img" src="">
-                <p id="player1-name"></p>
-            </div>
-            <p id="vs">VS</p>
-            <div id="player2-info">
-                <img id="player2-img" src="">
-                <p id="player2-name"></p>
-            </div>
-            <div id="timer">30</div>
-        </div> 
+        <div id="timer">30</div>
         <div id="game-wrapper">
-            <h3 id="current-player">
-            </h3>
-            <h3 id="player-turn">
-            </h3>
-            <div id="connect-four">
-            </div>
+            <div id="player-info">
+                <img id="player1-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                <div id="player1-name"></div>
+                <div id="vs">VS</div>
+                <div id="player2-name"></div>
+                <img id="player2-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+            </div> 
+            <div id="connect-four"></div>
         </div>
         <div id="overlay">
             <div id="winnerText"></div>
@@ -50,6 +41,7 @@ export class Connect4 extends Component{
         return `
         <style>
         
+        
         connect4-component {
             display: flex;
             justify-content: center;
@@ -57,45 +49,39 @@ export class Connect4 extends Component{
             height: 100vh;
             background-color: black;
         }
-
+            
         #game-wrapper {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-
+            
         #connect-four {
             height: 540px;
             width: 630px;
-
             background-color: blue;
             border: 10px solid navy;
             margin: 0 auto;
             display: flex;
             flex-wrap: wrap;
         }
-
+            
         #current-player {
             font-size: 2em;
             color: white;
             margin: 10px;
         }
-
+                
         .tile {
             width: 70px;
             height: 70px;
             margin: 8px;
-
             background-color: white;
             border-radius: 50%;
             border: 5px solid navy;
         }
-
-        .tile:not(.red):not(.yellow):hover {
-            background-color: lightblue;
-        }
-
+            
         .red {
             background-color: red;
         }
@@ -103,41 +89,37 @@ export class Connect4 extends Component{
         .yellow {
             background-color: yellow;
         }
-
-        .active-column {
+        
+        .active-column.tile:not(.red):not(.yellow) {
             background-color: lightblue;
         }
-
+            
         #player-info {
-            display: none;
-            padding: 15px;
-            position: absolute;
-            flex-direction: column;
-            margin-top: 10vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center items vertically */
+            width: 100%; /* Full width */
+            margin-bottom: 20px;
+        }
+        
+        #player-info img {
+            width: 50px; /* Adjust the width as needed */
+            height: 50px; /* Adjust the height as needed */
+            border-radius: 50%; /* Optional: make the image circular */
         }
 
-        #player1-img,
-        #player2-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin: 10px;
-        }
-
-        #player1-name,
-        #player2-name {
+        #player1-name, #player2-name {
             font-size: 1.5em;
+            font-family: 'Press Start 2P', cursive;
             color: white;
             margin: 10px;
-            font-weight: bold;
         }
 
         #vs {
             font-size: 1.5em;
-            color: rgb(99, 99, 99);
+            font-family: 'Press Start 2P', cursive;
+            color: white;
             margin: 10px;
-            font-weight: bold;
-            
         }
 
         #timer {
@@ -166,62 +148,26 @@ export class Connect4 extends Component{
         #winnerText {
             padding: 200px;
         }
+
+        #timer {
+            font-size: 1.5em;
+            color: white;
+            margin: 10px;
+            font-weight: bold;
+            font-family: 'Press Start 2P', cursive;
+        }
+
         .buttons {
             display: flex;
             justify-content: center;
             gap: 50px;
             align-items: center;
         }
-
-        #cancel,
-        #reconnect {
-            border: none;
-            background: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            align-items: center;
-        }
-
-        #cancel:hover,
-        #reconnect:hover {
-            background: rgba(255, 255, 255, 0.2);
-            }
             </style>
             `;
             
     }
 
-    // gameFinished(winner) {
-    //     document.getElementById('timer').innerText = '';
-    //     console.log(`${winner} wins!`);
-    //     let overlay = document.getElementById("overlay");
-    //     document.getElementById("timer").style.display = "none";
-    //     // const timerText = document.getElementById("timer-text");
-    //     // const reconnect = document.getElementById("reconnect");
-    //     const cancel = document.getElementById("cancel");
-    //     const winnerText = document.getElementById("winnerText");
-    //     if (winner == currentPlayer)
-    //         {
-    //             winnerText.innerHTML = "You win!";
-    //         winnerText.style.color = "green";
-    //     }
-    //     else
-    //     {
-    //         winnerText.innerHTML = "You lose";
-    //         winnerText.style.color = "red";
-    //     }
-    //     if (winner == "draw")
-    //         {
-    //             winnerText.innerHTML = "Draw!";
-    //         winnerText.style.color = "white";
-    //     }
-    //     [cancel, overlay, winnerText].forEach(el => el.style.display = "flex");
-    // }
-
-    
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
         const searchParams = new URLSearchParams(window.location.search);
@@ -240,16 +186,31 @@ export class Connect4 extends Component{
 
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
-            console.log(event.data);
-            console.log(data);
             switch (data.type) {
                 case "game_start":
                     this.player = data.player1 == userName ? "player1" : "player2";
+                    this.updateInfos(data);
                     this.startGame("player" + data.player_turn);
                     break;
                 case "move":
                     this.startGame("player" + data.player_turn);
                     this.updateBoard(data);
+                    break;
+                case "game_full":
+                    alert("Game is full");
+                    setTimeout(() => {
+                        window.router.navigate("/");
+                    }, 5000);
+                case "update":
+                    this.updateInfos(data);
+                    this.updateBoard(data);
+                    this.updateTimer(data.timer);
+                    break;
+                case "game_over":
+                    
+                    document.getElementById("overlay").style.display = "flex";
+                    document.getElementById("winnerText").innerText = data.winner + " wins!";
+                    this.startGame(null);
                     break;
             }
         };
@@ -263,6 +224,15 @@ export class Connect4 extends Component{
         }
 
         this.setGame();
+    }
+
+    updateInfos(data) {
+        document.getElementById("player1-name").innerText = data.player1;
+        document.getElementById("player2-name").innerText = data.player2;
+    }
+
+    updateTimer(timer) {
+        document.getElementById("timer").innerText = timer;
     }
 
     updateBoard(data) {
@@ -365,7 +335,6 @@ export class Connect4 extends Component{
         }
         return -1;
     }
-
 
     CustomDOMContentUnload(){
         this.ws.close();

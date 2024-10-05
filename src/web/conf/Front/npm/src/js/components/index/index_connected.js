@@ -94,7 +94,7 @@ export class IndexConnected extends Component{
                     window.router.navigate('/pong/');
                 break;
                 case './connect4.sh':
-                window.router.navigate('/connect4/');
+                    window.router.navigate('/matchmaking/');
                 break;
                 case './tournament.sh':
                     window.router.navigate('/tournament/');
