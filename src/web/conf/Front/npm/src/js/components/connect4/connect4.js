@@ -6,6 +6,7 @@ export class Connect4 extends Component{
         super();
         this.ws = null;
         this.board = this.createBoard();
+        this.player = null;
     }
 
     createBoard() {
@@ -49,14 +50,15 @@ export class Connect4 extends Component{
         return `
         <style>
         
-            connect4-component {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background-color: black;
-            }
-            #game-wrapper {
+        connect4-component {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+
+        #game-wrapper {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -100,6 +102,10 @@ export class Connect4 extends Component{
 
         .yellow {
             background-color: yellow;
+        }
+
+        .active-column {
+            background-color: lightblue;
         }
 
         #player-info {
@@ -218,23 +224,29 @@ export class Connect4 extends Component{
     
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
+        const searchParams = new URLSearchParams(window.location.search);
+        const gameId = searchParams.get("id");
         this.ws = new WebSocket(`wss://${window.location.hostname}/wss-game/connect4/`);
         
         this.ws.onopen = () => {
             console.log("Connected to the server");
             this.checkUserIdInterval = setInterval(() => {
                 if (userName && this.ws.readyState === WebSocket.OPEN) {
-                    this.ws.send(JSON.stringify({ type: 'join', player_id: `${userName}` }));
+                    this.ws.send(JSON.stringify({ type: 'join', player_id: `${userName}`, room: `${gameId}` }));
                     clearInterval(this.checkUserIdInterval);
                 }
             }, 100);
         };
 
         this.ws.onmessage = (event) => {
-            let data = JSON.parse(e.data);
+            let data = JSON.parse(event.data);
             console.log(event.data);
+            console.log(data);
             switch (data.type) {
-                //en legende
+                case "game_start":
+                    this.player = data.player1 == userName ? "player1" : "player2";
+                    this.startGame("player" + data.player_turn);
+                    break;
             }
         };
         
@@ -245,6 +257,7 @@ export class Connect4 extends Component{
         this.ws.onerror = (error) => {
             console.log("Error: ", error);
         }
+
         this.setGame();
     }
 
@@ -264,28 +277,29 @@ export class Connect4 extends Component{
     setGame() 
     {
         for (var row = 0; row < 6; row++)
-            {
+        {
             for (var col = 0; col < 7; col++) 
             {
                 let tile = document.createElement("div");
                 tile.className = "tile";
-                tile.id = row + " " + col
-                tile.addEventListener("click", function () {
-                    let [tileRow, tileCol] = tile.id.split(" ").map(Number)
-                    if (!this.checkAvailableTile(tileRow, tileCol))
-                        return
-                    if (!tile.classList.contains("red") && !tile.classList.contains("yellow") 
-                        && this.currentPlayer == playerTurn)
-                    {
-                        this.ws.send(JSON.stringify({ 
-                            type:"game.move",
-                            player: this.currentPlayer,
-                            row: tileRow, col: tileCol,
-                            player_id: `${userId}`
-                        }));
-                    }
-                }.bind(this));
+                tile.row = row;
+                tile.col = col;
+                tile.id = row + " " + col;
                 document.getElementById("connect-four").appendChild(tile);
+            }
+        }
+    }
+
+    startGame(player_turn)
+    {
+        //I want to make active the first column for player_turn
+        // this.updateBoard(data);
+        console.log("player_turn", player_turn);
+        if (this.player == player_turn)
+        {
+            for (var row = 0; row < 6; row++) {
+                let tile = document.getElementById(row + " 0");
+                tile.classList.add("active-column");
             }
         }
     }
@@ -298,63 +312,6 @@ export class Connect4 extends Component{
             return true;
         if (row == 5 && this.board[row][col] == '')
             return true;
-        return false;
-    }
-
-    checkWin(row, col) {
-        let count = 0;
-        let i;
-
-        for (i = 0; i < 7; i++) {
-            if (this.board[row][i] == currentPlayer) {
-                count++;
-                if (count == 4) {
-                    return true;
-                }
-            } else {
-                count = 0;
-            }
-        }
-
-        count = 0;
-        for (i = 0; i < 6; i++) {
-            if (this.board[i][col] == currentPlayer) {
-                count++;
-                if (count == 4) {
-                    return true;
-                }
-            } else {
-                count = 0;
-            }
-        }
-        
-        count = 0;
-        for (i = -3; i <= 3; i++) {
-            if (row + i >= 0 && row + i < 6 && col + i >= 0 && col + i < 7) {
-                if (this.board[row + i][col + i] == currentPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
-                    }
-                } else {
-                    count = 0;
-                }
-            }
-        }
-
-        count = 0;
-        for (i = -3; i <= 3; i++) {
-            if (row + i >= 0 && row + i < 6 && col - i >= 0 && col - i < 7) {
-                if (this.board[row + i][col - i] == currentPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
-                    }
-                } else {
-                    count = 0;
-                }
-            }
-        }
         return false;
     }
 
