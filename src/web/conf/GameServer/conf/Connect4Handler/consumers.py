@@ -113,6 +113,22 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 )
             #start timer ?
             return
+        if message['type'] == 'move':
+            if self.player_id != Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].get_turn() - 1]:
+                return
+            column = message['column']
+            if Connect4GameConsumer.games[self.room_name].make_move(column):
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'move',
+                        'message': 'Move made',
+                        'board': Connect4GameConsumer.games[self.room_name].get_board(),
+                        'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
+                        'winner': Connect4GameConsumer.games[self.room_name].get_winner(),
+                        'moves': Connect4GameConsumer.games[self.room_name].get_moves()
+                    }
+                )
         
     async def game_start(self, event):
         await self.send(text_data=json.dumps({
@@ -121,4 +137,14 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             'player1': event['player1'],
             'player2': event['player2'],
             'player_turn': event['player_turn']
+        }))
+    
+    async def move(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'move',
+            'message': event['message'],
+            'board': event['board'],
+            'player_turn': event['player_turn'],
+            'winner': event['winner'],
+            'moves': event['moves']
         }))

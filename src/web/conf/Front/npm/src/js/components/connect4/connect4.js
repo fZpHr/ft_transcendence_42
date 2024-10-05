@@ -247,6 +247,10 @@ export class Connect4 extends Component{
                     this.player = data.player1 == userName ? "player1" : "player2";
                     this.startGame("player" + data.player_turn);
                     break;
+                case "move":
+                    this.startGame("player" + data.player_turn);
+                    this.updateBoard(data);
+                    break;
             }
         };
         
@@ -265,9 +269,9 @@ export class Connect4 extends Component{
         this.board = data.board;
         for (var row = 0; row < 6; row++) {
             for (var col = 0; col < 7; col++) {
-                if (this.board[row][col] == 'red') {
+                if (this.board[row][col] == 1) {
                     document.getElementById(row + " " + col).classList.add("red");
-                } else if (this.board[row][col] == 'yellow') {
+                } else if (this.board[row][col] == 2) {
                     document.getElementById(row + " " + col).classList.add("yellow");
                 }
             }
@@ -301,18 +305,65 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " 0");
                 tile.classList.add("active-column");
             }
+            this.column = 0;
+            this.handleKeyDown = this.handleKeyDown.bind(this);
+            document.addEventListener("keydown", this.handleKeyDown);
+        }
+        else
+        {
+            document.removeEventListener("keydown", this.handleKeyDown);
         }
     }
 
-    checkAvailableTile(row, col)
+    handleKeyDown(event) {
+        if (event.key == "ArrowLeft") {
+            for (var row = 0; row < 6; row++) {
+                let tile = document.getElementById(row + " " + this.column);
+                tile.classList.remove("active-column");
+            }
+            if (this.column > 0) this.column--;
+            for (var row = 0; row < 6; row++) {
+                let tile = document.getElementById(row + " " + this.column);
+                tile.classList.add("active-column");
+            }
+        } else if (event.key == "ArrowRight") {
+            for (var row = 0; row < 6; row++) {
+                let tile = document.getElementById(row + " " + this.column);
+                tile.classList.remove("active-column");
+            }
+            if (this.column < 6) this.column++; // Adjusted to ensure column does not exceed 6
+            for (var row = 0; row < 6; row++) {
+                let tile = document.getElementById(row + " " + this.column);
+                tile.classList.add("active-column");
+            }
+        } else if (event.key == " ") {
+            console.log("Enter");
+            let row = this.checkAvailableTile(this.column);
+            if (row != -1) {
+                let tile = document.getElementById(row + " " + this.column);
+                tile.classList.add(this.player);
+                this.ws.send(JSON.stringify({ type: "move", player_id: this.player, column: this.column }));
+                for (var roww = 0; roww < 6; roww++) {
+                    let tile = document.getElementById(roww + " " + this.column);
+                    tile.classList.remove("active-column");
+                }
+            }
+        }
+    }
+
+    //Function that listen to keyboard event arrow left and right and enter to select column
+
+    checkAvailableTile(column)
     {
-        if (this.board[row][col] != '')
-            return false;
-        if (row != 5 && this.board[row + 1][col] != '')
-            return true;
-        if (row == 5 && this.board[row][col] == '')
-            return true;
-        return false;
+        for (var row = 5; row >= 0; row--)
+        {
+            let tile = document.getElementById(row + " " + column);
+            if (!tile.classList.contains("red") && !tile.classList.contains("yellow"))
+            {
+                return row;
+            }
+        }
+        return -1;
     }
 
 
