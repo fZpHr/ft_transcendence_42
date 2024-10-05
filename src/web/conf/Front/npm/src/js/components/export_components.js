@@ -8,8 +8,11 @@ import { PongLocal } from "@components/pong/pongLocal";
 // import { PongRemote } from "@components/pong/pongRemote";
 // import { PongAI } from "@components/pong/pongAI";
 import { Index } from "@components/index/index";
+import { IndexConnected } from "@components/index/index_connected";
+import { Tournament } from "@components/tournament/tournament";
 
-
+window.customElements.define('tournament-component', Tournament);
+window.customElements.define('index-connected-component', IndexConnected);
 window.customElements.define('truc-component', truc);
 window.customElements.define('autretruc-component', autretruc);
 window.customElements.define('navbar-component', NavBar);
@@ -21,6 +24,7 @@ window.customElements.define('pong-local-component', PongLocal);
 // window.customElements.define('pong-remote', PongRemote);
 window.customElements.define('index-component', Index);
 
+
 export default {
     truc,
     autretruc,
@@ -31,5 +35,7 @@ export default {
     PongLocal,
     // PongAI
     // PongRemote,
-    Index
+    Index,
+    IndexConnected,
+    Tournament
 };

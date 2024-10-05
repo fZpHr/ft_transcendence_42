@@ -25,3 +25,4 @@ export class NotFound extends Component{
         console.log("404 added to page.");
     }
 }
+

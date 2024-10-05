@@ -14,6 +14,8 @@ const router = new Router(target, {
   // '/pong/ai': new Route('/pong/ai', 'pong-ai-component'),
   '/pong/remote': new Route('/pong/remote', 'pong-remote-component', "^id=[A-Z0-9]{7}$"),
   '/404/': new Route('/404/', 'not-found'),
+  '/auth42/': new Route('/auth42/', 'auth42-component'),
+  '/tournament/': new Route(`/tournament/`, 'tournament-component'),
 });
 
 router.init();
