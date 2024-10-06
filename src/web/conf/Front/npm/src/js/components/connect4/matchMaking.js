@@ -10,7 +10,14 @@ export class MatchMaking extends Component{
     render(){
         return`
             <div id="overlay">
-                <h1>Matchmaking</h1>
+                <pre>
+███╗   ███╗ █████╗ ████████╗ ██████╗██╗  ██╗    ███╗   ███╗ █████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗
+████╗ ████║██╔══██╗╚══██╔══╝██╔════╝██║  ██║    ████╗ ████║██╔══██╗██║ ██╔╝██║████╗  ██║██╔════╝ 
+██╔████╔██║███████║   ██║   ██║     ███████║    ██╔████╔██║███████║█████╔╝ ██║██╔██╗ ██║██║  ███╗
+██║╚██╔╝██║██╔══██║   ██║   ██║     ██╔══██║    ██║╚██╔╝██║██╔══██║██╔═██╗ ██║██║╚██╗██║██║   ██║
+██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║    ██║ ╚═╝ ██║██║  ██║██║  ██╗██║██║ ╚████║╚██████╔╝
+╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+                </pre>
                 <div id="overlay-text">Waiting for an opponent</div>
             </div>
         `;
@@ -34,6 +41,12 @@ export class MatchMaking extends Component{
                 color: white;
                 // display: none;
                 user-select: none;
+            }
+            #overlay pre {
+                font-family: "Courier New", Courier, monospace;
+                color: white;
+                margin: 0;
+                padding: 0;
             }
             #overlay-text {
                 margin-bottom: 20px;

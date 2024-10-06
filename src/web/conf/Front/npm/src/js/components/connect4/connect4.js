@@ -16,21 +16,34 @@ export class Connect4 extends Component{
 
     render(){
         return`
-        <div id="timer">30</div>
         <div id="game-wrapper">
-            <div id="player-info">
-                <img id="player1-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
-                <div id="player1-name"></div>
-                <div id="vs">VS</div>
-                <div id="player2-name"></div>
-                <img id="player2-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
-            </div> 
+            <div id="infos">
+                <div id="player-info">
+                    <div id="player1">
+                        <img id="player1-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                        <div id="player1-name"></div>
+                    </div>
+                    <div id="vs">VS</div>
+                    <div id="player2">
+                        <div id="player2-name"></div>
+                        <img id="player2-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                    </div>
+                </div>
+            </div>
+            <div id="timer">30</div>
             <div id="connect-four"></div>
         </div>
         <div id="overlay">
             <div id="winnerText"></div>
-            <div class="buttons">
-                <button id="cancel">Menu principal</button>
+            <div id="choose">
+                <div class="arrows">
+                    <img src="/public/img/arrow-select.png" alt="arrows">
+                    <img src="/public/img/arrow-select.png" alt="arrows" display="none">
+                </div>
+                <div class="buttons">
+                    <button class="pixel-corners" id="cancel">~/</button>
+                    <button class="pixel-corners" id="play-again">Play Again</button>
+                </div>
             </div>
         </div>
         `;
@@ -40,131 +53,272 @@ export class Connect4 extends Component{
         // MON CSS
         return `
         <style>
-        
-        
-        connect4-component {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: black;
-        }
-            
-        #game-wrapper {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-            
-        #connect-four {
-            height: 540px;
-            width: 630px;
-            background-color: blue;
-            border: 10px solid navy;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-        }
-            
-        #current-player {
-            font-size: 2em;
-            color: white;
-            margin: 10px;
-        }
+            #infos {
+                display: flex;
+                flex-direction: column;
+                width: 95%;
+                margin-bottom: 20px;
+            }
+
+            #player1, #player2 {
+                width: 45%;
+                display: flex;
+                flex-direction: row;
+            }
+
+            #player1 {
+                justify-content: flex-start;
+            }
+
+            #player2 {
+                justify-content: flex-end;
+            }
+
+            #player1-turn, #player2-turn {
+                font-family: 'Press Start 2P', cursive;
+                color: white;
+                font-size: 8px;
+            }
+
+            connect4-component {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: black;
+            }
                 
-        .tile {
-            width: 70px;
-            height: 70px;
-            margin: 8px;
-            background-color: white;
-            border-radius: 50%;
-            border: 5px solid navy;
-        }
+            #game-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+                
+            #connect-four {
+                height: 540px;
+                width: 630px;
+                background-color: black;
+                border: 13px solid #1b1e21;
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+            }
+                
+            #current-player {
+                font-size: 2em;
+                color: white;
+                margin: 10px;
+            }
+                    
+            .tile {
+                width: 70px;
+                height: 70px;
+                margin: 8px;
+                background-color: white;
+                clip-path: polygon(
+                0px calc(100% - 25px),
+                5px calc(100% - 25px),
+                5px calc(100% - 15px),
+                10px calc(100% - 15px),
+                10px calc(100% - 10px),
+                15px calc(100% - 10px),
+                15px calc(100% - 5px),
+                25px calc(100% - 5px),
+                25px 100%,
+                calc(100% - 25px) 100%,
+                calc(100% - 25px) calc(100% - 5px),
+                calc(100% - 15px) calc(100% - 5px),
+                calc(100% - 15px) calc(100% - 10px),
+                calc(100% - 10px) calc(100% - 10px),
+                calc(100% - 10px) calc(100% - 15px),
+                calc(100% - 5px) calc(100% - 15px),
+                calc(100% - 5px) calc(100% - 25px),
+                100% calc(100% - 25px),
+                100% 25px,
+                calc(100% - 5px) 25px,
+                calc(100% - 5px) 15px,
+                calc(100% - 10px) 15px,
+                calc(100% - 10px) 10px,
+                calc(100% - 15px) 10px,
+                calc(100% - 15px) 5px,
+                calc(100% - 25px) 5px,
+                calc(100% - 25px) 0px,
+                25px 0px,
+                25px 5px,
+                15px 5px,
+                15px 10px,
+                10px 10px,
+                10px 15px,
+                5px 15px,
+                5px 25px,
+                0px 25px
+                );
+            }
             
-        .red {
-            background-color: red;
-        }
+                
+            .red {
+                background-color: red;
+            }
 
-        .yellow {
-            background-color: yellow;
-        }
-        
-        .active-column.tile:not(.red):not(.yellow) {
-            background-color: lightblue;
-        }
+            .yellow {
+                background-color: yellow;
+            }
             
-        #player-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center; /* Center items vertically */
-            width: 100%; /* Full width */
-            margin-bottom: 20px;
-        }
-        
-        #player-info img {
-            width: 50px; /* Adjust the width as needed */
-            height: 50px; /* Adjust the height as needed */
-            border-radius: 50%; /* Optional: make the image circular */
-        }
+            .active-column.tile:not(.red):not(.yellow) {
+                background-color: lightblue;
+            }
+                
+            #player-info {
+                display: flex;
+                justify-content: space-evenly; /* Evenly space items */
+                align-items: center; /* Center items vertically */
+                width: 100%; /* Full width */
+            }
+            
+            #player-info img {
+                width: 50px; /* Adjust the width as needed */
+                height: 50px; /* Adjust the height as needed */
+                border-radius: 50%; /* Optional: make the image circular */
+            }
 
-        #player1-name, #player2-name {
-            font-size: 1.5em;
-            font-family: 'Press Start 2P', cursive;
-            color: white;
-            margin: 10px;
-        }
+            #player1-name, #player2-name {
+                font-size: 1.2em;
+                font-family: 'Press Start 2P', cursive;
+                color: white;
+                margin: 10px;
+            }
 
-        #vs {
-            font-size: 1.5em;
-            font-family: 'Press Start 2P', cursive;
-            color: white;
-            margin: 10px;
-        }
+            #vs {
+                font-size: 1.2em;
+                font-family: 'Press Start 2P', cursive;
+                text-align: center;
+                width: 10%;
+                color: white;
+                margin: 10px;
+            }
 
-        #timer {
-            font-size: 1.5em;
-            color: white;
-            margin: 10px;
-            font-weight: bold;
-        }
+            #timer {
+                font-size: 1.5em;
+                color: white;
+                margin: 10px;
+                font-weight: bold;
+            }
 
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            z-index: 2;
-            flex-direction: column;
-        }
+            #overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                z-index: 2;
+                flex-direction: column;
+            }
 
-        #winnerText {
-            padding: 200px;
-        }
+            #winnerText {
+                padding: 200px;
+            }
 
-        #timer {
-            font-size: 1.5em;
-            color: white;
-            margin: 10px;
-            font-weight: bold;
-            font-family: 'Press Start 2P', cursive;
-        }
+            #timer {
+                font-size: 1.5em;
+                color: white;
+                margin: 10px;
+                font-weight: bold;
+                font-family: 'Press Start 2P', cursive;
+            }
 
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            align-items: center;
-        }
-            </style>
-            `;
+            .buttons {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .arrows {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .arrows img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .pixel-corners {
+                clip-path: polygon(
+                    0px calc(100% - 42px),
+                    6px calc(100% - 42px),
+                    6px calc(100% - 30px),
+                    12px calc(100% - 30px),
+                    12px calc(100% - 18px),
+                    18px calc(100% - 18px),
+                    18px calc(100% - 12px),
+                    30px calc(100% - 12px),
+                    30px calc(100% - 6px),
+                    42px calc(100% - 6px),
+                    42px 100%,
+                    calc(100% - 42px) 100%,
+                    calc(100% - 42px) calc(100% - 6px),
+                    calc(100% - 30px) calc(100% - 6px),
+                    calc(100% - 30px) calc(100% - 12px),
+                    calc(100% - 18px) calc(100% - 12px),
+                    calc(100% - 18px) calc(100% - 18px),
+                    calc(100% - 12px) calc(100% - 18px),
+                    calc(100% - 12px) calc(100% - 30px),
+                    calc(100% - 6px) calc(100% - 30px),
+                    calc(100% - 6px) calc(100% - 42px),
+                    100% calc(100% - 42px),
+                    100% 42px,
+                    calc(100% - 6px) 42px,
+                    calc(100% - 6px) 30px,
+                    calc(100% - 12px) 30px,
+                    calc(100% - 12px) 18px,
+                    calc(100% - 18px) 18px,
+                    calc(100% - 18px) 12px,
+                    calc(100% - 30px) 12px,
+                    calc(100% - 30px) 6px,
+                    calc(100% - 42px) 6px,
+                    calc(100% - 42px) 0px,
+                    42px 0px,
+                    42px 6px,
+                    30px 6px,
+                    30px 12px,
+                    18px 12px,
+                    18px 18px,
+                    12px 18px,
+                    12px 30px,
+                    6px 30px,
+                    6px 42px,
+                    0px 42px
+                );
+                }
+
+            .buttons button {
+                width: 300px;
+                height: 85px;
+                font-family: 'Press Start 2P', cursive;
+                background-color: #252525;
+                color: white;
+                border-color: white;
+            }
+
+            #choose {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+        `;
             
     }
 
@@ -269,6 +423,7 @@ export class Connect4 extends Component{
         //I want to make active the first column for player_turn
         // this.updateBoard(data);
         console.log("player_turn", player_turn);
+        this.updateTurn(player_turn);
         if (this.player == player_turn)
         {
             for (var row = 0; row < 6; row++) {
@@ -283,6 +438,10 @@ export class Connect4 extends Component{
         {
             document.removeEventListener("keydown", this.handleKeyDown);
         }
+    }
+
+    updateTurn(player_turn)
+    {
     }
 
     handleKeyDown(event) {
