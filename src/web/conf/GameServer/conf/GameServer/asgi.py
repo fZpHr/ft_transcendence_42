@@ -12,6 +12,7 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from Connect4Handler.routing import websocket_urlpatterns as Connect4Handler_websocket_urlpatterns
+from MatchMakingHandler.routing import websocket_urlpatterns as MatchMakingHandler_websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GameServer.settings')
 
@@ -19,7 +20,7 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            Connect4Handler_websocket_urlpatterns
+            Connect4Handler_websocket_urlpatterns + MatchMakingHandler_websocket_urlpatterns
         )
     ),
 })

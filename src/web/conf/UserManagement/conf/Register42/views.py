@@ -3,11 +3,11 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 import requests
 import os
-from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from .models import User
 
 logger = logging.getLogger('print')
 
