@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import logging
 import json
-from django.contrib.auth import get_user_model
+from .models import UserProxy 
 from asgiref.sync import sync_to_async
 from urllib.parse import parse_qs
 import asyncio
@@ -206,6 +206,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                         'winner': Connect4GameConsumer.games[self.room_name].get_winner()
                     }
                 )
+                return
             else:   
                 Connect4GameConsumer.games[self.room_name].timer -= 1
                 await self.channel_layer.group_send(
@@ -227,8 +228,24 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
         }))
 
     async def game_finished(self, event):
+        player1_username = Connect4GameConsumer.games[self.room_name].players[0]
+        player2_username = Connect4GameConsumer.games[self.room_name].players[1]
+        logger.info(f"Player 1: {player1_username}, Player 2: {player2_username}")
+        player1 = await sync_to_async(UserProxy.objects.get)(username=player1_username)
+        player2 = await sync_to_async(UserProxy.objects.get)(username=player2_username)
+        winner = None
+        if event['winner'] == 1:
+            winner = player1.username
+            player1.elo += 10
+            player2.elo -= 10
+        else:
+            winner = player2.username
+            player1.elo -= 10
+            player2.elo += 10
+        await sync_to_async(player1.save)()
+        await sync_to_async(player2.save)()
         await self.send(text_data=json.dumps({
             'type': 'game_over',
             'message': event['message'],
-            'winner': event['winner']
+            'winner': winner
         }))

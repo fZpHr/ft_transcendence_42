@@ -30,7 +30,11 @@ export class Connect4 extends Component{
                     </div>
                 </div>
             </div>
-            <div id="timer">30</div>
+            <div id="current-player">
+                <div id="player1-turn">Player 1's turn</div>
+                <div id="timer">30</div>
+                <div id="player2-turn"></div>
+            </div>
             <div id="connect-four"></div>
         </div>
         <div id="overlay">
@@ -70,12 +74,6 @@ export class Connect4 extends Component{
                 justify-content: flex-end;
             }
 
-            #player1-turn, #player2-turn {
-                font-family: 'Press Start 2P', cursive;
-                color: white;
-                font-size: 8px;
-            }
-
             connect4-component {
                 display: flex;
                 justify-content: center;
@@ -83,6 +81,23 @@ export class Connect4 extends Component{
                 height: 100vh;
                 background-color: black;
             }
+
+            #current-player {
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                justify-content: space-evenly;
+                width: 100%;
+            }
+
+            #player1-turn, #player2-turn {
+                font-family: 'Press Start 2P', cursive;
+                color: white;
+                font-size: 0.8em;
+                text-align: center;
+                width: 45%;
+            }
+                
                 
             #game-wrapper {
                 display: flex;
@@ -99,12 +114,6 @@ export class Connect4 extends Component{
                 margin: 0 auto;
                 display: flex;
                 flex-wrap: wrap;
-            }
-                
-            #current-player {
-                font-size: 2em;
-                color: white;
-                margin: 10px;
             }
                     
             .tile {
@@ -199,6 +208,8 @@ export class Connect4 extends Component{
                 color: white;
                 margin: 10px;
                 font-weight: bold;
+                width: 10%;
+                text-align: center;
             }
 
             #overlay {
@@ -682,6 +693,7 @@ export class Connect4 extends Component{
                     this.startGame("player" + data.player_turn);
                     break;
                 case "move":
+                    this.updateTurn("player" + data.player_turn);
                     this.startGame("player" + data.player_turn);
                     this.updateBoard(data);
                     break;
@@ -826,6 +838,16 @@ export class Connect4 extends Component{
 
     updateTurn(player_turn)
     {
+        if (player_turn == "player1")
+        {
+            document.getElementById("player1-turn").innerHTML = "Player 1's turn";
+            document.getElementById("player2-turn").innerHTML = "";
+        }
+        else
+        {
+            document.getElementById("player1-turn").innerHTML = "";
+            document.getElementById("player2-turn").innerHTML = "Player 2's turn";
+        }
     }
 
     handleKeyDown(event) {
