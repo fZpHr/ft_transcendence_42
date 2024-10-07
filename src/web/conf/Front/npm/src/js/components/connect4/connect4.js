@@ -229,7 +229,9 @@ export class Connect4 extends Component{
             }
 
             #winnerText {
-                padding: 200px;
+                padding: 100px;
+                font-size: 2em;
+                font-family: 'Press Start 2P', cursive;
             }
 
             #timer {

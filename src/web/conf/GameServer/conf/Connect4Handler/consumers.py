@@ -104,10 +104,12 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             if self.room_name not in Connect4GameConsumer.games:
                 Connect4GameConsumer.games[self.room_name] = Connect4Game(message['room'])
             if Connect4GameConsumer.games[self.room_name].gameFinished:
+                player1_username_win = Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].winner - 1]
+                player1_winner = await sync_to_async(UserProxy.objects.get)(username=player1_username_win)
                 await self.send(text_data=json.dumps({
                     'type': 'game_over',
                     'message': 'Game finished',
-                    'winner': Connect4GameConsumer.games[self.room_name].get_winner()
+                    'winner': player1_winner.username
                 }))
                 return
             if self.player_id in Connect4GameConsumer.games[self.room_name].players:
