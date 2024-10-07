@@ -81,7 +81,8 @@ export class MatchMaking extends Component{
                     }, 3000);
                     break;
                 case "match_failed":
-                    this.redirection = document.getElementById("overlay-text").innerText = event.data.message;
+                    clearInterval(this.interval);
+                    document.getElementById("overlay-text").innerText = message.message;
                     setTimeout(() => {
                         window.router.navigate(`/`);
                     }, 3000);

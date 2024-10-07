@@ -31,7 +31,7 @@ export class Connect4 extends Component{
                 </div>
             </div>
             <div id="current-player">
-                <div id="player1-turn">Player 1's turn</div>
+                <div id="player1-turn"></div>
                 <div id="timer">30</div>
                 <div id="player2-turn"></div>
             </div>
@@ -688,6 +688,7 @@ export class Connect4 extends Component{
 
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
+            console.log("data", data);
             switch (data.type) {
                 case "game_start":
                     this.player = data.player1 == userName ? "player1" : "player2";
@@ -700,17 +701,22 @@ export class Connect4 extends Component{
                     this.updateBoard(data);
                     break;
                 case "game_full":
-                    alert("Game is full");
-                    setTimeout(() => {
-                        window.router.navigate("/");
-                    }, 5000);
+                    this.game_full();
                 case "update":
+                    this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
                     this.updateBoard(data);
                     this.updateTimer(data.timer);
+                    if (!this.player)
+                    {
+                        this.player = data.player1 == userName ? "player1" : "player2";
+                        this.startGame("player" + data.player_turn);
+                    }
                     break;
                 case "game_over":
-                    this.startGame(null);
+                    this.updateTurn(null);
+                    this.updateBoard(data);
+                    this.updateInfos(data);
                     this.endGame(data);
                     break;
             }
@@ -845,10 +851,15 @@ export class Connect4 extends Component{
             document.getElementById("player1-turn").innerHTML = "Player 1's turn";
             document.getElementById("player2-turn").innerHTML = "";
         }
-        else
+        else if (player_turn == "player2")
         {
             document.getElementById("player1-turn").innerHTML = "";
             document.getElementById("player2-turn").innerHTML = "Player 2's turn";
+        }
+        else 
+        {
+            document.getElementById("player1-turn").innerHTML = "";
+            document.getElementById("player2-turn").innerHTML = "";
         }
     }
 
@@ -901,6 +912,14 @@ export class Connect4 extends Component{
             }
         }
         return -1;
+    }
+
+    game_full() {
+        document.getElementById("overlay").style.display = "flex";
+        document.getElementById("winnerText").innerText = "Game full!";
+        setTimeout(() => {
+            window.router.navigate("/");
+        }, 5000);
     }
 
     CustomDOMContentUnload(){

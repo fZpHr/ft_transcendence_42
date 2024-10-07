@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 import logging
 from .models import Game
+from Connect4Handler.models import UserProxy
 from asgiref.sync import sync_to_async
 
 logger = logging.getLogger('print')
@@ -35,9 +36,11 @@ class MatchMakingHandler(AsyncWebsocketConsumer):
         if len(MatchMakingHandler.waiting_list) >= 2:
             opponent1 = MatchMakingHandler.waiting_list.pop()
             opponent2 = MatchMakingHandler.waiting_list.pop()
-            if opponent1 == opponent2:
-                MatchMakingHandler.waiting_list.append(opponent1)
-                await opponent2.send(text_data=json.dumps({
+            player1 = await sync_to_async(UserProxy.objects.get)(username=opponent1.player_id)
+            player2 = await sync_to_async(UserProxy.objects.get)(username=opponent2.player_id)
+            if player1.username == player2.username:
+                MatchMakingHandler.waiting_list.append(opponent2)
+                await opponent1.send(text_data=json.dumps({
                     'type': 'match_failed',
                     'message': 'You are already in the queue'
                 }))

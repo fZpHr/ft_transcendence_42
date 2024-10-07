@@ -109,7 +109,10 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 await self.send(text_data=json.dumps({
                     'type': 'game_over',
                     'message': 'Game finished',
-                    'winner': player1_winner.username
+                    'winner': player1_winner.username,
+                    'board': Connect4GameConsumer.games[self.room_name].get_board(),
+                    'player1': Connect4GameConsumer.games[self.room_name].players[0],
+                    'player2': Connect4GameConsumer.games[self.room_name].players[1],
                 }))
                 return
             if self.player_id in Connect4GameConsumer.games[self.room_name].players:
@@ -249,5 +252,8 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'game_over',
             'message': event['message'],
-            'winner': winner
+            'winner': winner,
+            'board': Connect4GameConsumer.games[self.room_name].get_board(),
+            'player1': Connect4GameConsumer.games[self.room_name].players[0],
+            'player2': Connect4GameConsumer.games[self.room_name].players[1],
         }))
