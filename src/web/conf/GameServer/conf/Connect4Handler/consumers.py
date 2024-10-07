@@ -223,13 +223,17 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def timer(self, event):
+        player1 = Connect4GameConsumer.games[self.room_name].players[0]
+        player2 = Connect4GameConsumer.games[self.room_name].players[1]
+        if player2 == None:
+            player2 = "Waiting for player 2"
         await self.send(text_data=json.dumps({
             'type': 'update',
             'timer': event['timer'],
             'board' : Connect4GameConsumer.games[self.room_name].get_board(),
             'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
-            'player1': Connect4GameConsumer.games[self.room_name].players[0],
-            'player2': Connect4GameConsumer.games[self.room_name].players[1],
+            'player1': player1,
+            'player2': player2,
         }))
 
     async def game_finished(self, event):

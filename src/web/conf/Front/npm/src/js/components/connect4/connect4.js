@@ -674,7 +674,7 @@ export class Connect4 extends Component{
         const userName = getCookie("user42");
         const searchParams = new URLSearchParams(window.location.search);
         const gameId = searchParams.get("id");
-        this.ws = new WebSocket(`wss://${window.location.hostname}/wss-game/connect4/`);
+        this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4/`);
         
         this.ws.onopen = () => {
             console.log("Connected to the server");
