@@ -8,7 +8,6 @@ const target = document.getElementById('main-content')
 const router = new Router(target, {
   '/': new Route('/', 'index-component', null, false),
   '/404/': new Route('/404/', 'not-found', null, false),
-  '/auth42/': new Route('/auth42/', 'auth42-component', null , false),
   '/pong/': new Route('/pong/', 'pong-main-component'),
   '/pong/local': new Route('/pong/local', 'pong-local-component'),
   '/matchmaking/': new Route('/matchmaking/', 'matchmaking-component'),

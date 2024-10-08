@@ -2,27 +2,22 @@ services:
 ################MICROSERVICES################
   web-npm:
     extends:
-      file: ./src/web/docker-compose.yaml
+      file: ./src/web/docker-compose.yml
       service: web-npm
 
   web-nginx:
     extends:
-      file: ./src/web/docker-compose.yaml
+      file: ./src/web/docker-compose.yml
       service: web-nginx
 
   web-game_server:
     extends:
-      file: ./src/web/docker-compose.yaml
+      file: ./src/web/docker-compose.yml
       service: web-game_server
-
-  web-tournament_management:
-    extends:
-      file: ./src/web/docker-compose.yaml
-      service: web-tournament_management
 
   web-user_management:
     extends:
-      file: ./src/web/docker-compose.yaml
+      file: ./src/web/docker-compose.yml
       service: web-user_management
 
 
@@ -86,7 +81,6 @@ services:
       - web-npm
       - web-nginx
       - web-game_server
-      - web-tournament_management
       - web-user_management    
     # restart: on-failure
     networks:
@@ -149,7 +143,6 @@ services:
       - web-npm
       - web-nginx
       - web-game_server
-      - web-tournament_management
       - web-user_management
     # ports:
     #   - "9090"
