@@ -16,7 +16,9 @@ def check_user(request):
         'Authorization': 'Bearer ' + token,
     }
     r = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-
+    data = r.json()
+    if data.login != request.COOKIES.get('user42'):
+        return JsonResponse({'status': 'error'})
     if r.status_code == 200:
         return JsonResponse({'status': 'success'})
     else:
