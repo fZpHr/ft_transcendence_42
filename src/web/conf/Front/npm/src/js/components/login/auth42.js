@@ -10,7 +10,7 @@ export class Auth42 extends Component {
         return`
                 <div id="container">
                     <div id="terminal">
-                        <pre id="terminal-out">Welcome Guest.\nType 'help' to see available commands.\nYou are not connected. Please login to continue, and access to all features.</pre>
+                        <pre id="terminal-out">Welcome Guest.\nType 'help' to see available commands.\nYou are not connected. Please ./login42.sh to continue, and access to all features.</pre>
                         <div id="input-container">
                             <span id="prompt">></span>
                             <input type="text" id="terminal-in" autofocus />
