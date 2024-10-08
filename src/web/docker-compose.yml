@@ -14,7 +14,6 @@ services:
       - ../../.env
     depends_on:
       - web-game_server
-      - web-tournament_management
       - web-user_management
     networks:
       - transcendence
@@ -37,7 +36,6 @@ services:
     depends_on:
       - web-npm
       - web-game_server
-      - web-tournament_management
       - web-user_management
     networks:
       transcendence:
@@ -61,25 +59,6 @@ services:
     networks:
       transcendence:
 
-  web-tournament_management:
-    build:
-      context: conf/TournamentManagement
-      dockerfile: Dockerfile
-    container_name: web-tournament_management
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "8002"
-    env_file:
-      - ../../.env
-    volumes:
-      - ./conf/TournamentManagement/:/usr/src/app/logs/
-      - ./conf/TournamentManagement/conf/:/usr/src/app/
-    # restart: on-failure
-    networks:
-      transcendence:
-
   web-user_management:
     build:
       context: conf/UserManagement
@@ -88,6 +67,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      web-game_server:
+        condition: service_started
     ports:
       - "8003"
     env_file:

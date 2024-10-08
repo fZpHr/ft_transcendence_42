@@ -1,26 +1,21 @@
 services:
   web-npm:
     extends:
-      file: ../src/web/docker-compose.yaml
+      file: ../src/web/docker-compose.yml
       service: web-npm
   web-nginx:
     extends:
-      file: ../src/web/docker-compose.yaml
+      file: ../src/web/docker-compose.yml
       service: web-nginx
 
   web-game_server:
     extends:
-      file: ../src/web/docker-compose.yaml
+      file: ../src/web/docker-compose.yml
       service: web-game_server
-
-  web-tournament_management:
-    extends:
-      file: ../src/web/docker-compose.yaml
-      service: web-tournament_management
 
   web-user_management:
     extends:
-      file: ../src/web/docker-compose.yaml
+      file: ../src/web/docker-compose.yml
       service: web-user_management
 
   portainer:
