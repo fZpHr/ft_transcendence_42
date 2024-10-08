@@ -691,14 +691,14 @@ export class Connect4 extends Component{
             console.log("data", data);
             switch (data.type) {
                 case "game_start":
-                    this.player = data.player1 == userName ? "player1" : "player2";
+                    this.player = data.player1.username == userName ? "player1" : "player2";
                     this.updateInfos(data);
                     this.startGame("player" + data.player_turn);
                     break;
                 case "move":
+                    this.updateBoard(data);
                     this.updateTurn("player" + data.player_turn);
                     this.startGame("player" + data.player_turn);
-                    this.updateBoard(data);
                     break;
                 case "game_full":
                     this.game_full();
@@ -709,7 +709,7 @@ export class Connect4 extends Component{
                     this.updateTimer(data.timer);
                     if (!this.player)
                     {
-                        this.player = data.player1 == userName ? "player1" : "player2";
+                        this.player = data.player1.username == userName ? "player1" : "player2";
                         this.startGame("player" + data.player_turn);
                     }
                     break;
@@ -785,8 +785,8 @@ export class Connect4 extends Component{
     }
 
     updateInfos(data) {
-        document.getElementById("player1-name").innerText = data.player1;
-        document.getElementById("player2-name").innerText = data.player2;
+        document.getElementById("player1-name").innerText = data.player1.username;
+        document.getElementById("player2-name").innerText = data.player2.username;
     }
 
     updateTimer(timer) {
@@ -830,11 +830,19 @@ export class Connect4 extends Component{
         this.updateTurn(player_turn);
         if (this.player == player_turn)
         {
+            for (var col = 0; col < 7; col++)
+            {
+                if (!this.checkColumnFull(col))
+                {
+                    this.column = col;
+                    break;
+                }
+            }
+            console.log("column", this.column);
             for (var row = 0; row < 6; row++) {
-                let tile = document.getElementById(row + " 0");
+                let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
             }
-            this.column = 0;
             this.handleKeyDown = this.handleKeyDown.bind(this);
             document.addEventListener("keydown", this.handleKeyDown);
         }
@@ -869,7 +877,8 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            if (this.column > 0) this.column--;
+            while (this.column > 0 && this.checkColumnFull(this.column - 1))
+                this.column--;
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
@@ -879,7 +888,8 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            if (this.column < 6) this.column++; // Adjusted to ensure column does not exceed 6
+            while (this.column < 6 && this.checkColumnFull(this.column + 1))
+                this.column++;
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
@@ -920,6 +930,19 @@ export class Connect4 extends Component{
         setTimeout(() => {
             window.router.navigate("/");
         }, 5000);
+    }
+
+    checkColumnFull(column)
+    {
+        for (var row = 0; row < 6; row++)
+        {
+            let tile = document.getElementById(row + " " + column);
+            if (!tile.classList.contains("red") && !tile.classList.contains("yellow"))
+            {
+                return false;
+            }
+        }
+        return true
     }
 
     CustomDOMContentUnload(){
