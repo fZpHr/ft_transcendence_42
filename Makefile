@@ -1,4 +1,6 @@
 CONFIG_FILE = dev_tools/.make_config
+NGINX_CONF=./src/web/conf/Front/nginx/conf/nginx.conf
+DOCKERFILE_NPM=./src/web/conf/Front/Dockerfile_npm
 
 ifneq ("$(wildcard $(CONFIG_FILE))","")
     include $(CONFIG_FILE)
@@ -9,8 +11,6 @@ ASCII_ART = "▄▄▄▖▗▄▄▖  ▗▄▖ ▗▖  ▗▖ ▗▄▄▖ ▗
               █  ▐▛▀▚▖▐▛▀▜▌▐▌ ▝▜▌ ▝▀▚▖▐▌   ▐▛▀▀▘▐▌ ▝▜▌▐▌  █▐▛▀▀▘▐▌ ▝▜▌▐▌   ▐▛▀▀▘\n\
               █  ▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌▗▄▄▞▘▝▚▄▄▖▐▙▄▄▖▐▌  ▐▌▐▙▄▄▀▐▙▄▄▖▐▌  ▐▌▝▚▄▄▖▐▙▄▄▖\n\
                                                                     "
-
-VERSION_LAUNCH = 0
 
 all:
 	@echo $(ASCII_ART)
@@ -51,17 +51,31 @@ re:
 	@make -s down
 	@make -s all
 
+
 start:
 	make -s env
 	@if [ "$(VERSION)" = "dev" ] && [ "$(SHOW_DETAILS)" = "1" ]; then \
+        sed -i '/# Mode prod/,/# prod end/ {/^# Mode prod/!{/^# prod end/!s/^\([^#]\)/#\1/;}}' $(NGINX_CONF); \
+        sed -i '/# Mode dev/,/# dev end/ {/^# Mode dev/!{/^# dev end/!s/^#\s*//;}}' $(NGINX_CONF); \
+        sed -i 's/npm run build/npm run dev/' $(DOCKERFILE_NPM); \
         docker compose --env-file .env -f dev_tools/docker-compose-dev.yml up --build; \
     elif [ "$(VERSION)" = "prod" ] && [ "$(SHOW_DETAILS)" = "1" ]; then \
+        sed -i '/# Mode dev/,/# dev end/ {/^# Mode dev/!{/^# dev end/!s/^\([^#]\)/#\1/;}}' $(NGINX_CONF); \
+        sed -i '/# Mode prod/,/# prod end/ {/^# Mode prod/!{/^# prod end/!s/^#\s*//;}}' $(NGINX_CONF); \
+        sed -i 's/npm run dev/npm run build/' $(DOCKERFILE_NPM); \
         docker compose up --build; \
-	elif [ "$(VERSION)" = "dev" ] && [ "$(SHOW_DETAILS)" = "0" ]; then \
-		docker compose --env-file .env -f dev_tools/docker-compose-dev.yml up --build -d; \
-	elif [ "$(VERSION)" = "prod" ] && [ "$(SHOW_DETAILS)" = "0" ]; then \
-		docker compose up --build -d; \
+    elif [ "$(VERSION)" = "dev" ] && [ "$(SHOW_DETAILS)" = "0" ]; then \
+        sed -i '/# Mode prod/,/# prod end/ {/^# Mode prod/!{/^# prod end/!s/^\([^#]\)/#\1/;}}' $(NGINX_CONF); \
+        sed -i '/# Mode dev/,/# dev end/ {/^# Mode dev/!{/^# dev end/!s/^#\s*//;}}' $(NGINX_CONF); \
+        sed -i 's/npm run build/npm run dev/' $(DOCKERFILE_NPM); \
+        docker compose --env-file .env -f dev_tools/docker-compose-dev.yml up --build -d; \
+    elif [ "$(VERSION)" = "prod" ] && [ "$(SHOW_DETAILS)" = "0" ]; then \
+        sed -i '/# Mode dev/,/# dev end/ {/^# Mode dev/!{/^# dev end/!s/^\([^#]\)/#\1/;}}' $(NGINX_CONF); \
+        sed -i '/# Mode prod/,/# prod end/ {/^# Mode prod/!{/^# prod end/!s/^#\s*//;}}' $(NGINX_CONF); \
+        sed -i 's/npm run dev/npm run build/' $(DOCKERFILE_NPM); \
+        docker compose up --build -d; \
     fi
+
 
 env:
 	@if [ ! -f .env ] || [ ! -s .env ]; then \

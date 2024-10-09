@@ -1,4 +1,5 @@
 import { Component } from "@js/component";
+import { getCookie } from "../../utils/cookie";
 
 export class Index extends Component{
     constructor(){
@@ -7,7 +8,7 @@ export class Index extends Component{
 
     render(){
         let html;
-        let isUserConnected = document.cookie.includes("connected=true");
+        let isUserConnected = getCookie('connected');
         if (isUserConnected)
             html = `
                 <index-connected-component></index-connected-component>`
