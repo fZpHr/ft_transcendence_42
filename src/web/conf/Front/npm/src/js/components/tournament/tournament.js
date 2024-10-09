@@ -451,9 +451,6 @@ export class Tournament extends Component {
         function getBallPosition() {
             const ball = document.getElementById('ball');
             const rect = ball.getBoundingClientRect();
-            console.log(ball);
-            console.log(rect);
-            console.log(window.scrollX);
             return {
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX,
