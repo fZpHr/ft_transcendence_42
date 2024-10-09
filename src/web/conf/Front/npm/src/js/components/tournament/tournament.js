@@ -16,29 +16,40 @@ export class Tournament extends Component {
 
     render() {
         return `
+        <h2 id="hd">Mode Tournois</h2>
         <div id="tournament-container">
-            <div id="player-registration">
-                <h2>Inscrivez les joueurs</h2>
-                <div id="player-inputs"></div>
-                <button id="add-player-button">Ajouter un joueur</button>
-                <button id="start-tournament-button">Démarrer le tournoi</button>
+                <div id="player-registration">
+                    <div id="player-inputs"></div>
+                    <button id="start-tournament-button">Démarrer le tournoi</button>
+                    </div>
+                    <div id="tournament-progress" style="display: none;">
+                    <h2>Tournoi en cours</h2>
+                    <button id="start-pong-button">Lancer la partie</button>
+                    <button id="reset-tournament">Nouveau tournoi</button>
+                    <div id="current-match"></div>
+                    <div id="tournament-bracket"></div>
+                </div>
+                <div id="tournament-result" style="display: none;">
+                    <h2>Résultat du tournoi</h2>
+                    <div id="winner-display"></div>
+                    <button id="reset-end">Nouveau tournoi</button>
+                </div>
             </div>
-            <div id="tournament-progress" style="display: none;">
-            <h2>Tournoi en cours</h2>
-            <button id="reset-tournament">Nouveau tournoi</button>
-            <div id="basePong">
-            <div id="middleLine"></div>
-            <div class="ball" id="ball">
-            <div class="ballstyle"></div>
-            </div>
-            <div id="player_1_paddle" class="paddle_1"></div>
-            <div id="player_2_paddle" class="paddle_2"></div>
-            <div class="text">
-            <div id="player_1_score" class="score_1">0</div>
-            <div id="player_2_score" class="score_2">0</div>
-            <div id="message"></div>
-            </div>
-            <div id="overlay-before-start">
+
+            <div id="pong-container" style="display: none;">
+                <div id="basePong">
+                    <div id="middleLine"></div>
+                    <div class="ball" id="ball">
+                        <div class="ballstyle"></div>
+                    </div>
+                    <div id="player_1_paddle" class="paddle_1"></div>
+                    <div id="player_2_paddle" class="paddle_2"></div>
+                    <div class="text">
+                        <div id="player_1_score" class="score_1">0</div>
+                        <div id="player_2_score" class="score_2">0</div>
+                        <div id="message"></div>
+                    </div>
+                    <div id="overlay-before-start">
                         <div class="controls">
                             <div class="text-before">Are you ready?</div>
                             <div class="player-controls">
@@ -60,15 +71,7 @@ export class Tournament extends Component {
                         <div id="overlay-score"></div>
                     </div>
                 </div>
-                <div id="current-match"></div>
-                <div id="tournament-bracket"></div>
             </div>
-            <div id="tournament-result" style="display: none;">
-                <h2>Résultat du tournoi</h2>
-                <div id="winner-display"></div>
-                <button id="reset-end">Nouveau tournoi</button>
-            </div>
-        </div>
     `;
     }
 
@@ -79,35 +82,60 @@ export class Tournament extends Component {
                 height: 100%;
                 margin: 0;
                 padding: 0;
-                background-color: black;
+                background-color: #121212;
+                color: #ffffff;
+                font-family: 'Press Start 2P', cursive;
             }
 
+            #hd {
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+                background-color: #1f1f1f;
+                border-bottom: 2px solid #333;
+            }
+
+            #player-registration,
             #tournament-container {
-                font-family: 'Press Start 2P', cursive;
-                color: white;
-                background-color: black;
+                background-color: #1f1f1f;
                 padding: 20px;
                 text-align: center;
+                justify-content: center;
+                display: flex;
+                margin-top: 10px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
 
             button {
-                background-color: white;
-                color: black;
+                background-color: #6200ea;
+                color: #ffffff;
                 border: none;
                 padding: 10px 20px;
                 margin: 10px;
                 cursor: pointer;
-                font-family: 'Press Start 2P', cursive;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
             }
 
             button:hover {
-                background-color: #ddd;
+                background-color: #3700b3;
+                transform: scale(1.05);
             }
 
             input {
                 margin: 5px;
-                padding: 5px;
-                font-family: 'Press Start 2P', cursive;
+                padding: 10px;
+                border: 2px solid #333;
+                border-radius: 5px;
+                background-color: #2c2c2c;
+                color: #ffffff;
+                transition: border-color 0.3s ease;
+            }
+
+            input:focus {
+                border-color: #6200ea;
+                outline: none;
             }
 
             #tournament-bracket {
@@ -116,8 +144,10 @@ export class Tournament extends Component {
 
             .match {
                 margin: 10px 0;
-                padding: 5px;
+                padding: 10px;
                 background-color: #333;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             }
 
 
@@ -126,14 +156,13 @@ export class Tournament extends Component {
 
             /* Pong */
             #basePong {
-                height: 623px;
-                width: 1440px;
+                height: 831px; /* If you modify the size u have to modify the condition in JS */
+                width: 1920px;
                 position: relative;
                 background: black;
                 font-family: 'Press Start 2P', cursive;
                 user-select: none;
                 overflow: hidden;
-                left: 12%;
             }
 
             .paddle_1,
@@ -172,7 +201,6 @@ export class Tournament extends Component {
                 font-weight: 500px;
                 top: 10%;
                 font-size: 50px;
-
             }
 
             #middleLine {
@@ -339,9 +367,9 @@ export class Tournament extends Component {
         let ballSpeedX = BALL_SPEED_X; 
         let ballSpeedY = BALL_SPEED_Y;
     
-        let ballPositionX = getBallPosition().left;
-        let ballPositionY = getBallPosition().top;
-        const initialBallPos = { left: ballPositionX, top: ballPositionY };
+        const initialBallPos = getBallPosition();
+        let ballPositionX = initialBallPos.left;
+        let ballPositionY = initialBallPos.top;
         
         let score_1 = 0;
         let score_2 = 0;
@@ -382,7 +410,9 @@ export class Tournament extends Component {
 
         function handleClick(e) {
             const overlay = document.getElementById("overlay-before-start");
-            if (e.target.id === "start-button") {
+            if (e.target.id === "start-pong-button") {
+                document.getElementById('tournament-container').style.display = 'none';
+                document.getElementById('pong-container').style.display = 'block';
                 overlay.style.display = "none";
                 initGame();
             }
@@ -396,6 +426,7 @@ export class Tournament extends Component {
         
         function resetGame() {
             clearInterval(intervalGameStart);
+            const initialBallPos = getBallPosition();
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
             ball.style.left = ballPositionX + "px";
@@ -420,7 +451,9 @@ export class Tournament extends Component {
         function getBallPosition() {
             const ball = document.getElementById('ball');
             const rect = ball.getBoundingClientRect();
-        
+            console.log(ball);
+            console.log(rect);
+            console.log(window.scrollX);
             return {
                 top: rect.top + window.scrollY,
                 left: rect.left + window.scrollX,
@@ -428,8 +461,45 @@ export class Tournament extends Component {
                 height: rect.height
             };
         }
-
+        
+        function resetGame() {
+            clearInterval(intervalGameStart);
+            ballPositionX = initialBallPos.left;
+            ballPositionY = initialBallPos.top;
+            ball.style.left = ballPositionX + "px";
+            ball.style.top = ballPositionY + "px";
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+            score_1 = 0;
+            score_2 = 0;
+            wPressed = false;
+            sPressed = false;
+            upPressed = false;
+            downPressed = false;
+            document.removeEventListener("keyup", handleKeyUp, true);
+            document.removeEventListener("keydown", handleKeyDown, true);
+            document.removeEventListener("click", handleClick);
+            cancelAnimationFrame(gameLoop);
+            cancelAnimationFrame(moveBall);
+        }
+        
+        this.gameReset = resetGame;
+        
+        function getBallPosition() {
+            const ball = document.getElementById('ball');
+            const ballWidth = ball.offsetWidth;
+            const ballHeight = ball.offsetHeight;
+        
+            return {
+                top: (836 / 2) - (ballHeight / 2),
+                left: (1920 / 2) - (ballWidth / 2),
+                width: ballWidth,
+                height: ballHeight
+            };
+        }
+        
         function resetBall() {
+            const initialBallPos = getBallPosition();
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
             ball.style.left = ballPositionX + "px";
@@ -453,39 +523,39 @@ export class Tournament extends Component {
             const ballRect = ball.getBoundingClientRect();
             const paddle1Rect = paddle_1.getBoundingClientRect();
             const paddle2Rect = paddle_2.getBoundingClientRect();
-            
+        
             const paddles = [
                 { rect: paddle1Rect, speedMultiplier: -1, positionX: paddle1Rect.right },
                 { rect: paddle2Rect, speedMultiplier: -1, positionX: paddle2Rect.left - ballRect.width }
             ];
-
+        
             for (const paddle of paddles) {
                 if (ballRect.left < paddle.rect.right && ballRect.right > paddle.rect.left &&
                     ballRect.top < paddle.rect.bottom && ballRect.bottom > paddle.rect.top) {
-                    
+        
                     ballSpeedX *= paddle.speedMultiplier;
                     ballPositionX = paddle.positionX;
-            
+        
                     let relativeIntersectY = (ballRect.top + (ballRect.height / 2)) - (paddle.rect.top + (paddle.rect.height / 2));
                     let normalizedRelativeIntersectionY = (relativeIntersectY / (paddle.rect.height / 2)) * 10;
-                    
+        
                     ballSpeedY = normalizedRelativeIntersectionY;
-            
+        
                     const paddleElement = paddle.rect === paddle1Rect ? paddle_1 : paddle_2;
                     paddleElement.style.transform = "scale(1.1)";
-            
+        
                     setTimeout(() => {
                         paddleElement.style.transform = "scale(1)";
                     }, 100);
                 }
             }
-            
-            if (ballRect.left < 250 && !ballScored) {
+        
+            if (ballRect.left < 1 && !ballScored) {
                 score_2 += 1;
                 ballScored = true;
                 var score = document.getElementById("player_2_score");
                 if (score !== null) score.textContent = score_2;
-                
+        
                 showOverlay("Player 2 scores!", score_1, score_2);
                 setTimeout(function() {
                     hideOverlay();
@@ -493,13 +563,13 @@ export class Tournament extends Component {
                     ballScored = false;
                 }, OVERLAY_DISPLAY_TIME);
             }
-            
-            if (ballRect.right > 1440 && !ballScored) {
+        
+            if (ballRect.right > 1920 && !ballScored) {
                 score_1 += 1;
                 ballScored = true;
                 var score = document.getElementById("player_1_score");
                 if (score !== null) score.textContent = score_1;
-                
+        
                 showOverlay("Player 1 scores!", score_1, score_2);
                 setTimeout(function() {
                     hideOverlay();
@@ -540,11 +610,11 @@ export class Tournament extends Component {
             if (basePong === null) return;
     
             checkCollision();
-            if (ballPositionX >= 1440 - ball.offsetWidth || ballPositionX <= 0) {
+            if (ballPositionX >= 1920 - ball.offsetWidth || ballPositionX <= 0) {
                 ballSpeedX *= -1;
             }
     
-            if (ballPositionY >= 623 - ball.offsetHeight - 1 || ballPositionY <= 0) {
+            if (ballPositionY >= 836 - ball.offsetHeight - 1 || ballPositionY <= 0) {
                 ballSpeedY *= -1;
             }
             if (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE) {
@@ -565,7 +635,6 @@ export class Tournament extends Component {
                 this.handleMatchResult(score_1 === WINNING_SCORE ? 0 : 1);
                 setTimeout(() => {
                     resetGame();
-                    window.router.navigate("/pong/");
                     window.router.navigate("/tournament/");
                 }, OVERLAY_DISPLAY_TIME);
                 return;
@@ -573,15 +642,16 @@ export class Tournament extends Component {
             requestAnimationFrame(gameLoop);
         }
         
-        async function initGame() {
-            await startGame();
-            gameLoop();
-            moveBall();
-        } 
+        function initGame() {
+            resetBall();
+            startGame().then(() => {
+                gameLoop();
+                moveBall();
+        }); 
     }
+}
 
     setupEventListeners() {
-        document.getElementById('add-player-button').addEventListener('click', () => this.addPlayerInput());
         document.getElementById('start-tournament-button').addEventListener('click', () => this.startTournament());
         document.getElementById('reset-tournament').addEventListener('click', () => this.resetTournament());
         document.getElementById('reset-end').addEventListener('click', () => this.resetTournament());
@@ -590,30 +660,35 @@ export class Tournament extends Component {
     renderPlayerInputs() {
         const container = document.getElementById('player-inputs');
         container.innerHTML = '';
-        for (let i = 0; i < this.players.length; i++) {
+        for (let i = 0; i < 4; i++) {
             container.innerHTML += `<input type="text" id="player${i}" value="${this.players[i] || ''}" placeholder="Nom du joueur ${i + 1}">`;
-        }
-    }
-
-    addPlayerInput() {
-        if (this.players.length < 4) {
-            this.players.push('');
-            this.renderPlayerInputs();
-            this.saveFullState(); 
-        } else {
-            alert("Le nombre maximum de joueurs est de 4.");
         }
     }
 
     startTournament() {
         this.players = Array.from(document.querySelectorAll('#player-inputs input')).map(input => input.value).filter(name => name.trim() !== '');
-        if (this.players.length < 4 || this.players.length > 4 || /*this.players.length > 16 ||*/ (this.players.length & (this.players.length - 1)) !== 0) {
-            alert("Le nombre de joueurs doit être 4"/*, 8 ou 16."*/);
+        if (this.players.length !== 4) {
+            alert("Veuillez entrer 4 noms de joueurs pour démarrer le tournoi");
+            return;
+        }
+        if (!this.areNamesUnique(this.players)) {
+            alert("Les noms des joueurs doivent être différents");
             return;
         }
         this.initializeTournament();
         document.getElementById('player-registration').style.display = 'none';
         document.getElementById('tournament-progress').style.display = 'block';
+    }
+    
+    areNamesUnique(names) {
+        for (let i = 0; i < names.length; i++) {
+            for (let j = i + 1; j < names.length; j++) {
+                if (names[i] === names[j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     initializeTournament() {
