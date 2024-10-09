@@ -37,6 +37,17 @@ export class Connect4 extends Component{
                 <div id="player2-turn"></div>
             </div>
             <div id="connect-four"></div>
+            <div id="keyboard" class="keycaps">
+                <button id="arrow-left" class="arrows pixel-corners">
+                    <img src="/public/img/arrow-left-button.png" style="width: 100%; height:100%"></img>
+                </button>
+                <button id="space" class="pixel-corners">
+                    <img src="/public/img/space-bar-icon.png" style="width: 80%; height:75%"></img>
+                </button>
+                <button id="arrow-right" class="arrows pixel-corners">
+                    <img src="/public/img/arrow-right-button.png" style="width: 100%; height:100%"></img>
+                </button>
+            </div>
         </div>
         <div id="overlay">
             <div id="winnerText"></div>
@@ -46,14 +57,30 @@ export class Connect4 extends Component{
                     <button class="pixel-corners" id="play-again">Play Again</button>
                 </div>
             </div>
-        </div>
-        `;
+        </div>`;
     }
 
     style(){
         // MON CSS
         return `
         <style>
+
+            #keyboard {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                width: 100%;
+                height: 80px;
+                margin-top: 20px;
+            }
+
+            #keyboard .arrows {
+                width: 15%;
+            }
+
+            #space {
+                width: 60%;
+            }
             #infos {
                 display: flex;
                 flex-direction: column;
@@ -249,6 +276,22 @@ export class Connect4 extends Component{
                 justify-content: center;
                 align-items: center;
                 gap: 20px;
+            }
+
+            .keycaps {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .keycaps button {
+                width: 300px;
+                height: 85px;
+                font-family: 'Press Start 2P', cursive;
+                background-color: #252525;
+                color: white;
             }
 
             .arrows {
@@ -735,8 +778,16 @@ export class Connect4 extends Component{
     }
 
     endGame(data) {
+        const activeTiles = document.querySelectorAll(".tile.active-column");
+        activeTiles.forEach(tile => {
+            tile.classList.remove("active-column");
+        });
         document.getElementById("overlay").style.display = "flex";
-        document.getElementById("winnerText").innerText = data.winner + " wins!";
+        if (data.option && data.option == 'draw')
+            document.getElementById("winnerText").innerText = "Draw!";
+        else
+            document.getElementById("winnerText").innerText = data.winner + " wins!";
+        document.removeEventListener("keydown", this.handleKeyDown);
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -767,7 +818,7 @@ export class Connect4 extends Component{
             });
         };
     
-        if (event.key === "Enter") {
+        if (event.key === " ") {
             buttons.forEach(element => {
                 if (element.classList.contains("pixel-corners-active")) {
                     if (element.id == "cancel") {
@@ -882,6 +933,13 @@ export class Connect4 extends Component{
 
     handleKeyDown(event) {
         if (event.key == "ArrowLeft") {
+            const arrowLeft = document.getElementById("arrow-left");
+            arrowLeft.classList.remove("pixel-corners");
+            arrowLeft.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                arrowLeft.classList.remove("pixel-corners-active");
+                arrowLeft.classList.add("pixel-corners");
+            }, 100);
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
@@ -893,6 +951,13 @@ export class Connect4 extends Component{
                 tile.classList.add("active-column");
             }
         } else if (event.key == "ArrowRight") {
+            const arrowRight = document.getElementById("arrow-right");
+            arrowRight.classList.remove("pixel-corners");
+            arrowRight.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                arrowRight.classList.remove("pixel-corners-active");
+                arrowRight.classList.add("pixel-corners");
+            }, 100);
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
@@ -904,7 +969,13 @@ export class Connect4 extends Component{
                 tile.classList.add("active-column");
             }
         } else if (event.key == " ") {
-            console.log("Enter");
+            const space = document.getElementById("space");
+            space.classList.remove("pixel-corners");
+            space.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                space.classList.remove("pixel-corners-active");
+                space.classList.add("pixel-corners");
+            }, 100);
             let row = this.checkAvailableTile(this.column);
             if (row != -1) {
                 let tile = document.getElementById(row + " " + this.column);
