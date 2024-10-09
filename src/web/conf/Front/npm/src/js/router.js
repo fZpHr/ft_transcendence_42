@@ -19,7 +19,7 @@ export class Router {
             path = path.split('?')[0];
         }
         const route = this.routes[path];
-        if (!route) {
+        if (!route || regex && !route.extraRegex || !regex && route.extraRegex) {
             this.navigate('/404/');
             return;
         }
