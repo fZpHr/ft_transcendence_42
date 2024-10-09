@@ -20,6 +20,7 @@ class Connect4Game:
         self.timer_started = False
         self.timer = 30
         self.gameFinished = False
+        self.lastMove = None
 
     def make_move(self, column):
         if self.winner:
@@ -33,6 +34,7 @@ class Connect4Game:
                 if self.check_winner(i, column):
                     self.winner = self.turn
                 self.turn = 1 if self.turn == 2 else 2
+                self.lastMove = (i, column)
                 return True
         return False
 
@@ -196,7 +198,8 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                             'board': Connect4GameConsumer.games[self.room_name].get_board(),
                             'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
                             'winner': Connect4GameConsumer.games[self.room_name].get_winner(),
-                            'moves': Connect4GameConsumer.games[self.room_name].get_moves()
+                            'moves': Connect4GameConsumer.games[self.room_name].get_moves(),
+                            'lastMove': Connect4GameConsumer.games[self.room_name].lastMove
                         }
                     )
 
@@ -219,7 +222,8 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             'board': event['board'],
             'player_turn': event['player_turn'],
             'winner': event['winner'],
-            'moves': event['moves']
+            'moves': event['moves'],
+            'lastMove': event['lastMove']
         }))
 
     async def game_full(self, event):
@@ -266,6 +270,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             'type': 'update',
             'timer': event['timer'],
             'board' : Connect4GameConsumer.games[self.room_name].get_board(),
+            'lastMove': Connect4GameConsumer.games[self.room_name].lastMove,
             'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
             'player1': player1Serializer,
             'player2': player2Serializer,

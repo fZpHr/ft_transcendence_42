@@ -796,12 +796,19 @@ export class Connect4 extends Component{
 
     updateBoard(data) {
         this.board = data.board;
+        const lastTile = document.querySelector(".tile.pixel-corners-active");
+        console.log(lastTile)
+        if (lastTile)
+            lastTile.classList.remove("pixel-corners-active");
         for (var row = 0; row < 6; row++) {
             for (var col = 0; col < 7; col++) {
                 if (this.board[row][col] == 1) {
                     document.getElementById(row + " " + col).classList.add("red");
                 } else if (this.board[row][col] == 2) {
                     document.getElementById(row + " " + col).classList.add("yellow");
+                }
+                if (data.lastMove && data.lastMove[0] == row && data.lastMove[1] == col) {
+                    document.getElementById(row + " " + col).classList.add("pixel-corners-active");
                 }
             }
         }
