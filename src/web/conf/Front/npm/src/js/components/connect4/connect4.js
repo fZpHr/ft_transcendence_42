@@ -7,6 +7,7 @@ export class Connect4 extends Component{
         this.ws = null;
         this.board = this.createBoard();
         this.player = null;
+        this.avalaibleColumns = [0, 1, 2, 3, 4, 5, 6];
     }
 
     createBoard() {
@@ -828,17 +829,18 @@ export class Connect4 extends Component{
         // this.updateBoard(data);
         console.log("player_turn", player_turn);
         this.updateTurn(player_turn);
+        for (var col = 0; col < 7; col++)
+        {
+            if (this.checkColumnFull(col))
+            {
+                let index = this.avalaibleColumns.indexOf(col);
+                if (index > -1)
+                    this.avalaibleColumns.splice(index, 1);
+            }
+        }
         if (this.player == player_turn)
         {
-            for (var col = 0; col < 7; col++)
-            {
-                if (!this.checkColumnFull(col))
-                {
-                    this.column = col;
-                    break;
-                }
-            }
-            console.log("column", this.column);
+            this.column = this.avalaibleColumns[0];
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
@@ -877,8 +879,8 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            while (this.column > 0 && this.checkColumnFull(this.column - 1))
-                this.column--;
+            if (this.column > 0 && this.avalaibleColumns.indexOf(this.column) > 0)
+                this.column = this.avalaibleColumns[this.avalaibleColumns.indexOf(this.column) - 1];
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
@@ -888,8 +890,8 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            while (this.column < 6 && this.checkColumnFull(this.column + 1))
-                this.column++;
+            if (this.column < 6 && this.avalaibleColumns.indexOf(this.column) < this.avalaibleColumns.length - 1)
+                this.column = this.avalaibleColumns[this.avalaibleColumns.indexOf(this.column) + 1];
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
