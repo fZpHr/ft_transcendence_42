@@ -716,12 +716,12 @@ export class Connect4 extends Component{
 
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
-        const searchParams = new URLSearchParams(window.location.search);
-        const gameId = searchParams.get("id");
         this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4/`);
         
         this.ws.onopen = () => {
             console.log("Connected to the server");
+            const searchParams = new URLSearchParams(window.location.search);
+            const gameId = searchParams.get("id");
             this.checkUserIdInterval = setInterval(() => {
                 if (userName && this.ws.readyState === WebSocket.OPEN) {
                     this.ws.send(JSON.stringify({ type: 'join', player_id: `${userName}`, room: `${gameId}` }));
@@ -745,7 +745,9 @@ export class Connect4 extends Component{
                     this.startGame("player" + data.player_turn);
                     break;
                 case "game_full":
-                    this.game_full();
+                    this.game_full(data);
+                    this.ws.close(3845);
+                    break;
                 case "update":
                     this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
@@ -1004,9 +1006,9 @@ export class Connect4 extends Component{
         return -1;
     }
 
-    game_full() {
+    game_full(data) {
         document.getElementById("overlay").style.display = "flex";
-        document.getElementById("winnerText").innerText = "Game full!";
+        document.getElementById("winnerText").innerText = data.message;
         setTimeout(() => {
             window.router.navigate("/");
         }, 5000);
@@ -1026,7 +1028,8 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentUnload(){
-        this.ws.close();
+        if (this.ws.readyState === WebSocket.OPEN)
+            this.ws.close();
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keydown", this.handleEndGame);
     }

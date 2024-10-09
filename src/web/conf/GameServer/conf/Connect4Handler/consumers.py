@@ -7,6 +7,7 @@ from asgiref.sync import sync_to_async
 from urllib.parse import parse_qs
 from MatchMakingHandler.models import Game
 import asyncio
+from channels.layers import get_channel_layer
 
 logger = logging.getLogger('print')
 class Connect4Game:
@@ -87,13 +88,17 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, close_code):
+        logger.info(f"Disconnecting {close_code}")
+        if close_code == 3845:
+            return
+        
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
         if self.room_name in Connect4GameConsumer.games:
             Connect4GameConsumer.games[self.room_name].players.remove(self.player)
-        if len(Connect4GameConsumer.games[self.room_name].players) == 0:
+        if Connect4GameConsumer.games[self.room] and len(Connect4GameConsumer.games[self.room_name].players) == 0:
             Connect4GameConsumer.games.pop(self.room_name)
 
     async def receive(self, text_data):
@@ -107,6 +112,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                     'type': 'game_full',
                     'message': 'Game not found'
                 }))
+                return
             self.player = await sync_to_async(UserProxy.objects.get)(username=message['player_id'])
             player1 = await sync_to_async(UserProxy.objects.get)(id=self.game.player1_id)
             player2 = await sync_to_async(UserProxy.objects.get)(id=self.game.player2_id)
@@ -137,14 +143,14 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                     'type': 'game_full',
                     'message': 'You are not allowed'
                 }))
-                self.disconnect()
+                self.disconnect(1)
                 return
             if len(Connect4GameConsumer.games[self.room_name].players) == 2:
                 await self.send(text_data=json.dumps({
                     'type': 'game_full',
                     'message': 'Game is full'
                 }))
-                self.disconnect()
+                self.disconnect(1)
                 return
             Connect4GameConsumer.games[self.room_name].players.append(self.player)
             if len(Connect4GameConsumer.games[self.room_name].players) == 2:

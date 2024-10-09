@@ -7,7 +7,7 @@ export class Router {
     }
 
     async init() {
-        let route = window.location.pathname;
+        let route = window.location.pathname + window.location.search;
         this.navigate(route);
         this.popStateHandler();
     }
@@ -55,6 +55,7 @@ export class Router {
             return;
         }
         if (regex && route.extraRegex) {
+            console.log(regex, route.extraRegex);
             const regexPattern = new RegExp(route.extraRegex);
             if (!regexPattern.test(regex)) {
                 console.log('Regex does not match');
@@ -86,7 +87,7 @@ export class Router {
 
     async popStateHandler() {
         window.addEventListener('popstate', async (event) => {
-            this.navigate(window.location.pathname);
+            this.navigate(window.location.pathname + window.location.search);
         });
     }
 }
