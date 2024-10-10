@@ -985,6 +985,7 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add(this.player);
                 this.ws.send(JSON.stringify({ type: "move", player_id: this.player, column: this.column }));
+                document.removeEventListener("keydown", this.handleKeyDown);
                 for (var roww = 0; roww < 6; roww++) {
                     let tile = document.getElementById(roww + " " + this.column);
                     tile.classList.remove("active-column");

@@ -160,9 +160,9 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 }))
                 self.disconnect(1)
                 return
-            if Connect4GameConsumer.games[self.room_name].players[1] == None:
+            if Connect4GameConsumer.games[self.room_name].players[1] == None and self.player == player1:
                 Connect4GameConsumer.games[self.room_name].players[1] = self.player
-            elif Connect4GameConsumer.games[self.room_name].players[2] == None:
+            elif Connect4GameConsumer.games[self.room_name].players[2] == None and self.player == player2:
                 Connect4GameConsumer.games[self.room_name].players[2] = self.player
             if Connect4GameConsumer.games[self.room_name].players[1] != None and \
                 Connect4GameConsumer.games[self.room_name].players[2] != None and \
