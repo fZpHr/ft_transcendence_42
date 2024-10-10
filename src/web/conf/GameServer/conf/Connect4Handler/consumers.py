@@ -25,6 +25,7 @@ class Connect4Game:
         self.timer = 30
         self.gameFinished = False
         self.lastMove = None
+        self.isStarted = False
 
     def make_move(self, column):
         if self.winner:
@@ -104,7 +105,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 Connect4GameConsumer.games[self.room_name].players[1] = None
             elif self.player == Connect4GameConsumer.games[self.room_name].players[2]:
                 Connect4GameConsumer.games[self.room_name].players[2] = None
-        if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None:
+        if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None:  
             Connect4GameConsumer.games.pop(self.room_name)
 
     async def receive(self, text_data):
@@ -135,11 +136,11 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 winnerSerializer = UserProxySerializer(winner).data
 
                 await self.send(text_data=json.dumps({
-                    'type': 'game_over',
+                    'type': 'game_full',
                     'message': 'Game finished',
-                    'winner': winnerSerializer.username,
-                    'player1': player1Serializer.username,
-                    'player2': player2Serializer.username,
+                    'winner': winnerSerializer['username'],
+                    'player1': player1Serializer['username'],
+                    'player2': player2Serializer['username'],
                 }))
                 return
             if self.room_name not in Connect4GameConsumer.games:
@@ -164,7 +165,9 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             elif Connect4GameConsumer.games[self.room_name].players[2] == None:
                 Connect4GameConsumer.games[self.room_name].players[2] = self.player
             if Connect4GameConsumer.games[self.room_name].players[1] != None and \
-                Connect4GameConsumer.games[self.room_name].players[2] != None:
+                Connect4GameConsumer.games[self.room_name].players[2] != None and \
+                    not Connect4GameConsumer.games[self.room_name].isStarted:
+                Connect4GameConsumer.games[self.room_name].isStarted = True
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
@@ -275,14 +278,10 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def timer(self, event):
-        player1 = Connect4GameConsumer.games[self.room_name].players[1]
-        player2 = Connect4GameConsumer.games[self.room_name].players[2]
+        player1 = await sync_to_async(UserProxy.objects.get)(id=self.game.player1_id)
+        player2 = await sync_to_async(UserProxy.objects.get)(id=self.game.player2_id)
         player1Serializer = UserProxySerializer(player1).data
-        player2Serializer = None
-        if player2 == None:
-            player2 = "Waiting for player 2"
-        else:
-            player2Serializer = UserProxySerializer(player2).data
+        player2Serializer = UserProxySerializer(player2).data
         await self.send(text_data=json.dumps({
             'type': 'update',
             'timer': event['timer'],

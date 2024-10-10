@@ -746,16 +746,19 @@ export class Connect4 extends Component{
                     break;
                 case "game_full":
                     this.game_full(data);
+                    this.endGame(data);
                     this.ws.close(3845);
                     break;
                 case "update":
+                    this.updateBoard(data);
                     this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
-                    this.updateBoard(data);
                     this.updateTimer(data.timer);
+                    console.log(this.player);
                     if (!this.player)
                     {
                         this.player = data.player1.username == userName ? "player1" : "player2";
+                        console.log(this.player);
                         this.startGame("player" + data.player_turn);
                     }
                     break;
@@ -850,7 +853,6 @@ export class Connect4 extends Component{
     updateBoard(data) {
         this.board = data.board;
         const lastTile = document.querySelector(".tile.pixel-corners-active");
-        console.log(lastTile)
         if (lastTile)
             lastTile.classList.remove("pixel-corners-active");
         for (var row = 0; row < 6; row++) {
@@ -1009,20 +1011,14 @@ export class Connect4 extends Component{
     game_full(data) {
         document.getElementById("overlay").style.display = "flex";
         document.getElementById("winnerText").innerText = data.message;
-        setTimeout(() => {
-            window.router.navigate("/");
-        }, 5000);
     }
 
     checkColumnFull(column)
     {
         for (var row = 0; row < 6; row++)
         {
-            let tile = document.getElementById(row + " " + column);
-            if (!tile.classList.contains("red") && !tile.classList.contains("yellow"))
-            {
+            if (!this.board[row][column])
                 return false;
-            }
         }
         return true
     }
