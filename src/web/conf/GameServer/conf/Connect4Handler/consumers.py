@@ -17,7 +17,10 @@ class Connect4Game:
         self.turn = 1
         self.winner = None
         self.moves = 0
-        self.players = []
+        self.players = {
+            1: None,
+            2: None
+        }
         self.timer_started = False
         self.timer = 30
         self.gameFinished = False
@@ -97,8 +100,11 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         if self.room_name in Connect4GameConsumer.games:
-            Connect4GameConsumer.games[self.room_name].players.remove(self.player)
-        if Connect4GameConsumer.games[self.room] and len(Connect4GameConsumer.games[self.room_name].players) == 0:
+            if self.player == Connect4GameConsumer.games[self.room_name].players[1]:
+                Connect4GameConsumer.games[self.room_name].players[1] = None
+            elif self.player == Connect4GameConsumer.games[self.room_name].players[2]:
+                Connect4GameConsumer.games[self.room_name].players[2] = None
+        if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None:
             Connect4GameConsumer.games.pop(self.room_name)
 
     async def receive(self, text_data):
@@ -145,22 +151,27 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 }))
                 self.disconnect(1)
                 return
-            if len(Connect4GameConsumer.games[self.room_name].players) == 2:
+            if Connect4GameConsumer.games[self.room_name].players[1] != None and \
+                Connect4GameConsumer.games[self.room_name].players[2] != None:
                 await self.send(text_data=json.dumps({
                     'type': 'game_full',
                     'message': 'Game is full'
                 }))
                 self.disconnect(1)
                 return
-            Connect4GameConsumer.games[self.room_name].players.append(self.player)
-            if len(Connect4GameConsumer.games[self.room_name].players) == 2:
+            if Connect4GameConsumer.games[self.room_name].players[1] == None:
+                Connect4GameConsumer.games[self.room_name].players[1] = self.player
+            elif Connect4GameConsumer.games[self.room_name].players[2] == None:
+                Connect4GameConsumer.games[self.room_name].players[2] = self.player
+            if Connect4GameConsumer.games[self.room_name].players[1] != None and \
+                Connect4GameConsumer.games[self.room_name].players[2] != None:
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
                         'type': 'game_start',
                         'message': 'Game started',
-                        'player1': Connect4GameConsumer.games[self.room_name].players[0],
-                        'player2': Connect4GameConsumer.games[self.room_name].players[1],
+                        'player1': Connect4GameConsumer.games[self.room_name].players[1],
+                        'player2': Connect4GameConsumer.games[self.room_name].players[2],
                         'player_turn': Connect4GameConsumer.games[self.room_name].get_turn(),
                     }
                 )
@@ -171,7 +182,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             return
         if message['type'] == 'move':
             Connect4GameConsumer.games[self.room_name].timer = 30
-            if self.player != Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].get_turn() - 1]:
+            if self.player != Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].get_turn()]:
                 return
             column = message['column']
             if Connect4GameConsumer.games[self.room_name].make_move(column):
@@ -264,8 +275,8 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def timer(self, event):
-        player1 = Connect4GameConsumer.games[self.room_name].players[0]
-        player2 = Connect4GameConsumer.games[self.room_name].players[1]
+        player1 = Connect4GameConsumer.games[self.room_name].players[1]
+        player2 = Connect4GameConsumer.games[self.room_name].players[2]
         player1Serializer = UserProxySerializer(player1).data
         player2Serializer = None
         if player2 == None:
