@@ -7,6 +7,7 @@ export class Connect4 extends Component{
         this.ws = null;
         this.board = this.createBoard();
         this.player = null;
+        this.avalaibleColumns = [0, 1, 2, 3, 4, 5, 6];
     }
 
     createBoard() {
@@ -36,6 +37,17 @@ export class Connect4 extends Component{
                 <div id="player2-turn"></div>
             </div>
             <div id="connect-four"></div>
+            <div id="keyboard" class="keycaps">
+                <button id="arrow-left" class="arrows pixel-corners">
+                    <img src="/public/img/arrow-left-button.png" style="width: 100%; height:100%"></img>
+                </button>
+                <button id="space" class="pixel-corners">
+                    <img src="/public/img/space-bar-icon.png" style="width: 80%; height:75%"></img>
+                </button>
+                <button id="arrow-right" class="arrows pixel-corners">
+                    <img src="/public/img/arrow-right-button.png" style="width: 100%; height:100%"></img>
+                </button>
+            </div>
         </div>
         <div id="overlay">
             <div id="winnerText"></div>
@@ -45,14 +57,30 @@ export class Connect4 extends Component{
                     <button class="pixel-corners" id="play-again">Play Again</button>
                 </div>
             </div>
-        </div>
-        `;
+        </div>`;
     }
 
     style(){
         // MON CSS
         return `
         <style>
+
+            #keyboard {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                width: 100%;
+                height: 80px;
+                margin-top: 20px;
+            }
+
+            #keyboard .arrows {
+                width: 15%;
+            }
+
+            #space {
+                width: 60%;
+            }
             #infos {
                 display: flex;
                 flex-direction: column;
@@ -248,6 +276,22 @@ export class Connect4 extends Component{
                 justify-content: center;
                 align-items: center;
                 gap: 20px;
+            }
+
+            .keycaps {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .keycaps button {
+                width: 300px;
+                height: 85px;
+                font-family: 'Press Start 2P', cursive;
+                background-color: #252525;
+                color: white;
             }
 
             .arrows {
@@ -672,12 +716,12 @@ export class Connect4 extends Component{
 
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
-        const searchParams = new URLSearchParams(window.location.search);
-        const gameId = searchParams.get("id");
         this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4/`);
         
         this.ws.onopen = () => {
             console.log("Connected to the server");
+            const searchParams = new URLSearchParams(window.location.search);
+            const gameId = searchParams.get("id");
             this.checkUserIdInterval = setInterval(() => {
                 if (userName && this.ws.readyState === WebSocket.OPEN) {
                     this.ws.send(JSON.stringify({ type: 'join', player_id: `${userName}`, room: `${gameId}` }));
@@ -691,25 +735,30 @@ export class Connect4 extends Component{
             console.log("data", data);
             switch (data.type) {
                 case "game_start":
-                    this.player = data.player1 == userName ? "player1" : "player2";
+                    this.player = data.player1.username == userName ? "player1" : "player2";
                     this.updateInfos(data);
                     this.startGame("player" + data.player_turn);
                     break;
                 case "move":
+                    this.updateBoard(data);
                     this.updateTurn("player" + data.player_turn);
                     this.startGame("player" + data.player_turn);
-                    this.updateBoard(data);
                     break;
                 case "game_full":
-                    this.game_full();
+                    this.game_full(data);
+                    this.endGame(data);
+                    this.ws.close(3845);
+                    break;
                 case "update":
+                    this.updateBoard(data);
                     this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
-                    this.updateBoard(data);
                     this.updateTimer(data.timer);
+                    console.log(this.player);
                     if (!this.player)
                     {
-                        this.player = data.player1 == userName ? "player1" : "player2";
+                        this.player = data.player1.username == userName ? "player1" : "player2";
+                        console.log(this.player);
                         this.startGame("player" + data.player_turn);
                     }
                     break;
@@ -734,8 +783,16 @@ export class Connect4 extends Component{
     }
 
     endGame(data) {
+        const activeTiles = document.querySelectorAll(".tile.active-column");
+        activeTiles.forEach(tile => {
+            tile.classList.remove("active-column");
+        });
         document.getElementById("overlay").style.display = "flex";
-        document.getElementById("winnerText").innerText = data.winner + " wins!";
+        if (data.option && data.option == 'draw')
+            document.getElementById("winnerText").innerText = "Draw!";
+        else
+            document.getElementById("winnerText").innerText = data.winner + " wins!";
+        document.removeEventListener("keydown", this.handleKeyDown);
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -766,7 +823,7 @@ export class Connect4 extends Component{
             });
         };
     
-        if (event.key === "Enter") {
+        if (event.key === " ") {
             buttons.forEach(element => {
                 if (element.classList.contains("pixel-corners-active")) {
                     if (element.id == "cancel") {
@@ -785,8 +842,8 @@ export class Connect4 extends Component{
     }
 
     updateInfos(data) {
-        document.getElementById("player1-name").innerText = data.player1;
-        document.getElementById("player2-name").innerText = data.player2;
+        document.getElementById("player1-name").innerText = data.player1.username;
+        document.getElementById("player2-name").innerText = data.player2.username;
     }
 
     updateTimer(timer) {
@@ -795,12 +852,18 @@ export class Connect4 extends Component{
 
     updateBoard(data) {
         this.board = data.board;
+        const lastTile = document.querySelector(".tile.pixel-corners-active");
+        if (lastTile)
+            lastTile.classList.remove("pixel-corners-active");
         for (var row = 0; row < 6; row++) {
             for (var col = 0; col < 7; col++) {
                 if (this.board[row][col] == 1) {
                     document.getElementById(row + " " + col).classList.add("red");
                 } else if (this.board[row][col] == 2) {
                     document.getElementById(row + " " + col).classList.add("yellow");
+                }
+                if (data.lastMove && data.lastMove[0] == row && data.lastMove[1] == col) {
+                    document.getElementById(row + " " + col).classList.add("pixel-corners-active");
                 }
             }
         }
@@ -828,13 +891,22 @@ export class Connect4 extends Component{
         // this.updateBoard(data);
         console.log("player_turn", player_turn);
         this.updateTurn(player_turn);
+        for (var col = 0; col < 7; col++)
+        {
+            if (this.checkColumnFull(col))
+            {
+                let index = this.avalaibleColumns.indexOf(col);
+                if (index > -1)
+                    this.avalaibleColumns.splice(index, 1);
+            }
+        }
         if (this.player == player_turn)
         {
+            this.column = this.avalaibleColumns[0];
             for (var row = 0; row < 6; row++) {
-                let tile = document.getElementById(row + " 0");
+                let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
             }
-            this.column = 0;
             this.handleKeyDown = this.handleKeyDown.bind(this);
             document.addEventListener("keydown", this.handleKeyDown);
         }
@@ -865,32 +937,55 @@ export class Connect4 extends Component{
 
     handleKeyDown(event) {
         if (event.key == "ArrowLeft") {
+            const arrowLeft = document.getElementById("arrow-left");
+            arrowLeft.classList.remove("pixel-corners");
+            arrowLeft.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                arrowLeft.classList.remove("pixel-corners-active");
+                arrowLeft.classList.add("pixel-corners");
+            }, 100);
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            if (this.column > 0) this.column--;
+            if (this.column > 0 && this.avalaibleColumns.indexOf(this.column) > 0)
+                this.column = this.avalaibleColumns[this.avalaibleColumns.indexOf(this.column) - 1];
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
             }
         } else if (event.key == "ArrowRight") {
+            const arrowRight = document.getElementById("arrow-right");
+            arrowRight.classList.remove("pixel-corners");
+            arrowRight.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                arrowRight.classList.remove("pixel-corners-active");
+                arrowRight.classList.add("pixel-corners");
+            }, 100);
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.remove("active-column");
             }
-            if (this.column < 6) this.column++; // Adjusted to ensure column does not exceed 6
+            if (this.column < 6 && this.avalaibleColumns.indexOf(this.column) < this.avalaibleColumns.length - 1)
+                this.column = this.avalaibleColumns[this.avalaibleColumns.indexOf(this.column) + 1];
             for (var row = 0; row < 6; row++) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
             }
         } else if (event.key == " ") {
-            console.log("Enter");
+            const space = document.getElementById("space");
+            space.classList.remove("pixel-corners");
+            space.classList.add("pixel-corners-active");
+            setTimeout(() => {
+                space.classList.remove("pixel-corners-active");
+                space.classList.add("pixel-corners");
+            }, 100);
             let row = this.checkAvailableTile(this.column);
             if (row != -1) {
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add(this.player);
                 this.ws.send(JSON.stringify({ type: "move", player_id: this.player, column: this.column }));
+                document.removeEventListener("keydown", this.handleKeyDown);
                 for (var roww = 0; roww < 6; roww++) {
                     let tile = document.getElementById(roww + " " + this.column);
                     tile.classList.remove("active-column");
@@ -914,16 +1009,24 @@ export class Connect4 extends Component{
         return -1;
     }
 
-    game_full() {
+    game_full(data) {
         document.getElementById("overlay").style.display = "flex";
-        document.getElementById("winnerText").innerText = "Game full!";
-        setTimeout(() => {
-            window.router.navigate("/");
-        }, 5000);
+        document.getElementById("winnerText").innerText = data.message;
+    }
+
+    checkColumnFull(column)
+    {
+        for (var row = 0; row < 6; row++)
+        {
+            if (!this.board[row][column])
+                return false;
+        }
+        return true
     }
 
     CustomDOMContentUnload(){
-        this.ws.close();
+        if (this.ws.readyState === WebSocket.OPEN)
+            this.ws.close();
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keydown", this.handleEndGame);
     }

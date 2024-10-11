@@ -46,8 +46,9 @@ class MatchMakingHandler(AsyncWebsocketConsumer):
                 }))
                 return
             game = await sync_to_async(Game.objects.create)(
-                player1=opponent1.player_id,
-                player2=opponent2.player_id
+                player1=player1,
+                player2=player2,
+                winner=None
             )
             logger.info(f"Match found between {opponent1.player_id} and {opponent2.player_id}")
             room_name = str(game.game_uuid)
