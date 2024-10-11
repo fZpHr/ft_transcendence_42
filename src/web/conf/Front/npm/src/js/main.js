@@ -18,5 +18,5 @@ const router = new Router(target, {
   '/credits': new Route(`/credits`, 'credits-component'),
 });
 
-router.init();
 window.router = router;
+router.init();

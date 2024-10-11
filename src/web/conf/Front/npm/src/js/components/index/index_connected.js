@@ -143,7 +143,7 @@ export class IndexConnected extends Component{
                     }).then((response) => {
                         console.log(response)
                         if (response.ok) {
-                            window.location.reload();
+                            window.router.navigate('/');
                         }
                     });
                 }, 1000);

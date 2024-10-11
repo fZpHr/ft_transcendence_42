@@ -7,22 +7,17 @@ export class Router {
     }
 
     async init() {
-        let route = window.location.pathname;
-        this.navigate(route);
-        this.popStateHandler();
-    }
-
-    async navigate(path) {  
-        let regex = null;
-        if (path.includes('?')) {
-            regex = path.split('?')[1];
-            path = path.split('?')[0];
-        }
-        const route = this.routes[path];
-        if (!route) {
-            this.navigate('/404');
+        const deltaTime = 2500;
+        const lastFetchTime = localStorage.getItem('lastFetchTime');
+        const currentTime = new Date().getTime();
+        
+        if (lastFetchTime && (currentTime - lastFetchTime < deltaTime)) {
+            console.log('Fetch request debounced');
+            window.router.navigate('/')
             return;
         }
+        localStorage.setItem('lastFetchTime', currentTime);
+        let route = window.location.pathname;
         try
         {
             const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
@@ -36,22 +31,29 @@ export class Router {
             }
             const data = await response.json();
             if (data.status === 'error')
-            {
                 this.updateCookies(false, null, null);
-                if (route.permission)
-                {
-                    this.navigate('/');
-                    return;
-                }
-            }
             else if (data.status === 'success')
                 this.updateCookies(true, getCookie('token'), getCookie('user42'));
         }
         catch (error)
         {
+            console.log('Fetch request failed');
             this.updateCookies(false, null, null);
-            if (route.permission)
-                this.navigate('/');
+            return;
+        }
+        this.navigate(route);
+        this.popStateHandler();
+    }
+
+    async navigate(path) {  
+        let regex = null;
+        if (path.includes('?')) {
+            regex = path.split('?')[1];
+            path = path.split('?')[0];
+        }
+        const route = this.routes[path];
+        if (!route) {
+            this.navigate('/404');
             return;
         }
         if (regex && route.extraRegex) {
