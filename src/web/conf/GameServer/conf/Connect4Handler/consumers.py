@@ -117,6 +117,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             except Game.DoesNotExist:
                 await self.send(text_data=json.dumps({
                     'type': 'game_full',
+                    'option': 'not_found',
                     'message': 'Game not found'
                 }))
                 return
@@ -127,14 +128,9 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             player2Serializer = UserProxySerializer(player2).data
             self.room_name = message['room']
             self.room_group_name = 'connect4' + self.room_name
-            await self.channel_layer.group_add(
-                self.room_group_name,
-                self.channel_name
-            )
             if self.game.isFinished:
                 winner = await sync_to_async(UserProxy.objects.get)(id=self.game.winner_id)
                 winnerSerializer = UserProxySerializer(winner).data
-
                 await self.send(text_data=json.dumps({
                     'type': 'game_full',
                     'message': 'Game finished',
@@ -160,6 +156,10 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 }))
                 self.disconnect(1)
                 return
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
             if Connect4GameConsumer.games[self.room_name].players[1] == None and self.player == player1:
                 Connect4GameConsumer.games[self.room_name].players[1] = self.player
             elif Connect4GameConsumer.games[self.room_name].players[2] == None and self.player == player2:

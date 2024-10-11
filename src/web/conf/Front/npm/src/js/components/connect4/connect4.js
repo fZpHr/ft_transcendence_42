@@ -719,7 +719,6 @@ export class Connect4 extends Component{
         this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4/`);
         
         this.ws.onopen = () => {
-            console.log("Connected to the server");
             const searchParams = new URLSearchParams(window.location.search);
             const gameId = searchParams.get("id");
             this.checkUserIdInterval = setInterval(() => {
@@ -732,7 +731,6 @@ export class Connect4 extends Component{
 
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
-            console.log("data", data);
             switch (data.type) {
                 case "game_start":
                     this.player = data.player1.username == userName ? "player1" : "player2";
@@ -746,7 +744,6 @@ export class Connect4 extends Component{
                     break;
                 case "game_full":
                     this.game_full(data);
-                    this.endGame(data);
                     this.ws.close(3845);
                     break;
                 case "update":
@@ -754,11 +751,9 @@ export class Connect4 extends Component{
                     this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
                     this.updateTimer(data.timer);
-                    console.log(this.player);
                     if (!this.player)
                     {
                         this.player = data.player1.username == userName ? "player1" : "player2";
-                        console.log(this.player);
                         this.startGame("player" + data.player_turn);
                     }
                     break;
@@ -772,11 +767,9 @@ export class Connect4 extends Component{
         };
         
         this.ws.onclose = () => {
-            console.log("Disconnected from the server");
         };
 
         this.ws.onerror = (error) => {
-            console.log("Error: ", error);
         }
 
         this.setGame();
@@ -800,13 +793,9 @@ export class Connect4 extends Component{
 
     handleEndGame(event) {
         const buttons = document.querySelectorAll(".buttons button");
-        console.log("event", event);
-        console.log("buttons", buttons);
     
         const updateActiveButton = (direction) => {
             buttons.forEach((element, index) => {
-                console.log("element", element);
-                console.log("index", index);
                 if (element.classList.contains("pixel-corners-active")) {
                     if (direction === "up" && index > 0) {
                         element.classList.remove("pixel-corners-active");
@@ -891,7 +880,6 @@ export class Connect4 extends Component{
     {
         //I want to make active the first column for player_turn
         // this.updateBoard(data);
-        console.log("player_turn", player_turn);
         this.updateTurn(player_turn);
         for (var col = 0; col < 7; col++)
         {
@@ -1014,6 +1002,8 @@ export class Connect4 extends Component{
     game_full(data) {
         document.getElementById("overlay").style.display = "flex";
         document.getElementById("winnerText").innerText = data.message;
+        document.removeEventListener("keydown", this.handleKeyDown);
+        document.addEventListener("keydown", this.handleEndGame);
     }
 
     checkColumnFull(column)
