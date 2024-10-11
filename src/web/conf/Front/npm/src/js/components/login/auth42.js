@@ -25,7 +25,6 @@ export class Auth42 extends Component {
     style(){
         return `
              <style>
-            @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
 
             #container {
                 position: relative;

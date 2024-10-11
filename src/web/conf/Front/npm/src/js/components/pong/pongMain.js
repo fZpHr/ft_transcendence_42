@@ -544,6 +544,20 @@ export class PongMain extends Component{
     }
 
     CustomDOMContentUnload(){
-        console.log("DOM CONTENT UNLOAD.");
+        document.removeEventListener("keydown", this.handleEndGame);
+        document.removeEventListener("click", (e) => {
+            if (e.target.id === "pong-local") {
+                window.router.navigate("/pong/local");
+            }
+            else if (e.target.id === "pong-ai") {
+                window.router.navigate("/pong/ai");
+            }
+            else if (e.target.id === "pong-remote") {
+                window.router.navigate("/pong/remote");
+            }
+            else if (e.target.id === "reset-button") {
+                window.router.navigate("/");
+            }
+        }   );
     }
 }

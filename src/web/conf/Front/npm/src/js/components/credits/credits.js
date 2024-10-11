@@ -3,26 +3,34 @@ import { Component } from "@js/component";
 export class Credits extends Component {
     constructor() {
         super();
+        this.isRedirect = false;
     }
 
     render() {
         return `
-            <div id="overlay">
-                <div id="credits-title">Credits</div>
-                <div id="credits-list">
-                    <div class="credit-item">
-                        <div class="credit-name">User 1</div>
-                        <div class="credit-role">Role 1</div>
+            <div id="overlay" class="d-flex flex-column justify-content-center align-items-center bg-dark text-white vh-100">
+                <div id="credits-title" class="display-4 mb-4 text-uppercase text-center border-bottom pb-3 w-75">Credits</div>
+                <div id="credits-list" class="row w-100 justify-content-center">
+                    <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 0s;">
+                        <div class="card-body text-center shadow-lg rounded">
+                            <div class="credit-name card-title h4">Benoit</div>
+                            <div class="credit-role card-text">Digital Innovation and Strategy Manager AND Business Intelligence and Data Analytics Specialist</div>
+                        </div>
                     </div>
-                    <div class="credit-item">
-                        <div class="credit-name">User 2</div>
-                        <div class="credit-role">Role 2</div>
+                    <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 0.5s;">
+                        <div class="card-body text-center shadow-lg rounded">
+                            <div class="credit-name card-title h4">Emile</div>
+                            <div class="credit-role card-text">Senior MonkeyType High-Velocity Typing Optimization AND AI and Machine Learning Solutions Architect</div>
+                        </div>
                     </div>
-                    <div class="credit-item">
-                        <div class="credit-name">User 3</div>
-                        <div class="credit-role">Role 3</div>
+                    <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 1s;">
+                        <div class="card-body text-center shadow-lg rounded">
+                            <div class="credit-name card-title h4">Heliam</div>
+                            <div class="credit-role card-text">DevOps Pipeline Automation Engineer AND IT Infrastructure and Operations Manager</div>
+                        </div>
                     </div>
                 </div>
+                <button id="back" type="button" class="btn btn-outline-light mt-4">Back</button>
             </div>
         `;
     }
@@ -30,45 +38,119 @@ export class Credits extends Component {
     style() {
         return `
             <style>
+                html, body {
+                background-color: black;
+                color: white;
+                }
+
+                .bg-dark {
+                    background-color: black !important;
+                }
+
+                .bg-secondary {
+                    background-color: #6200ea !important;
+                }
+
                 #overlay {
                     position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    background: black;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
                     font-family: 'Press Start 2P', cursive;
                     font-size: 20px;
-                    color: white;
                     user-select: none;
                 }
                 #credits-title {
                     font-size: 30px;
-                    margin-bottom: 20px;
-                }
-                #credits-list {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    border-bottom: 2px solid white;
                 }
                 .credit-item {
-                    margin: 10px 0;
-                    text-align: center;
+                    width: 100%;
+                    max-width: 300px;
+                    opacity: 0;
+                    animation: fadeIn 1.5s ease forwards;
                 }
                 .credit-name {
                     font-size: 24px;
+                    font-weight: bold;
+                    text-transform: uppercase;
                 }
                 .credit-role {
                     font-size: 18px;
-                    color: #ccc;
+                    color: #ddd;
+                }
+                .card {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+                .card:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                }
+                @media (max-width: 576px) {
+                    #credits-title {
+                        font-size: 24px;
+                    }
+                    .credit-item {
+                        width: 90%;
+                    }
+                }
+                
+                /* Animation fade-in */
+                @keyframes fadeIn {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
             </style>
         `;
     }
 
+    debounceImmediate(func, wait) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            if (!timeout) {
+                func.apply(context, args);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                }, wait);
+            }
+        };
+    }
+
+    redirectTruc(event) {
+        if (event.key === 'Escape') {
+            document.removeEventListener('keydown', this);
+            this.isRedirect = true;
+            setTimeout(() => {
+                console.log('Back to home page in 3 seconds');
+                if (this.isRedirect)
+                    window.router.navigate('/');
+            }, 1000);
+        }
+    }
+
     CustomDOMContentLoaded() {
-        console.log("Credits page loaded.");
+        const back = document.getElementById('back');
+        back.addEventListener('click', () => {
+            window.router.navigate('/');
+        }, {once: true});
+        document.addEventListener('keydown', this.redirectTruc);
+    }
+
+    CustomDOMUnload() {
+        this.isRedirect = false;
+        document.addEventListener('keydown', this.redirectTruc);
+        document.getElementById('back').removeEventListener('click', () => {
+            window.router.navigate('/');
+        });
     }
 }

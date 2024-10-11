@@ -336,6 +336,27 @@ export class PongLocal extends Component {
     }
 
     CustomDOMContentLoaded() {
+
+        function debounceImmediate(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                if (!timeout) {
+                    func.apply(context, args);
+                }
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    timeout = null;
+                }, wait);
+            };
+        }
+
+        document.addEventListener('keydown', debounceImmediate((event) => {
+            if (event.key === 'Escape') {
+                window.router.navigate('/pong');
+            }
+        }, 3000));
+
         let ballSpeedX = BALL_SPEED_X; 
         let ballSpeedY = BALL_SPEED_Y;
         const check = document.getElementById('settings-option1')
@@ -685,5 +706,9 @@ export class PongLocal extends Component {
 
     CustomDOMContentUnload() {
         this.gameReset();
+        // document.getElementById('toggle-settings').removeEventListener('click');
+        // document.getElementById('settings-option1').removeEventListener('click');
+        // document.getElementById('color-picker').removeEventListener('input');
+        document.removeEventListener('keydown', debounceImmediate);
     }
 }

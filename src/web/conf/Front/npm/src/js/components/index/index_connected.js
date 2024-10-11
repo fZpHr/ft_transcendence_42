@@ -83,7 +83,7 @@ export class IndexConnected extends Component{
             .btn-link:active {
                 outline: none !important;
                 border: none !important;
-                box-shadow: none !important; /* Supprime l'ombre de focus */
+                box-shadow: none !important;
             }
             
         </style>
