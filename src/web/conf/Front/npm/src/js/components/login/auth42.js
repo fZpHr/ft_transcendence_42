@@ -4,12 +4,14 @@ export class Auth42 extends Component {
     constructor() {
         super();
         this.commands = ['help', 'ls', 'pwd', 'whoami', 'exit', 'clear', './login42.sh'];
+        const terminal_out = [];
     }
 
     render(){
         return`
                 <div id="container">
-                    <div id="terminal">
+                <div id="terminal">
+                <button id="credits" type="button" class="btn btn-link">©</button>
                         <pre id="terminal-out">Welcome Guest.\nType 'help' to see available commands.\nYou are not connected. Please ./login42.sh to continue, and access to all features.</pre>
                         <div id="input-container">
                             <span id="prompt">></span>
@@ -47,6 +49,7 @@ export class Auth42 extends Component {
                 white-space: pre-wrap;
                 font-size: 1.2em;
                 overflow-y: auto;
+                scrollbar-width: none;
             }
 
             #input-container {
@@ -61,7 +64,6 @@ export class Auth42 extends Component {
             }
 
             #terminal-in {
-
                 color: white;
                 background-color: black;
                 border: none;
@@ -70,38 +72,65 @@ export class Auth42 extends Component {
                 font-family: monospace;
                 width: 100%;
             }
+
+            .btn-link {
+                color: white;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            
+            .btn-link:focus,
+            .btn-link:active {
+                outline: none !important;
+                border: none !important;
+                box-shadow: none !important; /* Supprime l'ombre de focus */
+            }
+                
         </style>
         `;
     }
 
     CustomDOMContentLoaded(){
         this.setup_term();
+
+        const credits = document.getElementById('credits');
+        this.terminal_out = document.getElementById('terminal-out');
+
+        credits.addEventListener('click', () => {
+            this.terminal_out.innerText += '\n' + 'Credits page only available for connected users.\n';
+            this.scrollToBottom();
+        });
+    }
+
+    scrollToBottom() {
+        const terminalOut = document.getElementById('terminal-out');
+        terminalOut.scrollTop = terminalOut.scrollHeight;
     }
 
     command_handler(input) {
-        const terminal_out = document.getElementById('terminal-out');
-        terminal_out.innerText += '\n' + `> ${input}`;
+        this.terminal_out.innerText += '\n' + `> ${input}`;
         switch (input) {
             case 'help':
-                terminal_out.innerText += '\n' + 'Command list:\n- clear\n- ls\n- pwd\n- whoami\n- exit';
+                this.terminal_out.innerText += '\n' + 'Command list:\n- clear\n- ls\n- pwd\n- whoami\n- exit';
                 break;
             case 'ls':
-                terminal_out.innerText += '\n' + 'login42.sh';
+                this.terminal_out.innerText += '\n' + 'login42.sh';
                 break;
             case 'pwd':
-                terminal_out.innerText += '\n' + `/Guest/`;
+                this.terminal_out.innerText += '\n' + `/Guest/`;
                 break;
             case 'whoami':
-                terminal_out.innerText += '\n' + `Guest`;
+                this.terminal_out.innerText += '\n' + `Guest`;
                 break;
             case 'exit':
-                terminal_out.innerText += '\n' + `Goodbye Guest`;
+                this.terminal_out.innerText += '\n' + `Goodbye Guest`;
                 setTimeout(() => {
                     window.location.href = "https://google.com";
                 },1000);
                 break;
             case 'clear':
-                terminal_out.innerText = '';
+                this.terminal_out.innerText = '';
                 break;
             case './login42.sh':
                 const hostname = window.location.hostname;
@@ -114,32 +143,33 @@ export class Auth42 extends Component {
                 window.location.href = authUrl;
                 break;
             default:
-                terminal_out.innerText += '\n' + 'Command not found: ' + input;
+                this.terminal_out.innerText += '\n' + 'Command not found: ' + input;
                 break;
         }
+        this.scrollToBottom();
     }
         
-        setup_term() {
-            const terminal_in = document.getElementById('terminal-in');
-        
-            terminal_in.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    const input = terminal_in.value.trim();
-                    this.command_handler(input);
-                    terminal_in.value = '';
-                } else if (event.key === 'Tab') {
-                    event.preventDefault();
-                    this.autocomplete(terminal_in);
-                }
-            });
-        }
-
-        autocomplete(inputElement) {
-            const input = inputElement.value;
-            const matchingCommands = this.commands.filter(command => command.startsWith(input));
+    setup_term() {
+        const terminal_in = document.getElementById('terminal-in');
     
-            if (matchingCommands.length === 1) {
-                inputElement.value = matchingCommands[0];
+        terminal_in.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const input = terminal_in.value.trim();
+                this.command_handler(input);
+                terminal_in.value = '';
+            } else if (event.key === 'Tab') {
+                event.preventDefault();
+                this.autocomplete(terminal_in);
             }
+        });
+    }
+
+    autocomplete(inputElement) {
+        const input = inputElement.value;
+        const matchingCommands = this.commands.filter(command => command.startsWith(input));
+
+        if (matchingCommands.length === 1) {
+            inputElement.value = matchingCommands[0];
         }
     }
+}

@@ -59,7 +59,7 @@ export class MatchMaking extends Component{
     CustomDOMContentLoaded(){
         const user42 = getCookie("user42");
         try {
-            this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/matchmaking/`);
+            this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/matchmaking`);
         } catch (error) {
             console.log("Error: ", error);
         }

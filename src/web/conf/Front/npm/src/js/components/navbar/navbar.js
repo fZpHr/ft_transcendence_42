@@ -61,7 +61,7 @@ export class NavBar extends Component{
 
         const pongNavLink = this.querySelector("#pong-navlink");
         pongNavLink.addEventListener("click", () => {
-            window.router.navigate("/pong/");
+            window.router.navigate("/pong");
         });
 
         const logoutNavLink = this.querySelector("#logout-navlink");

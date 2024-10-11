@@ -1,13 +1,19 @@
 import { Component } from "@js/component";
 
+let BALL_SPEED_X = 5;
+let BALL_SPEED_Y = 1;
+let PADDLE_SPEED = 5;
+
 export class PongLocal extends Component {
     constructor() {
         super();
         this.gameReset = null;
+
     }
 
     render() {
         return `
+            <h2 id="hd">Mode local</h2>
             <div id="basePong">
                 <div id="middleLine"></div>
                 <div class="ball" id="ball">
@@ -34,7 +40,15 @@ export class PongLocal extends Component {
                             <div class="key">ArrowDown</div>
                         </div>
                     </div>
-                    <button id="start-button">Start</button>
+                    <div>
+                        <button id="start-button">Start</button>
+                        <button id="toggle-settings">Options</button>
+                        <div id="options-container" class="hidden">
+                            <button id="settings-option1" class="off">X2 (Off)</button>
+                            <label for="color-picker" >Choose Color for map:</label>
+                            <input type="color" id="color-picker" name="color-picker">
+                        </div>
+                    </div>
                 </div>
                 <div id="overlay">
                     <div id="overlay-title">PONG</div>
@@ -48,8 +62,42 @@ export class PongLocal extends Component {
     style() {
         return `
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: black;
+                color: #ffffff;
+                font-family: 'Press Start 2P', cursive;
+            }
+
+            .hidden {
+                display: none !important;
+            }
+            
+            #options-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 85%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: black;
+                color: white;
+                padding: 20px;
+                border: 2px solid white;
+            }
+
+            #hd {
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+                background-color: black;
+                border-bottom: 2px solid #333;
+            }
             #basePong {
-                height: 831px; /* If you modify the size u have to modify the condition in JS */
+                height: 831px;
                 width: 1920px;
                 position: relative;
                 background: black;
@@ -119,7 +167,7 @@ export class PongLocal extends Component {
 
             #message {
                 color: white;
-                left: 50%;
+                left: 49%;
                 top: 30%;
             }
 
@@ -138,6 +186,60 @@ export class PongLocal extends Component {
                 user-select: none;
             }
 
+            #settings-menu {
+                font-size: 20px;
+                padding: 10px;
+                background: black;
+                color: white;
+                border: 2px solid white;
+                cursor: pointer;
+                position: absolute;
+                top: 50%;
+            }
+
+            #settings-menu {
+                font-size: 20px;
+                padding: 10px;
+                text-align: center;
+            }
+
+            #settings-menu button, #settings-menu input[type="color"] {
+                margin: 5px;
+            }
+
+            #settings-option1.on {
+                background-color: green;
+                color: white;
+            }
+
+            #settings-option1.off {
+                background-color: red;
+                color: white;
+            }
+
+            #settings-option1 {
+                font-size: 20px;
+                padding: 10px;
+                background: black;
+                color: white;
+                border: 2px solid white;
+                cursor: pointer;
+                margin: 15px;
+               
+            }
+
+            #toggle-settings {
+                font-size: 20px;
+                padding: 10px;
+                background: black;
+                color: white;
+                border: 2px solid white;
+                cursor: pointer;
+                position: absolute;
+                top: 60%;
+                left: calc(48% - 45px);
+            }
+            
             #start-button {
                 font-size: 20px;
                 padding: 10px;
@@ -147,9 +249,10 @@ export class PongLocal extends Component {
                 cursor: pointer;
                 position: absolute;
                 top: 50%;
-                left: calc(50% - 50px);
+                left: calc(50% - 62px);
             }
 
+            #toggle-settings:hover,
             #start-button:hover {
                 background: white;
                 color: black;
@@ -233,19 +336,85 @@ export class PongLocal extends Component {
     }
 
     CustomDOMContentLoaded() {
-        const BALL_SPEED_X = 10;
-        const BALL_SPEED_Y = 1;
-        const PADDLE_SPEED = 7;
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.router.navigate('/pong');
+            }
+        });
+
+        let ballSpeedX = BALL_SPEED_X; 
+        let ballSpeedY = BALL_SPEED_Y;
+        const check = document.getElementById('settings-option1')
+        if (check.classList.contains('on')) {
+            BALL_SPEED_X = 10;
+            BALL_SPEED_Y = 1;
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+            PADDLE_SPEED = 10;
+        }
+        else {
+            BALL_SPEED_X = 5;
+            BALL_SPEED_Y = 1;
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+        }
+        
+        document.getElementById('toggle-settings').addEventListener('click', function() {
+            var optionsContainer = document.getElementById('options-container');
+            optionsContainer.classList.toggle('hidden');
+        });
+        
+        document.getElementById('settings-option1').addEventListener('click', function() {
+            var button = this;
+            if (button.classList.contains('off')) {
+                button.classList.remove('off');
+                button.classList.add('on');
+                button.textContent = 'X2 (On)';
+                BALL_SPEED_X = 10;
+                BALL_SPEED_Y = 1;
+                ballSpeedX = BALL_SPEED_X;
+                ballSpeedY = BALL_SPEED_Y;
+                PADDLE_SPEED = 10;
+
+
+            } else {
+                button.classList.remove('on');
+                button.classList.add('off');
+                button.textContent = 'X2 (Off)';
+                BALL_SPEED_X = 5;
+                BALL_SPEED_Y = 1;
+                ballSpeedX = BALL_SPEED_X;
+                ballSpeedY = BALL_SPEED_Y;
+                PADDLE_SPEED = 5;
+            }
+        });
+        
+    
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    
+
+        document.getElementById('color-picker').addEventListener('input', debounce(function(event) {
+            var chosenColor = event.target.value;
+            document.getElementById('basePong').style.backgroundColor = chosenColor;
+            currentColor = chosenColor;
+        }, 1));
+
         const WINNING_SCORE = 5;
         const OVERLAY_DISPLAY_TIME = 3000;
-
+   
+        
         const ball = document.getElementById("ball");
         const paddle_1 = document.getElementById("player_1_paddle");
         const paddle_2 = document.getElementById("player_2_paddle");
-
+        
         let ballScored = false;
-        let ballSpeedX = BALL_SPEED_X; 
-        let ballSpeedY = BALL_SPEED_Y;
     
         let ballPositionX = getBallPosition().left;
         let ballPositionY = getBallPosition().top;
@@ -472,7 +641,7 @@ export class PongLocal extends Component {
                 showOverlay(`Player ${score_1 === WINNING_SCORE ? "1" : "2"} wins!`, score_1, score_2);
                 setTimeout(() => {
                     resetGame();
-                    window.router.navigate("/pong/");
+                    window.router.navigate("/pong");
                 }, OVERLAY_DISPLAY_TIME);
                 return;
             }
@@ -484,9 +653,47 @@ export class PongLocal extends Component {
             gameLoop();
             moveBall();
         } 
+        document.addEventListener('keydown', handleEndGame);
+        
+        function handleEndGame(event) {
+            const buttons = document.querySelectorAll(".start-button");
+            const updateActiveButton = (direction) => {
+                for (let index = 0; index < buttons.length; index++) {
+                    const element = buttons[index];
+                    if (element.classList.contains("active")) {
+                        if (direction === "up" && index > 0) {
+                            element.classList.remove("active");
+                            const nextIndex = (index - 1) % buttons.length;
+                            buttons[nextIndex].classList.add("active");
+                            break;
+                        } else if (direction === "down" && index < buttons.length - 1) {
+                            element.classList.remove("active");
+                            const prevIndex = (index + 1) % buttons.length;
+                            buttons[prevIndex].classList.add("active");
+                            break;
+                        }
+                    }
+                }
+            };
+        
+            if (event.key === "Enter") {
+                buttons.forEach(element => {
+                    if (element.classList.contains("active")) {
+                        element.click();
+                    }
+                });
+            } else if (event.key === "ArrowUp") {
+                updateActiveButton("up");
+            } else if (event.key === "ArrowDown") {
+                updateActiveButton("down");
+            }
+        }
     }
 
     CustomDOMContentUnload() {
         this.gameReset();
+        // document.getElementById('toggle-settings').removeEventListener('click');
+        // document.getElementById('settings-option1').removeEventListener('click');
+        // document.getElementById('color-picker').removeEventListener('input');
     }
 }

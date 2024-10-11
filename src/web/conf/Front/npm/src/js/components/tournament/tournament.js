@@ -1,5 +1,9 @@
 import { Component } from "@js/component";
 
+let BALL_SPEED_X = 5;
+let BALL_SPEED_Y = 1;
+let PADDLE_SPEED = 5;
+
 export class Tournament extends Component {
     constructor() {
         super();
@@ -25,15 +29,33 @@ export class Tournament extends Component {
                     <div id="tournament-progress" style="display: none;">
                     <h2>Tournoi en cours</h2>
                     <button id="start-pong-button">Lancer la partie</button>
+                    <button id="toggle-settings">Options</button>
+                    <div id="options-container" class="hidden">
+                        <button id="settings-option1" class="off">X2 (Off)</button>
+                        <label for="color-picker" >Choose Color for map:</label>
+                        <input type="color" id="color-picker" name="color-picker">
+                    </div>
                     <button id="reset-tournament">Nouveau tournoi</button>
                     <div id="current-match"></div>
                     <div id="tournament-bracket"></div>
-                </div>
-                <div id="tournament-result" style="display: none;">
+                    <div id="control" class="controls">
+                        <div id="control1" class="player-controls">
+                            <div class="player-name">Player 1</div>
+                            <div class="key">W</div>
+                            <div class="key">S</div>
+                        </div>
+                        <div id="control2" class="player-controls">
+                            <div class="player-name">Player 2</div>
+                            <div class="key">ArrowUp</div>
+                            <div class="key">ArrowDown</div>
+                        </div>
+                    </div>
+                    </div>
+                    <div id="tournament-result" style="display: none;">
                     <h2>Résultat du tournoi</h2>
                     <div id="winner-display"></div>
                     <button id="reset-end">Nouveau tournoi</button>
-                </div>
+                    </div>
             </div>
 
             <div id="pong-container" style="display: none;">
@@ -50,20 +72,6 @@ export class Tournament extends Component {
                         <div id="message"></div>
                     </div>
                     <div id="overlay-before-start">
-                        <div class="controls">
-                            <div class="text-before">Are you ready?</div>
-                            <div class="player-controls">
-                                <div class="player-name">Player 1</div>
-                                <div class="key">W</div>
-                                <div class="key">S</div>
-                            </div>
-                            <div class="player-controls">
-                                <div class="player-name">Player 2</div>
-                                <div class="key">ArrowUp</div>
-                                <div class="key">ArrowDown</div>
-                            </div>
-                        </div>
-                        <button id="start-button">Start</button>
                     </div>
                     <div id="overlay">
                         <div id="overlay-title">PONG</div>
@@ -155,8 +163,53 @@ export class Tournament extends Component {
 
 
             /* Pong */
+
+            #control1 {
+                background-color: #6200ea;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+            #control2 {
+                background-color: #6200ea;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+            .hidden {
+                display: none !important;
+            }
+            
+            #options-container {
+                background-color: #6200ea;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+            #hd {
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+                background-color: black;
+                border-bottom: 2px solid #333;
+            }
             #basePong {
-                height: 831px; /* If you modify the size u have to modify the condition in JS */
+                height: 831px;
                 width: 1920px;
                 position: relative;
                 background: black;
@@ -226,7 +279,7 @@ export class Tournament extends Component {
 
             #message {
                 color: white;
-                left: 50%;
+                left: 49%;
                 top: 30%;
             }
 
@@ -245,6 +298,48 @@ export class Tournament extends Component {
                 user-select: none;
             }
 
+            #settings-menu {
+                background-color: #6200ea;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
+            #settings-menu {
+                font-size: 20px;
+                padding: 10px;
+                text-align: center;
+            }
+
+            #settings-menu button, #settings-menu input[type="color"] {
+                margin: 5px;
+            }
+
+            #settings-option1.on {
+                background-color: green;
+                color: white;
+            }
+
+            #settings-option1.off {
+                background-color: red;
+                color: white;
+            }
+
+            #settings-option1 {
+                background-color: #6200ea;
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                margin: 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+            
             #start-button {
                 font-size: 20px;
                 padding: 10px;
@@ -254,9 +349,10 @@ export class Tournament extends Component {
                 cursor: pointer;
                 position: absolute;
                 top: 50%;
-                left: calc(50% - 50px);
+                left: calc(50% - 62px);
             }
 
+            #toggle-settings:hover,
             #start-button:hover {
                 background: white;
                 color: black;
@@ -264,11 +360,10 @@ export class Tournament extends Component {
                 transform: scale(1.1);
             }
 
-            .controls {
+            #controls {
                 display: flex;
-                justify-content: space-around;
-                width: 100%;
-                margin-bottom: 20px;
+                justify-content: center;
+                margin-top: 20px;
             }
 
             .player-controls {
@@ -340,6 +435,73 @@ export class Tournament extends Component {
 
     
     CustomDOMContentLoaded() {
+
+        let ballSpeedX = BALL_SPEED_X; 
+        let ballSpeedY = BALL_SPEED_Y;
+        const check = document.getElementById('settings-option1')
+        if (check.classList.contains('on')) {
+            BALL_SPEED_X = 10;
+            BALL_SPEED_Y = 1;
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+            PADDLE_SPEED = 10;
+        }
+        else {
+            BALL_SPEED_X = 5;
+            BALL_SPEED_Y = 1;
+            ballSpeedX = BALL_SPEED_X;
+            ballSpeedY = BALL_SPEED_Y;
+        }
+        
+        document.getElementById('toggle-settings').addEventListener('click', function() {
+            var optionsContainer = document.getElementById('options-container');
+            optionsContainer.classList.toggle('hidden');
+        });
+        
+        document.getElementById('settings-option1').addEventListener('click', function() {
+            var button = this;
+            if (button.classList.contains('off')) {
+                button.classList.remove('off');
+                button.classList.add('on');
+                button.textContent = 'X2 (On)';
+                BALL_SPEED_X = 10;
+                BALL_SPEED_Y = 1;
+                ballSpeedX = BALL_SPEED_X;
+                ballSpeedY = BALL_SPEED_Y;
+                PADDLE_SPEED = 10;
+
+
+            } else {
+                button.classList.remove('on');
+                button.classList.add('off');
+                button.textContent = 'X2 (Off)';
+                BALL_SPEED_X = 5;
+                BALL_SPEED_Y = 1;
+                ballSpeedX = BALL_SPEED_X;
+                ballSpeedY = BALL_SPEED_Y;
+                PADDLE_SPEED = 5;
+            }
+        });
+        
+    
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    
+
+        document.getElementById('color-picker').addEventListener('input', debounce(function(event) {
+            var chosenColor = event.target.value;
+            document.getElementById('basePong').style.backgroundColor = chosenColor;
+            currentColor = chosenColor;
+        }, 1));
+
+
+
+
         this.setupEventListeners();
         this.renderPlayerInputs();
 
@@ -353,10 +515,7 @@ export class Tournament extends Component {
             this.updateUIWithTournamentState();
        }
 
-        const BALL_SPEED_X = 10;
-        const BALL_SPEED_Y = 1;
-        const PADDLE_SPEED = 7;
-        const WINNING_SCORE = 2;
+        const WINNING_SCORE = 3;
         const OVERLAY_DISPLAY_TIME = 3000;
 
         const ball = document.getElementById("ball");
@@ -364,8 +523,6 @@ export class Tournament extends Component {
         const paddle_2 = document.getElementById("player_2_paddle");
 
         let ballScored = false;
-        let ballSpeedX = BALL_SPEED_X; 
-        let ballSpeedY = BALL_SPEED_Y;
     
         const initialBallPos = getBallPosition();
         let ballPositionX = initialBallPos.left;
@@ -632,7 +789,7 @@ export class Tournament extends Component {
                 this.handleMatchResult(score_1 === WINNING_SCORE ? 0 : 1);
                 setTimeout(() => {
                     resetGame();
-                    window.router.navigate("/tournament/");
+                    window.router.navigate("/tournament");
                 }, OVERLAY_DISPLAY_TIME);
                 return;
             }
