@@ -20,7 +20,7 @@ export class Router {
         }
         const route = this.routes[path];
         if (!route) {
-            this.navigate('/404/');
+            this.navigate('/404');
             return;
         }
         try
@@ -58,7 +58,7 @@ export class Router {
             const regexPattern = new RegExp(route.extraRegex);
             if (!regexPattern.test(regex)) {
                 console.log('Regex does not match');
-                this.navigate('/404/');
+                this.navigate('/404');
                 return;
             }
         }

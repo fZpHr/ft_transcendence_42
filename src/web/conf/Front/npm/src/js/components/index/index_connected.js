@@ -9,7 +9,8 @@ export class IndexConnected extends Component{
     render(){
         return `
             <div id="container">
-                <div id="terminal">
+            <div id="terminal">
+            <button id="credits" type="button" class="btn btn-link">©</button>
                     <pre id="terminal-out">Welcome ${this.getCookie("user42")}.\nType 'help' to see available commands.</pre>
                     <div id="input-container">
                         <span id="prompt">></span>
@@ -70,6 +71,20 @@ export class IndexConnected extends Component{
                 font-family: monospace;
                 width: 100%;
             }
+
+            .btn-link {
+                color: white;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            
+            .btn-link:focus,
+            .btn-link:active {
+                outline: none !important;
+                border: none !important;
+                box-shadow: none !important; /* Supprime l'ombre de focus */
+            }
             
         </style>
         `;
@@ -77,6 +92,13 @@ export class IndexConnected extends Component{
 
     CustomDOMContentLoaded(){
         this.setup_term();
+
+        const credits = document.getElementById('credits');
+        this.terminal_out = document.getElementById('terminal-out');
+
+        credits.addEventListener('click', () => {
+            window.router.navigate('/credits');
+        });
     }
 
     command_handler(input) {
@@ -91,13 +113,13 @@ export class IndexConnected extends Component{
                 terminal_out.innerText += '\n' + 'pong.sh connect4.sh tournament.sh';
                 break;
                 case './pong.sh':
-                    window.router.navigate('/pong/');
+                    window.router.navigate('/pong');
                 break;
                 case './connect4.sh':
-                    window.router.navigate('/matchmaking/');
+                    window.router.navigate('/matchmaking');
                 break;
                 case './tournament.sh':
-                    window.router.navigate('/tournament/');
+                    window.router.navigate('/tournament');
                     break;
                     case 'pwd':
                         terminal_out.innerText += '\n' + `/${user42}/ft_transcendence`;
