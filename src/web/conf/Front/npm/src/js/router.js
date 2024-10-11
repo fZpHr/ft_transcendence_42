@@ -12,7 +12,7 @@ export class Router {
         this.popStateHandler();
     }
 
-    async navigate(path) {  
+    async navigate(path) {
         let regex = null;
         if (path.includes('?')) {
             regex = path.split('?')[1];
@@ -23,37 +23,37 @@ export class Router {
             this.navigate('/404/');
             return;
         }
-        try
-        {
-            const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            if (data.status === 'error')
-            {
-                this.updateCookies(false, null, null);
-                if (route.permission)
-                {
-                    this.navigate('/');
-                    return;
-                }
-            }
-            else if (data.status === 'success')
-                this.updateCookies(true, getCookie('token'), getCookie('user42'));
-        }
-        catch (error)
-        {
-            this.updateCookies(false, null, null);
-            if (route.permission)
-                this.navigate('/');
-            return;
-        }
+        // try
+        // {
+        //     const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         }
+        //     })
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     const data = await response.json();
+        //     if (data.status === 'error')
+        //     {
+        //         this.updateCookies(false, null, null);
+        //         if (route.permission)
+        //         {
+        //             this.navigate('/');
+        //             return;
+        //         }
+        //     }
+        //     else if (data.status === 'success')
+        //         this.updateCookies(true, getCookie('token'), getCookie('user42'));
+        // }
+        // catch (error)
+        // {
+        //     this.updateCookies(false, null, null);
+        //     if (route.permission)
+        //         this.navigate('/');
+        //     return;
+        // }
         if (regex && route.extraRegex) {
             console.log(regex, route.extraRegex);
             const regexPattern = new RegExp(route.extraRegex);

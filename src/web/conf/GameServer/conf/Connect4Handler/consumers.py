@@ -254,7 +254,6 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
 
     async def start_timer(self):
         while Connect4GameConsumer.games[self.room_name].gameFinished == False:
-            await asyncio.sleep(1)
             if Connect4GameConsumer.games[self.room_name].timer == 0:
                 Connect4GameConsumer.games[self.room_name].gameFinished = True
                 Connect4GameConsumer.games[self.room_name].winner = 1 if Connect4GameConsumer.games[self.room_name].get_turn() == 2 else 2
@@ -267,7 +266,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                     }
                 )
                 return
-            else:   
+            else:
                 Connect4GameConsumer.games[self.room_name].timer -= 1
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -276,6 +275,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                         'timer': Connect4GameConsumer.games[self.room_name].timer
                     }
                 )
+            await asyncio.sleep(1)
 
     async def timer(self, event):
         player1 = await sync_to_async(UserProxy.objects.get)(id=self.game.player1_id)

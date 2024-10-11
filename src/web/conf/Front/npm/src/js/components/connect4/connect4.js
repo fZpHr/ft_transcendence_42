@@ -792,6 +792,8 @@ export class Connect4 extends Component{
             document.getElementById("winnerText").innerText = "Draw!";
         else
             document.getElementById("winnerText").innerText = data.winner + " wins!";
+        document.getElementById("player1-turn").innerHTML = ""
+        document.getElementById("player2-turn").innerHTML = ""
         document.removeEventListener("keydown", this.handleKeyDown);
         document.addEventListener("keydown", this.handleEndGame);
     }
@@ -823,7 +825,7 @@ export class Connect4 extends Component{
             });
         };
     
-        if (event.key === " ") {
+        if (event.key === " " || event.key === "Enter") {
             buttons.forEach(element => {
                 if (element.classList.contains("pixel-corners-active")) {
                     if (element.id == "cancel") {
