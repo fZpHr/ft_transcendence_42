@@ -45,7 +45,7 @@ export class Router {
         this.popStateHandler();
     }
 
-    async navigate(path) {  
+    async navigate(path, windowHistory = true) {  
         let regex = null;
         console.log(path);
         if (path.includes('?')) {
@@ -66,7 +66,9 @@ export class Router {
                 return;
             }
         }
-        window.history.pushState({}, path, window.location.origin + path + (regex ? '?' + regex : ''));
+        console.log("Navigate to", path, window.location.origin + path + (regex ? '?' + regex : ''));
+        if (windowHistory)
+            window.history.pushState({}, path, window.location.origin + path + (regex ? '?' + regex : ''));
         this.target.innerHTML = ''
         const customElement = document.createElement(route.component);
         this.target.append(customElement);
@@ -90,7 +92,7 @@ export class Router {
 
     async popStateHandler() {
         window.addEventListener('popstate', async (event) => {
-            this.navigate(window.location.pathname + window.location.search);
+            this.navigate(window.location.pathname + window.location.search, false);
         });
     }
 }
