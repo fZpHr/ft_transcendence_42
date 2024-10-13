@@ -20,7 +20,7 @@ export class Tournament extends Component {
 
     render() {
         return `
-        <h2 id="hd">Mode Tournois</h2>
+        <h2 id="hd">Mode Tournoi</h2>
         <div id="tournament-container">
                 <div id="player-registration">
                     <div id="player-inputs"></div>
@@ -433,8 +433,14 @@ export class Tournament extends Component {
         `;
     }
 
-    
+    escape(event) {
+        if (event.key === 'Escape')
+            window.router.navigate('/');
+    }
+
     CustomDOMContentLoaded() {
+
+        document.addEventListener('keydown', this.escape);
 
         let ballSpeedX = BALL_SPEED_X; 
         let ballSpeedY = BALL_SPEED_Y;
@@ -496,7 +502,6 @@ export class Tournament extends Component {
         document.getElementById('color-picker').addEventListener('input', debounce(function(event) {
             var chosenColor = event.target.value;
             document.getElementById('basePong').style.backgroundColor = chosenColor;
-            currentColor = chosenColor;
         }, 1));
 
 
@@ -989,5 +994,6 @@ export class Tournament extends Component {
 
     CustomDOMContentUnload() {
         this.gameReset();
+        document.removeEventListener('keydown', this.escape);   
     }
 }

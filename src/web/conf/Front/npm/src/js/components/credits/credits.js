@@ -13,19 +13,19 @@ export class Credits extends Component {
                     <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 0s;">
                         <div class="card-body text-center shadow-lg rounded">
                             <div class="credit-name card-title h4">Benoit</div>
-                            <div class="credit-role card-text">Digital Innovation and Strategy Manager AND Business Intelligence and Data Analytics Specialist</div>
+                            <div class="credit-role card-text">Chief Strategic Officer of Tactical Betrayal Management AND Business Data Analytics Specialist</div>
                         </div>
                     </div>
                     <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 0.5s;">
                         <div class="card-body text-center shadow-lg rounded">
                             <div class="credit-name card-title h4">Emile</div>
-                            <div class="credit-role card-text">Senior MonkeyType High-Velocity Typing Optimization AND AI and Machine Learning Solutions Architect</div>
+                            <div class="credit-role card-text">Senior MonkeyType High-Velocity Typing Optimization <div id="wpm-text"><a href="https://media.discordapp.net/attachments/1184575000326451281/1291410611804307619/image.png?ex=670d2e5b&is=670bdcdb&hm=79443e46b6027c5168d888fcdcd0739d287ab625d90a01840963159aa56c0b5d&format=webp&quality=lossless&width=720&height=238&">294 wpm</a></div> AND AI and Machine Learning Solutions Architect</div>
                         </div>
                     </div>
                     <div class="credit-item card bg-secondary text-white mb-3 col-lg-3 col-md-4 col-sm-6 mx-2 animate-fade-in" style="animation-delay: 1s;">
                         <div class="card-body text-center shadow-lg rounded">
                             <div class="credit-name card-title h4">Heliam</div>
-                            <div class="credit-role card-text">DevOps Pipeline Automation Engineer AND IT Infrastructure and Operations Manager</div>
+                            <div class="credit-role card-text">Global Senior Executive of Strategic Prompt Engineering AND DevOps Pipeline Automation Engineer</div>
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,7 @@ export class Credits extends Component {
             window.router.navigate('/');
         }
     }
-
+    
     CustomDOMContentLoaded() {
         const back = document.getElementById('back');
         back.addEventListener('click', () => {
@@ -128,5 +128,6 @@ export class Credits extends Component {
 
     CustomDOMContentUnload() {
         document.removeEventListener('keydown', this.redirectTruc);
+
     }
 }

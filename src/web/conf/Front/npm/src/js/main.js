@@ -16,6 +16,7 @@ const router = new Router(target, {
   '/connect4': new Route('/connect4', 'connect4-component', "^id=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"),
   '/tournament': new Route(`/tournament`, 'tournament-component'),
   '/credits': new Route(`/credits`, 'credits-component'),
+  '/pong/multiplayer': new Route('/pong/multiplayer', 'multiplayer-pong-component'),
 });
 
 window.router = router;

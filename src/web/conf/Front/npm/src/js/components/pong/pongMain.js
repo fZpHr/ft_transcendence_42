@@ -11,9 +11,10 @@ export class PongMain extends Component{
                 <div id="overlay-title">PONG</div>
                 <div id="overlay-text">Choose your game</div>
                 <div class="buttons">
-                    <button id="pong-ai" class="pixel-corners-active">Pong against AI</button>
+                    <button id="pong-ai" class="pixel-corners">Pong against AI</button>
                     <button id="pong-local" class="pixel-corners">Pong 1v1 Local</button>
                     <button id="pong-remote" class="pixel-corners">Pong 1v1 Remote</button>
+                    <button id="pong-remote" class="pixel-corners">Pong Multiplayer</button>
                     <button id="reset-button" class="pixel-corners">Quit</button>
                 </div>
             </div>
@@ -476,88 +477,79 @@ export class PongMain extends Component{
     }
 
     CustomDOMContentLoaded(){
-        document.addEventListener("click", (e) => {
-            if (e.target.id === "pong-local") {
-                window.router.navigate("/pong/local");
-            }
-            else if (e.target.id === "pong-ai") {
-                window.router.navigate("/pong/ai");
-            }
-            else if (e.target.id === "pong-remote") {
-                window.router.navigate("/pong/remote");
-            }
-            else if (e.target.id === "reset-button") {
-                window.router.navigate("/");
-            }
-        });
-        // document.addEventListener("keydown", this.handleEndGame);
+        document.addEventListener("click", this.handleClicked);
     }
 
-    handleEndGame(event) {
-        const buttons = document.querySelectorAll(".buttons button");
-        const updateActiveButton = (direction) => {
-            for (let index = 0; index < buttons.length; index++) {
-                const element = buttons[index];
-                if (element.classList.contains("pixel-corners-active")) {
-                    if (direction === "up" && index > 0) {
-                        element.classList.remove("pixel-corners-active");
-                        element.classList.add("pixel-corners");
-                        const nextIndex = (index - 1) % buttons.length;
-                        buttons[nextIndex].classList.add("pixel-corners-active");
-                        buttons[nextIndex].classList.remove("pixel-corners");
-                        break;
-                    } else if (direction === "down" && index < buttons.length - 1) {
-                        console.log("index down", index);
-                        console.log("-----------------");
-                        element.classList.remove("pixel-corners-active");
-                        element.classList.add("pixel-corners");
-                        const prevIndex = (index + 1) % buttons.length;
-                        buttons[prevIndex].classList.add("pixel-corners-active");
-                        buttons[prevIndex].classList.remove("pixel-corners");
-                        break;
-                    }
-                }
-            }
-        };
-        if (event.key === "Enter") {
-            buttons.forEach(element => {
-                if (element.classList.contains("pixel-corners-active")) {
-                    if (element.id == "reset-button") {
-                        window.router.navigate("/");
-                    }
-                    else if (element.id == "pong-local") {
-                        window.router.navigate("/pong/local");
-                    }
-                    else if (element.id == "pong-ai") {
-                        window.router.navigate("/pong/ai");
-                    }
-                    else if (element.id == "pong-remote") {
-                        window.router.navigate("/pong/remote");
-                    }
-                }
-            });
-        } else if (event.key === "ArrowUp") {
-            updateActiveButton("up");
-        } else if (event.key === "ArrowDown") {
-            updateActiveButton("down");
+    handleClicked(e){
+        if (e.target.id === "pong-local") {
+            window.router.navigate("/pong/local");
+        }
+        else if (e.target.id === "pong-ai") {
+            window.router.navigate("/pong/ai");
+        }
+        else if (e.target.id === "pong-remote") {
+            window.router.navigate("/pong/remote");
+        }
+        else if (e.target.id === "pong-multiplayer") {
+            window.router.navigate("/pong/multiplayer");
+        }
+        else if (e.target.id === "reset-button") {
+            window.router.navigate("/");
         }
     }
 
+    // handleEndGame(event) {
+    //     const buttons = document.querySelectorAll(".buttons button");
+    //     const updateActiveButton = (direction) => {
+    //         for (let index = 0; index < buttons.length; index++) {
+    //             const element = buttons[index];
+    //             if (element.classList.contains("pixel-corners-active")) {
+    //                 if (direction === "up" && index > 0) {
+    //                     element.classList.remove("pixel-corners-active");
+    //                     element.classList.add("pixel-corners");
+    //                     const nextIndex = (index - 1) % buttons.length;
+    //                     buttons[nextIndex].classList.add("pixel-corners-active");
+    //                     buttons[nextIndex].classList.remove("pixel-corners");
+    //                     break;
+    //                 } else if (direction === "down" && index < buttons.length - 1) {
+    //                     console.log("index down", index);
+    //                     console.log("-----------------");
+    //                     element.classList.remove("pixel-corners-active");
+    //                     element.classList.add("pixel-corners");
+    //                     const prevIndex = (index + 1) % buttons.length;
+    //                     buttons[prevIndex].classList.add("pixel-corners-active");
+    //                     buttons[prevIndex].classList.remove("pixel-corners");
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     if (event.key === "Enter") {
+    //         buttons.forEach(element => {
+    //             if (element.classList.contains("pixel-corners-active")) {
+    //                 if (element.id == "reset-button") {
+    //                     window.router.navigate("/");
+    //                 }
+    //                 else if (element.id == "pong-local") {
+    //                     window.router.navigate("/pong/local");
+    //                 }
+    //                 else if (element.id == "pong-ai") {
+    //                     window.router.navigate("/pong/ai");
+    //                 }
+    //                 else if (element.id == "pong-remote") {
+    //                     window.router.navigate("/pong/remote");
+    //                 }
+    //             }
+    //         });
+    //     } else if (event.key === "ArrowUp") {
+    //         updateActiveButton("up");
+    //     } else if (event.key === "ArrowDown") {
+    //         updateActiveButton("down");
+    //     }
+    // }
+
     CustomDOMContentUnload(){
-        document.removeEventListener("keydown", this.handleEndGame);
-        document.removeEventListener("click", (e) => {
-            if (e.target.id === "pong-local") {
-                window.router.navigate("/pong/local");
-            }
-            else if (e.target.id === "pong-ai") {
-                window.router.navigate("/pong/ai");
-            }
-            else if (e.target.id === "pong-remote") {
-                window.router.navigate("/pong/remote");
-            }
-            else if (e.target.id === "reset-button") {
-                window.router.navigate("/");
-            }
-        }   );
+        // document.removeEventListener("keydown", this.handleEndGame);
+        document.removeEventListener("click", this.handleClicked);
     }
 }

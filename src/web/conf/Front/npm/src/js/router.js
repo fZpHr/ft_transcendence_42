@@ -17,7 +17,7 @@ export class Router {
             return;
         }
         localStorage.setItem('lastFetchTime', currentTime);
-        let route = window.location.pathname;
+        let route = window.location.pathname + window.location.search;  
         try
         {
             const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
@@ -30,6 +30,7 @@ export class Router {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+            console.log(data);
             if (data.status === 'error')
                 this.updateCookies(false, null, null);
             else if (data.status === 'success')
@@ -65,6 +66,11 @@ export class Router {
                 this.navigate('/404');
                 return;
             }
+        }
+        if (getCookie('connected') !== 'true' && route.permission === true)
+        {
+            this.navigate('/');
+            return;
         }
         console.log("Navigate to", path, window.location.origin + path + (regex ? '?' + regex : ''));
         if (windowHistory)
