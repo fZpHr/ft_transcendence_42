@@ -14,7 +14,7 @@ export class PongMain extends Component{
                     <button id="pong-ai" class="pixel-corners">Pong against AI</button>
                     <button id="pong-local" class="pixel-corners">Pong 1v1 Local</button>
                     <button id="pong-remote" class="pixel-corners">Pong 1v1 Remote</button>
-                    <button id="pong-remote" class="pixel-corners">Pong Multiplayer</button>
+                    <button id="pong-multiplayer" class="pixel-corners">Pong Multiplayer</button>
                     <button id="reset-button" class="pixel-corners">Quit</button>
                 </div>
             </div>
