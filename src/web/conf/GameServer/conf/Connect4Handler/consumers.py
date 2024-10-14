@@ -22,7 +22,7 @@ class Connect4Game:
             2: None
         }
         self.timer_started = False
-        self.timer = 30
+        self.timer = 3000000
         self.gameFinished = False
         self.lastMove = None
         self.isStarted = False
@@ -184,7 +184,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 asyncio.create_task(self.start_timer()) # Start timer for the game
             return
         if message['type'] == 'move':
-            Connect4GameConsumer.games[self.room_name].timer = 30
+            Connect4GameConsumer.games[self.room_name].timer = 300000
             if self.player != Connect4GameConsumer.games[self.room_name].players[Connect4GameConsumer.games[self.room_name].get_turn()]:
                 return
             column = message['column']

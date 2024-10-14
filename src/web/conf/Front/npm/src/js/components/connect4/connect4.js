@@ -21,13 +21,20 @@ export class Connect4 extends Component{
             <div id="infos">
                 <div id="player-info">
                     <div id="player1">
-                        <img id="player1-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                        <img id="player1-img" src="./img/profil.png"></img>
                         <div id="player1-name"></div>
                     </div>
                     <div id="vs">VS</div>
                     <div id="player2">
+                        <img id="player2-img" src="./img/profil.png"></img>
                         <div id="player2-name"></div>
-                        <img id="player2-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                    </div>
+                </div>
+                <div>
+                    <button id="toggle-settings">Options</button>
+                    <div id="options-container" class="hidden">
+                        <label for="color-picker" >Choose Color for map:</label>
+                        <input type="color" id="color-picker" name="color-picker">
                     </div>
                 </div>
             </div>
@@ -715,6 +722,53 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentLoaded(){
+
+        document.addEventListener('DOMContentLoaded', () => {
+            function changeProfileImage(playerId) {
+                const images = [
+                    './img/profil.png',
+                    './img/profil1.png',
+                    './img/profil2.png',
+                    './img/profil3.png',
+                    './img/profil4.png',
+                    './img/profil5.png',
+                    './img/profil6.png'
+                ];
+        
+                const randomIndex = Math.floor(Math.random() * images.length);
+                const randomImage = images[randomIndex];
+        
+                const imgElement = document.getElementById(playerId);
+                if (imgElement) {
+                    imgElement.src = randomImage;
+                }
+            }
+        
+            // Changer les images de profil pour les deux joueurs
+            changeProfileImage('player1-img');
+            changeProfileImage('player2-img');
+        });
+        document.getElementById('toggle-settings').addEventListener('click', function() {
+            var optionsContainer = document.getElementById('options-container');
+            optionsContainer.classList.toggle('hidden');
+        });
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    
+
+        document.getElementById('color-picker').addEventListener('input', debounce(function(event) {
+            var chosenColor = event.target.value;
+            document.getElementById('connect-four').style.backgroundColor = chosenColor;
+        }, 1));
+
+
+
         const userName = getCookie("user42");
         const searchParams = new URLSearchParams(window.location.search);
         const gameId = searchParams.get("id");
