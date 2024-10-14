@@ -8,6 +8,7 @@ export class Connect4 extends Component{
         this.board = this.createBoard();
         this.player = null;
         this.avalaibleColumns = [0, 1, 2, 3, 4, 5, 6];
+        this.eventKeyDown = null;
     }
 
     createBoard() {
@@ -716,6 +717,7 @@ export class Connect4 extends Component{
 
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
+        this.eventKeyDown = this.handleKeyDown.bind(this);
         const searchParams = new URLSearchParams(window.location.search);
         const gameId = searchParams.get("id");
         this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4`);
@@ -789,7 +791,10 @@ export class Connect4 extends Component{
             document.getElementById("winnerText").innerText = data.winner + " wins!";
         document.getElementById("player1-turn").innerHTML = ""
         document.getElementById("player2-turn").innerHTML = ""
-        document.removeEventListener("keydown", this.handleKeyDown);
+        console.log("remove event keydown")
+        
+        document.removeEventListener("keydown", this.eventKeyDown);
+        console.log("add event endGame")
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -899,12 +904,15 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add("active-column");
             }
-            this.handleKeyDown = this.handleKeyDown.bind(this);
-            document.addEventListener("keydown", this.handleKeyDown);
+            
+            console.log("add event keydown")
+            document.addEventListener("keydown", this.eventKeyDown);
         }
         else
         {
-            document.removeEventListener("keydown", this.handleKeyDown);
+            console.log("remove event keydown")
+            
+            document.removeEventListener("keydown", this.eventKeyDown);
         }
     }
 
@@ -977,7 +985,9 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add(this.player);
                 this.ws.send(JSON.stringify({ type: "move", player_id: this.player, column: this.column }));
-                document.removeEventListener("keydown", this.handleKeyDown);
+                console.log("remove event keydown")
+                
+                document.removeEventListener("keydown", this.eventKeyDown);
                 for (var roww = 0; roww < 6; roww++) {
                     let tile = document.getElementById(roww + " " + this.column);
                     tile.classList.remove("active-column");
@@ -1004,7 +1014,9 @@ export class Connect4 extends Component{
     game_full(data) {
         document.getElementById("overlay").style.display = "flex";
         document.getElementById("winnerText").innerText = data.message;
-        document.removeEventListener("keydown", this.handleKeyDown);
+        console.log("remove event keydown")
+        document.removeEventListener("keydown", this.eventKeyDown);
+        console.log("add event endGame")
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -1019,15 +1031,12 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentUnload(){
-        document.removeEventListener("keydown", this.handleKeyDown);
-        document.removeEventListener("keydown", this.handleKeyDown);
-        document.removeEventListener("keydown", this.handleKeyDown);
-        document.removeEventListener("keydown", this.handleEndGame);
-        document.removeEventListener("keydown", this.handleEndGame);
+        console.log("removing event keyDown")
+        document.removeEventListener("keydown", this.eventKeyDown);
+        console.log("removing event endGame")
         document.removeEventListener("keydown", this.handleEndGame);
         if (this.ws.readyState === WebSocket.OPEN)
             this.ws.close();
         this.ws = null;
-        console.log("removing event listeners")
     }
 }
