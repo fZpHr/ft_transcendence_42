@@ -8,7 +8,6 @@ export class Component extends HTMLElement {
 
     //Called when the element is added to the page
     connectedCallback() {
-        console.log("Custom element added to page.");
         if (!this.isRendered) {
             this.innerHTML = this.render() + this.style();
             this.isRendered = true;
@@ -18,7 +17,6 @@ export class Component extends HTMLElement {
 
     //Called when the element is removed from the page
     disconnectedCallback() {
-        console.log("Custom element removed from page.");
         this.isRendered = false;
         this.CustomDOMContentUnload();
         this.removeExtraEventListeners();

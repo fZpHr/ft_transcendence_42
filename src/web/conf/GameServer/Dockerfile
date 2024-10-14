@@ -1,5 +1,6 @@
 FROM python:3.11-slim-buster
 
+RUN apt update -y && apt install curl -y
 RUN pip install --upgrade pip
 COPY ./tools/. .
 RUN pip install -r requirements.txt

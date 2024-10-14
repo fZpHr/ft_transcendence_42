@@ -322,393 +322,393 @@ export class Connect4 extends Component{
             }
             
             .pixel-corners-active,
-.pixel-corners-active--wrapper {
-  clip-path: polygon(0px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px 100%,
-    calc(100% - 30px) 100%,
-    calc(100% - 30px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 30px),
-    100% calc(100% - 30px),
-    100% 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 0px,
-    30px 0px,
-    30px 5px,
-    20px 5px,
-    20px 10px,
-    15px 10px,
-    15px 15px,
-    10px 15px,
-    10px 20px,
-    5px 20px,
-    5px 30px,
-    0px 30px);
-  position: relative;
-}
-.pixel-corners-active {
-  border: 5px solid transparent;
-}
-.pixel-corners-active--wrapper {
-  width: fit-content;
-  height: fit-content;
-}
-.pixel-corners-active--wrapper .pixel-corners-active {
-  display: block;
-  clip-path: polygon(5px 30px,
-    10px 30px,
-    10px 20px,
-    15px 20px,
-    15px 15px,
-    20px 15px,
-    20px 10px,
-    30px 10px,
-    30px 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 30px),
-    5px calc(100% - 30px));
-}
-.pixel-corners-active::after,
-.pixel-corners-active--wrapper::after {
-  content: "";
-  position: absolute;
-  clip-path: polygon(0px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px 100%,
-    calc(100% - 30px) 100%,
-    calc(100% - 30px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 30px),
-    100% calc(100% - 30px),
-    100% 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 0px,
-    30px 0px,
-    30px 5px,
-    20px 5px,
-    20px 10px,
-    15px 10px,
-    15px 15px,
-    10px 15px,
-    10px 20px,
-    5px 20px,
-    5px 30px,
-    0px 30px,
-    0px 50%,
-    5px 50%,
-    5px 30px,
-    10px 30px,
-    10px 20px,
-    15px 20px,
-    15px 15px,
-    20px 15px,
-    20px 10px,
-    30px 10px,
-    30px 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px 50%,
-    0px 50%);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  display: block;
-  pointer-events: none;
-}
-.pixel-corners-active::after {
-  margin: -5px;
-}
+            .pixel-corners-active--wrapper {
+            clip-path: polygon(0px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px 100%,
+                calc(100% - 30px) 100%,
+                calc(100% - 30px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 30px),
+                100% calc(100% - 30px),
+                100% 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 0px,
+                30px 0px,
+                30px 5px,
+                20px 5px,
+                20px 10px,
+                15px 10px,
+                15px 15px,
+                10px 15px,
+                10px 20px,
+                5px 20px,
+                5px 30px,
+                0px 30px);
+            position: relative;
+            }
+            .pixel-corners-active {
+            border: 5px solid transparent;
+            }
+            .pixel-corners-active--wrapper {
+            width: fit-content;
+            height: fit-content;
+            }
+            .pixel-corners-active--wrapper .pixel-corners-active {
+            display: block;
+            clip-path: polygon(5px 30px,
+                10px 30px,
+                10px 20px,
+                15px 20px,
+                15px 15px,
+                20px 15px,
+                20px 10px,
+                30px 10px,
+                30px 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 30px),
+                5px calc(100% - 30px));
+            }
+            .pixel-corners-active::after,
+            .pixel-corners-active--wrapper::after {
+            content: "";
+            position: absolute;
+            clip-path: polygon(0px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px 100%,
+                calc(100% - 30px) 100%,
+                calc(100% - 30px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 30px),
+                100% calc(100% - 30px),
+                100% 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 0px,
+                30px 0px,
+                30px 5px,
+                20px 5px,
+                20px 10px,
+                15px 10px,
+                15px 15px,
+                10px 15px,
+                10px 20px,
+                5px 20px,
+                5px 30px,
+                0px 30px,
+                0px 50%,
+                5px 50%,
+                5px 30px,
+                10px 30px,
+                10px 20px,
+                15px 20px,
+                15px 15px,
+                20px 15px,
+                20px 10px,
+                30px 10px,
+                30px 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px 50%,
+                0px 50%);
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            display: block;
+            pointer-events: none;
+            }
+            .pixel-corners-active::after {
+            margin: -5px;
+            }
 
 
-.pixel-corners,
-.pixel-corners--wrapper {
-  clip-path: polygon(0px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px 100%,
-    calc(100% - 30px) 100%,
-    calc(100% - 30px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 30px),
-    100% calc(100% - 30px),
-    100% 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 0px,
-    30px 0px,
-    30px 5px,
-    20px 5px,
-    20px 10px,
-    15px 10px,
-    15px 15px,
-    10px 15px,
-    10px 20px,
-    5px 20px,
-    5px 30px,
-    0px 30px);
-  position: relative;
-}
-.pixel-corners {
-  border: 5px solid transparent;
-}
-.pixel-corners--wrapper {
-  width: fit-content;
-  height: fit-content;
-}
-.pixel-corners--wrapper .pixel-corners {
-  display: block;
-  clip-path: polygon(5px 30px,
-    10px 30px,
-    10px 20px,
-    15px 20px,
-    15px 15px,
-    20px 15px,
-    20px 10px,
-    30px 10px,
-    30px 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 30px),
-    5px calc(100% - 30px));
-}
-.pixel-corners::after,
-.pixel-corners--wrapper::after {
-  content: "";
-  position: absolute;
-  clip-path: polygon(0px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px 100%,
-    calc(100% - 30px) 100%,
-    calc(100% - 30px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 5px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 10px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 15px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 20px),
-    calc(100% - 5px) calc(100% - 30px),
-    100% calc(100% - 30px),
-    100% 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 0px,
-    30px 0px,
-    30px 5px,
-    20px 5px,
-    20px 10px,
-    15px 10px,
-    15px 15px,
-    10px 15px,
-    10px 20px,
-    5px 20px,
-    5px 30px,
-    0px 30px,
-    0px 50%,
-    5px 50%,
-    5px 30px,
-    10px 30px,
-    10px 20px,
-    15px 20px,
-    15px 15px,
-    20px 15px,
-    20px 10px,
-    30px 10px,
-    30px 5px,
-    calc(100% - 30px) 5px,
-    calc(100% - 30px) 10px,
-    calc(100% - 20px) 10px,
-    calc(100% - 20px) 15px,
-    calc(100% - 15px) 15px,
-    calc(100% - 15px) 20px,
-    calc(100% - 10px) 20px,
-    calc(100% - 10px) 30px,
-    calc(100% - 5px) 30px,
-    calc(100% - 5px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 30px),
-    calc(100% - 10px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 20px),
-    calc(100% - 15px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 15px),
-    calc(100% - 20px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 10px),
-    calc(100% - 30px) calc(100% - 5px),
-    30px calc(100% - 5px),
-    30px calc(100% - 10px),
-    20px calc(100% - 10px),
-    20px calc(100% - 15px),
-    15px calc(100% - 15px),
-    15px calc(100% - 20px),
-    10px calc(100% - 20px),
-    10px calc(100% - 30px),
-    5px calc(100% - 30px),
-    5px 50%,
-    0px 50%);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #191919;
-  display: block;
-  pointer-events: none;
-}
-.pixel-corners::after {
-  margin: -5px;
-}
+            .pixel-corners,
+            .pixel-corners--wrapper {
+            clip-path: polygon(0px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px 100%,
+                calc(100% - 30px) 100%,
+                calc(100% - 30px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 30px),
+                100% calc(100% - 30px),
+                100% 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 0px,
+                30px 0px,
+                30px 5px,
+                20px 5px,
+                20px 10px,
+                15px 10px,
+                15px 15px,
+                10px 15px,
+                10px 20px,
+                5px 20px,
+                5px 30px,
+                0px 30px);
+            position: relative;
+            }
+            .pixel-corners {
+            border: 5px solid transparent;
+            }
+            .pixel-corners--wrapper {
+            width: fit-content;
+            height: fit-content;
+            }
+            .pixel-corners--wrapper .pixel-corners {
+            display: block;
+            clip-path: polygon(5px 30px,
+                10px 30px,
+                10px 20px,
+                15px 20px,
+                15px 15px,
+                20px 15px,
+                20px 10px,
+                30px 10px,
+                30px 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 30px),
+                5px calc(100% - 30px));
+            }
+            .pixel-corners::after,
+            .pixel-corners--wrapper::after {
+            content: "";
+            position: absolute;
+            clip-path: polygon(0px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px 100%,
+                calc(100% - 30px) 100%,
+                calc(100% - 30px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 5px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 10px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 15px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 20px),
+                calc(100% - 5px) calc(100% - 30px),
+                100% calc(100% - 30px),
+                100% 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 0px,
+                30px 0px,
+                30px 5px,
+                20px 5px,
+                20px 10px,
+                15px 10px,
+                15px 15px,
+                10px 15px,
+                10px 20px,
+                5px 20px,
+                5px 30px,
+                0px 30px,
+                0px 50%,
+                5px 50%,
+                5px 30px,
+                10px 30px,
+                10px 20px,
+                15px 20px,
+                15px 15px,
+                20px 15px,
+                20px 10px,
+                30px 10px,
+                30px 5px,
+                calc(100% - 30px) 5px,
+                calc(100% - 30px) 10px,
+                calc(100% - 20px) 10px,
+                calc(100% - 20px) 15px,
+                calc(100% - 15px) 15px,
+                calc(100% - 15px) 20px,
+                calc(100% - 10px) 20px,
+                calc(100% - 10px) 30px,
+                calc(100% - 5px) 30px,
+                calc(100% - 5px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 30px),
+                calc(100% - 10px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 20px),
+                calc(100% - 15px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 15px),
+                calc(100% - 20px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 10px),
+                calc(100% - 30px) calc(100% - 5px),
+                30px calc(100% - 5px),
+                30px calc(100% - 10px),
+                20px calc(100% - 10px),
+                20px calc(100% - 15px),
+                15px calc(100% - 15px),
+                15px calc(100% - 20px),
+                10px calc(100% - 20px),
+                10px calc(100% - 30px),
+                5px calc(100% - 30px),
+                5px 50%,
+                0px 50%);
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #191919;
+            display: block;
+            pointer-events: none;
+            }
+            .pixel-corners::after {
+            margin: -5px;
+            }
         </style>
         `;
             
@@ -716,10 +716,11 @@ export class Connect4 extends Component{
 
     CustomDOMContentLoaded(){
         const userName = getCookie("user42");
-        this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4/`);
+        const searchParams = new URLSearchParams(window.location.search);
+        const gameId = searchParams.get("id");
+        this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/connect4`);
         
         this.ws.onopen = () => {
-            console.log("Connected to the server");
             const searchParams = new URLSearchParams(window.location.search);
             const gameId = searchParams.get("id");
             this.checkUserIdInterval = setInterval(() => {
@@ -732,7 +733,6 @@ export class Connect4 extends Component{
 
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
-            console.log("data", data);
             switch (data.type) {
                 case "game_start":
                     this.player = data.player1.username == userName ? "player1" : "player2";
@@ -746,7 +746,6 @@ export class Connect4 extends Component{
                     break;
                 case "game_full":
                     this.game_full(data);
-                    this.endGame(data);
                     this.ws.close(3845);
                     break;
                 case "update":
@@ -754,11 +753,9 @@ export class Connect4 extends Component{
                     this.updateTurn("player" + data.player_turn);
                     this.updateInfos(data);
                     this.updateTimer(data.timer);
-                    console.log(this.player);
                     if (!this.player)
                     {
                         this.player = data.player1.username == userName ? "player1" : "player2";
-                        console.log(this.player);
                         this.startGame("player" + data.player_turn);
                     }
                     break;
@@ -772,11 +769,9 @@ export class Connect4 extends Component{
         };
         
         this.ws.onclose = () => {
-            console.log("Disconnected from the server");
         };
 
         this.ws.onerror = (error) => {
-            console.log("Error: ", error);
         }
 
         this.setGame();
@@ -792,19 +787,17 @@ export class Connect4 extends Component{
             document.getElementById("winnerText").innerText = "Draw!";
         else
             document.getElementById("winnerText").innerText = data.winner + " wins!";
+        document.getElementById("player1-turn").innerHTML = ""
+        document.getElementById("player2-turn").innerHTML = ""
         document.removeEventListener("keydown", this.handleKeyDown);
         document.addEventListener("keydown", this.handleEndGame);
     }
 
     handleEndGame(event) {
         const buttons = document.querySelectorAll(".buttons button");
-        console.log("event", event);
-        console.log("buttons", buttons);
     
         const updateActiveButton = (direction) => {
             buttons.forEach((element, index) => {
-                console.log("element", element);
-                console.log("index", index);
                 if (element.classList.contains("pixel-corners-active")) {
                     if (direction === "up" && index > 0) {
                         element.classList.remove("pixel-corners-active");
@@ -823,14 +816,14 @@ export class Connect4 extends Component{
             });
         };
     
-        if (event.key === " ") {
+        if (event.key === " " || event.key === "Enter") {
             buttons.forEach(element => {
                 if (element.classList.contains("pixel-corners-active")) {
                     if (element.id == "cancel") {
                         window.router.navigate("/");
                     }
                     if (element.id == "play-again") {
-                        window.router.navigate("/matchmaking/");
+                        window.router.navigate("/matchmaking");
                     }
                 }
             });
@@ -889,7 +882,6 @@ export class Connect4 extends Component{
     {
         //I want to make active the first column for player_turn
         // this.updateBoard(data);
-        console.log("player_turn", player_turn);
         this.updateTurn(player_turn);
         for (var col = 0; col < 7; col++)
         {
@@ -1012,6 +1004,8 @@ export class Connect4 extends Component{
     game_full(data) {
         document.getElementById("overlay").style.display = "flex";
         document.getElementById("winnerText").innerText = data.message;
+        document.removeEventListener("keydown", this.handleKeyDown);
+        document.addEventListener("keydown", this.handleEndGame);
     }
 
     checkColumnFull(column)

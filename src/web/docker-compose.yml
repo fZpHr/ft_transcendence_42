@@ -1,4 +1,39 @@
 services:  
+  web-user_management:
+    build:
+      context: conf/UserManagement
+      dockerfile: Dockerfile
+    container_name: web-user_management
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8003"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/UserManagement/:/usr/src/app/logs/
+      - ./conf/UserManagement/conf/:/usr/src/app/
+    networks:
+      transcendence:
+
+  web-game_server:
+    build:
+      context: conf/GameServer
+      dockerfile: Dockerfile
+    container_name: web-game_server
+    depends_on:
+      - web-user_management
+    ports:
+      - "8001"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/GameServer/:/usr/src/app/logs/
+      - ./conf/GameServer/conf/:/usr/src/app/
+    networks:
+      transcendence:
+
   web-npm:
     build:
       context: ./conf/Front
@@ -14,10 +49,9 @@ services:
       - ../../.env
     depends_on:
       - web-game_server
-      - web-user_management
     networks:
       - transcendence
-  
+
   web-nginx:
     build:
       context: ./conf/Front
@@ -35,51 +69,5 @@ services:
       TZ: "Europe/Paris"
     depends_on:
       - web-npm
-      - web-game_server
-      - web-user_management
     networks:
       transcendence:
-
-  web-game_server:
-    build:
-      context: conf/GameServer
-      dockerfile: Dockerfile
-    container_name: web-game_server
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "8001"
-    env_file:
-      - ../../.env
-    volumes:
-      - ./conf/GameServer/:/usr/src/app/logs/
-      - ./conf/GameServer/conf/:/usr/src/app/
-    # restart: on-failure
-    networks:
-      transcendence:
-
-  web-user_management:
-    build:
-      context: conf/UserManagement
-      dockerfile: Dockerfile
-    container_name: web-user_management
-    depends_on:
-      postgres:
-        condition: service_healthy
-      web-game_server:
-        condition: service_started
-    ports:
-      - "8003"
-    env_file:
-      - ../../.env
-    volumes:
-      - ./conf/UserManagement/:/usr/src/app/logs/
-      - ./conf/UserManagement/conf/:/usr/src/app/
-    # restart: on-failure
-    networks:
-      transcendence:
-
-
-  
-
