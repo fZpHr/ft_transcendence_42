@@ -15,6 +15,9 @@ export class P3d extends Component {
         this.sPressed = false;
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
     }
 
     render() {
@@ -30,13 +33,13 @@ export class P3d extends Component {
                 <div class="controls">
                     <div class="player-controls">
                         <div class="player-name">Player 1</div>
-                        <div class="key">W</div>
-                        <div class="key">S</div>
+                        <div class="key">A</div>
+                        <div class="key">D</div>
                     </div>
                     <div class="player-controls">
                         <div class="player-name">Player 2</div>
-                        <div class="key">ArrowUp</div>
-                        <div class="key">ArrowDown</div>
+                        <div class="key">ArrowLeft</div>
+                        <div class="key">ArrowRight</div>
                     </div>
                 </div>
                 <div>
@@ -216,47 +219,48 @@ export class P3d extends Component {
         `;
     }
 
-    escape(event) {
-        if (event.key === 'Escape')
-            window.router.navigate('/pong');
-    }
-
+    
     CustomDOMContentLoaded() {
         document.addEventListener('keydown', this.escape);
-
+        
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('pong3d-container').appendChild(this.renderer.domElement);
-
-        // Ajouter les contrôles de la caméra
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true; // Activer l'amortissement (inertie)
-        this.controls.dampingFactor = 0.25;
-        this.controls.enableZoom = true; // Activer le zoom
-        this.controls.enablePan = true; // Activer le déplacement
-        this.controls.maxPolarAngle = Math.PI; // Permettre une rotation complète à 360 degrés
-        this.controls.minPolarAngle = 0; // Permettre une rotation complète à 360 degrés
-
-        this.controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE, // Déplacer avec le clic gauche
-            MIDDLE: THREE.MOUSE.DOLLY, // Zoomer avec la molette
-            RIGHT: THREE.MOUSE.PAN // Tourner avec le clic droit
-        };
-
+        // // Ajouter les contrôles de la caméra
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        // this.controls.enableDamping = true; // Activer l'amortissement (inertie)
+        // this.controls.dampingFactor = 0.25;
+        // this.controls.enableZoom = true; // Activer le zoom
+        // this.controls.enablePan = false; // Activer le déplacement
+        // this.controls.maxPolarAngle = Math.PI; // Permettre une rotation complète à 360 degrés
+        // this.controls.minPolarAngle = 0; // Permettre une rotation complète à 360 degrés
+        
+        // this.controls.mouseButtons = {
+            //     LEFT: THREE.MOUSE.ROTATE, // Déplacer avec le clic gauche
+            //     MIDDLE: THREE.MOUSE.DOLLY, // Zoomer avec la molette
+        //     RIGHT: THREE.MOUSE.PAN // Tourner avec le clic droit
+        // };
+        
         document.getElementById('start-button').addEventListener('click', () => this.initGame());
         document.getElementById('toggle-settings').addEventListener('click', () => this.toggleSettings());
         document.getElementById('settings-option1').addEventListener('click', () => this.toggleSpeed());
         document.getElementById('color-picker').addEventListener('input', (event) => this.changeColor(event));
     }
     
+    escape(event) {
+        if (event.key === 'Escape')
+            window.router.navigate('/pong');
+        // this.cleanup();
+    }
+
     async initGame() {
         document.getElementById('overlay').style.display = 'none';
-        await this.startGame();
+        // await this.startGame();
         this.createObjects();
         this.addLights();
-        this.camera.position.z = 5;
+        this.camera.position.set(0, 5, 0); // Positionnez la caméra au-dessus de la scène
         this.ballSpeed = new THREE.Vector3(BALL_SPEED_X, BALL_SPEED_Y, 0);
         this.paddleSpeed = PADDLE_SPEED;
         this.addControls();
@@ -320,6 +324,15 @@ export class P3d extends Component {
         this.wallBottom.position.y = -1.5;
         this.scene.add(this.wallTop);
         this.scene.add(this.wallBottom);
+
+        // Créer le sol
+        const groundGeometry = new THREE.PlaneGeometry(10, 5);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+        this.ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        this.ground.rotation.x = 0;
+        this.ground.position.y = -0.5;
+        this.scene.add(this.ground);
+
     }
 
     addLights() {
@@ -331,16 +344,16 @@ export class P3d extends Component {
         this.scene.add(pointLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(0, 10, 10);
+        directionalLight.position.set(-10, 10, -10);
         this.scene.add(directionalLight);
     }
 
     handleKey(event, isKeyDown) {
         const keyMap = {
-            "ArrowUp": () => this.upPressed = isKeyDown,
-            "ArrowDown": () => this.downPressed = isKeyDown,
-            "KeyW": () => this.wPressed = isKeyDown,
-            "KeyS": () => this.sPressed = isKeyDown
+            "ArrowLeft": () => this.upPressed = isKeyDown,
+            "ArrowRight": () => this.downPressed = isKeyDown,
+            "KeyD": () => this.wPressed = isKeyDown,
+            "KeyA": () => this.sPressed = isKeyDown
         };
         if (keyMap[event.code]) {
             event.preventDefault();
@@ -376,8 +389,29 @@ export class P3d extends Component {
         }
     }
 
+    updateCamera() {
+        if (this.ballSpeed.x > 0) {
+            this.camera.position.x = 7;
+            this.camera.position.y = 1; // Ajustez cette valeur pour obtenir l'angle de vue souhaité
+            this.camera.position.z = -0.5;
+        
+            this.camera.rotation.x = -Math.PI / 2; // 90 degrés pour une vue de dessus
+            this.camera.rotation.y = Math.PI / 2; // 90 degrés pour une vue de dessus
+            this.camera.rotation.z = 0;
+        }
+        else {
+            this.camera.position.x = -7;
+            this.camera.position.y = 1; // Ajustez cette valeur pour obtenir l'angle de vue souhaité
+            this.camera.position.z = -0.5;
+        
+            this.camera.rotation.x = -Math.PI / 2; // 90 degrés pour une vue de dessus
+            this.camera.rotation.y = -Math.PI / 2; // 90 degrés pour une vue de dessus
+            this.camera.rotation.z = 0;
+        }
+    }
+
     animate() {
-        requestAnimationFrame(() => this.animate());
+        this.animationId = requestAnimationFrame(() => this.animate());
     
         this.updatePaddles();
         
@@ -416,8 +450,8 @@ export class P3d extends Component {
             this.ballSpeed.x = -this.ballSpeed.x;
         }
     
-        this.controls.update();
-    
+        this.updateCamera();
+        // this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
 
@@ -438,12 +472,64 @@ export class P3d extends Component {
         }
     
         if (this.scorePlayer1 >= 5) {
+            this.cleanup();
             this.endGame('Player 1');
+
         } else if (this.scorePlayer2 >= 5) {
+            this.cleanup();
             this.endGame('Player 2');
         }
     }
     
+    cleanup() {
+        // Supprimer les écouteurs d'événements
+        window.removeEventListener('keydown', this.handleKeyDown);
+        window.removeEventListener('keyup', this.handleKeyUp);
+    
+        // Arrêter les animations
+        cancelAnimationFrame(this.animationId);
+    
+        // Nettoyer les références DOM
+        // const scorePlayer1Element = document.getElementById('scorePlayer1');
+        // const scorePlayer2Element = document.getElementById('scorePlayer2');
+    
+        // if (scorePlayer1Element) {
+        //     scorePlayer1Element.innerText = '';
+        // }
+    
+        // if (scorePlayer2Element) {
+        //     scorePlayer2Element.innerText = '';
+        // }
+    
+        // Définir les variables sur null pour permettre le garbage collection
+    
+        // Nettoyer la scène Three.js
+        this.scene.traverse((object) => {
+            if (!object.isMesh) return;
+    
+            object.geometry.dispose();
+    
+            if (object.material.isMaterial) {
+                cleanMaterial(object.material);
+            } else {
+                // an array of materials
+                for (const material of object.material) cleanMaterial(material);
+            }
+        });
+    
+        function cleanMaterial(material) {
+            material.dispose();
+    
+            // dispose textures
+            for (const key of Object.keys(material)) {
+                const value = material[key];
+                if (value && typeof value === 'object' && 'minFilter' in value) {
+                    value.dispose();
+                }
+            }
+        }
+    }
+
     endGame(winner) {
         document.getElementById('pong3d-container').style.display = 'none';
         document.getElementById('scoreboard').style.display = 'none';
@@ -458,19 +544,21 @@ export class P3d extends Component {
     }
     
     resetGame() {
+        this.resetBall();
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
         this.updateScore();
-        this.resetBall();
     }
 
     resetBall() {
         this.ball.position.set(0, 0, 0);
     
-        const randomDirectionX = (Math.random() > 0.5 ? 1 : -1) * BALL_SPEED_X;
-        const randomDirectionY = (Math.random() > 0.5 ? 1 : -1) * BALL_SPEED_Y;
-    
-        this.ballSpeed = new THREE.Vector3(randomDirectionX, randomDirectionY, 0);
+        if (this.scorePlayer1 > this.scorePlayer2) {
+            this.ballSpeed = new THREE.Vector3(-BALL_SPEED_X, BALL_SPEED_Y, 0);
+        }
+        else {
+            this.ballSpeed = new THREE.Vector3(BALL_SPEED_X, BALL_SPEED_Y, 0);
+        }
     }
 
     counter(text) {
@@ -495,43 +583,8 @@ export class P3d extends Component {
     }
     
     CustomDOMContentUnload() {
-        document.removeEventListener('keydown', this.escape);
-        window.removeEventListener('keydown', this.handleKeyDown);
-        window.removeEventListener('keyup', this.handleKeyUp);
-        
-        document.getElementById('start-button').removeEventListener('click', () => this.initGame());
-        document.getElementById('toggle-settings').removeEventListener('click', () => this.toggleSettings());
-        document.getElementById('settings-option1').removeEventListener('click', () => this.toggleSpeed());
-        document.getElementById('color-picker').removeEventListener('input', (event) => this.changeColor(event));
-        // Annuler les animations en cours
-        if (this.animationFrameId) {
-            cancelAnimationFrame(this.animationFrameId);
-        }
-    
-        // Nettoyer les objets Three.js pour libérer la mémoire
-        this.scene.traverse((object) => {
-            if (!object.isMesh) return;
-    
-            object.geometry.dispose();
-            if (object.material.isMaterial) {
-                cleanMaterial(object.material);
-            } else {
-                for (const material of object.material) cleanMaterial(material);
-            }
-        });
-    
-        this.renderer.dispose();
-    
-        function cleanMaterial(material) {
-            material.dispose();
-    
-            // Dispose textures
-            for (const key of Object.keys(material)) {
-                const value = material[key];
-                if (value && typeof value === 'object' && 'minFilter' in value) {
-                    value.dispose();
-                }
-            }
-        }
+        console.log("P3D unloaded");
+        // document.removeEventListener('keydown', this.escape);
+        this.cleanup();
     }
 }

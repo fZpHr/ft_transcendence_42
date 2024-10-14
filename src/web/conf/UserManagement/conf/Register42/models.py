@@ -20,3 +20,5 @@ class User(AbstractUser):
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
     )
+    
+    password = models.CharField(max_length=128, null=True, blank=True)  # Rendre le champ nullable
