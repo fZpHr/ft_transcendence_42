@@ -1019,9 +1019,15 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentUnload(){
-        if (this.ws.readyState === WebSocket.OPEN)
-            this.ws.close();
+        document.removeEventListener("keydown", this.handleKeyDown);
+        document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keydown", this.handleEndGame);
+        document.removeEventListener("keydown", this.handleEndGame);
+        document.removeEventListener("keydown", this.handleEndGame);
+        if (this.ws.readyState === WebSocket.OPEN)
+            this.ws.close();
+        this.ws = null;
+        console.log("removing event listeners")
     }
 }

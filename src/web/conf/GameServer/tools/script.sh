@@ -1,5 +1,7 @@
 #!/bin/bash
 
-timeout 5s python3 /usr/src/app/manage.py makemigrations
-timeout 5s python3 /usr/src/app/manage.py migrate
-exec "$@"
+# timeout 5s python3 /usr/src/app/manage.py makemigrations
+# timeout 5s python3 /usr/src/app/manage.py migrate
+# exec "$@"
+
+python3 /usr/src/app/manage.py makemigrations && python3 /usr/src/app/manage.py migrate && exec "$@"

@@ -1,9 +1,11 @@
 import { Component } from "@js/component";
+import { getCookie } from "@js/utils/cookie";
 
 export class IndexConnected extends Component{
     constructor(){
         super();
-        this.commands = ['help', 'ls', './pong.sh', './connect4.sh', './tournament.sh', 'pwd', 'whoami', 'exit', 'clear', 'cat', 'cat profil'];
+        this.commands = ['help', 'ls', './pong.sh', './connect4.sh', './tournament.sh', 'pwd', 'whoami', 'exit', 'clear', 'cat', './profil.txt', 'cat ./profil.txt'];
+        this.profil_info = {}
     }
 
     render(){
@@ -11,7 +13,7 @@ export class IndexConnected extends Component{
             <div id="container">
             <div id="terminal">
             <button id="credits" type="button" class="btn btn-link">©</button>
-                    <pre id="terminal-out">Welcome ${this.getCookie("user42")}.\nType 'help' to see available commands.</pre>
+                    <pre id="terminal-out">Welcome ${getCookie("user42")}.\nType 'help' to see available commands.</pre>
                     <div id="input-container">
                         <span id="prompt">></span>
                         <input type="text" id="terminal-in" autofocus />
@@ -95,43 +97,79 @@ export class IndexConnected extends Component{
 
         const credits = document.getElementById('credits');
         this.terminal_out = document.getElementById('terminal-out');
+        document.getElementById('terminal-in').focus()
 
         credits.addEventListener('click', () => {
             window.router.navigate('/credits');
         });
+        this.profil_info = this.get_user_info();  
+        console.log('test')  
+    }
+
+    get_user_info()
+    {
+        console.log("get user")
+        const getUserURL = "https://" + window.location.host + "/users/get-info/";
+        const token = getCookie('token');
+        const csrftoken = getCookie('csrftoken'); 
+        fetch(getUserURL, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken, // Include CSRF token if needed
+                'Authorization': `Bearer ${token}`, // Include token if needed
+            },
+        }).then((response) => {
+            if (response.ok) {
+                return response.json(); // Assuming the response is in JSON format
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        }).then((data) => {
+            this.profil_info = data;
+            console.log(this.profil_info)
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+        return null;
     }
 
     command_handler(input) {
         const terminal_out = document.getElementById('terminal-out');
-        const user42 = this.getCookie("user42");
+        const user42 = getCookie("user42");
         terminal_out.innerText += '\n' + `> ${input}`;
         switch (input) {
             case 'help':
                 terminal_out.innerText += '\n' + 'Command list:\n- clear\n- ls\n- cat\n- pwd\n- whoami\n- exit';
                 break;
             case 'ls':
-                terminal_out.innerText += '\n' + 'pong.sh connect4.sh tournament.sh';
+                terminal_out.innerText += '\n' + 'pong.sh connect4.sh tournament.sh profil.txt';
                 break;
-                case './pong.sh':
-                    window.router.navigate('/pong');
+            case './pong.sh':
+                window.router.navigate('/pong');
                 break;
-                case './connect4.sh':
-                    window.router.navigate('/matchmaking');
+            case './connect4.sh':
+                window.router.navigate('/matchmaking');
                 break;
-                case './tournament.sh':
-                    window.router.navigate('/tournament');
-                    break;
-                    case 'pwd':
-                        terminal_out.innerText += '\n' + `/${user42}/ft_transcendence`;
-                        break;
-                        case 'whoami':
-                            terminal_out.innerText += '\n' + `${user42}`;
+            case './tournament.sh':
+                window.router.navigate('/tournament');
+                break;
+            case './profil.txt':
+                terminal_out.innerText += '\n' + 'Use cat command to see inside the file'
+                break;
+            case 'pwd':
+                terminal_out.innerText += '\n' + `/${user42}/ft_transcendence`;
+                break;
+            case 'whoami':
+                terminal_out.innerText += '\n' + `${user42}`;
                 break;
             case 'exit':
                 terminal_out.innerText += '\n' + `Goodbye ${user42}`;
                 setTimeout(() => {
-                    let authUrl = `https://${window.location.hostname}:${window.location.port}/users/logout/`;
-                    const csrftoken = this.getCookie('csrftoken'); 
+                    const port = window.location.port ? `:${window.location.port}` : '';
+                    let authUrl = `https://${window.location.hostname}${port}/users/logout/`;
+                    const csrftoken = getCookie('csrftoken'); 
                     fetch(authUrl, {
                         method: 'POST',
                         credentials: 'include',
@@ -142,9 +180,6 @@ export class IndexConnected extends Component{
                         },
                     }).then((response) => {
                         console.log(response)
-                        if (response.ok) {
-                            window.router.navigate('/');
-                        }
                     });
                 }, 1000);
                 break;
@@ -154,15 +189,8 @@ export class IndexConnected extends Component{
             case 'cat':
                 terminal_out.innerText += '\n' + 'Usage: cat [file]';
                 break;
-            case 'cat profil':
-                const profile = {
-                    name: user42,
-                    pongRatio: '0/4',
-                    connect4Ratio: '4/0',
-                    tournamentRatio: '2/2'
-                };
-                const api_response = this.formatProfile(profile);
-                terminal_out.innerText += '\n' + api_response;
+            case 'cat ./profil.txt':
+                terminal_out.innerText += '\n' + this.formatProfile();
                 break;
             default:
                 terminal_out.innerText += '\n' + 'Command not found: ' + input;
@@ -175,8 +203,10 @@ export class IndexConnected extends Component{
         terminal_in.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
                 const input = terminal_in.value.trim();
-                this.command_handler(input);
                 terminal_in.value = '';
+                const terminal_out = document.getElementById('terminal-out')
+                terminal_out.scrollTop = terminal_out.scrollHeight 
+                this.command_handler(input);
             } else if (event.key === 'Tab') {
                 event.preventDefault();
                 this.autocomplete(terminal_in);
@@ -184,21 +214,60 @@ export class IndexConnected extends Component{
         });
     }
 
-    formatProfile(profile) {
+
+    formatProfile() {
         const lineLength = 40;
         const pad = (str, length) => {
             const padding = ' '.repeat(length - str.length);
             return str + padding;
         };
 
+        const center = (str, length) => {
+            let paddingEnd = '';
+            let padding = ' '.repeat((length - str.length)/ 2);
+            if (str.length % 2)
+                paddingEnd = ' '.repeat(((length - str.length)/ 2) + 1);
+            else
+                paddingEnd = padding;
+            return padding + str + paddingEnd;
+        }
+
+        if (this.profil_info.games.length == 0)
+            return `
+            +${'-'.repeat(lineLength)}+
+            | ${center(`User ${getCookie('user42')}`, lineLength - 2)} |
+            | ${center(`No game played yet`, lineLength - 2)} |
+            +${'-'.repeat(lineLength)}+
+            `
+
+        function infos(games) {
+            let htmlFinal = '';
+            games.forEach(element => {
+                htmlFinal += `            +${'-'.repeat(lineLength)}+\n`
+                htmlFinal += `            | ${center(`Connect4`, lineLength - 2)} |\n`;
+                htmlFinal += `            | ${pad(`${element.me} VS ${element.opp}`, lineLength - 2)} |\n`
+                htmlFinal += `            | ${pad(`Winner: ${element.winner}`, lineLength - 2)} |\n`
+            });
+            return htmlFinal;
+        }
+
+        function calculateWinRatio(games, user_id) {
+            let wins = 0;
+            games.forEach(game => {
+                if (game.winner === user_id) {
+                    wins++;
+                }
+            });
+            return Math.floor((wins / games.length) * 100);
+        }
+
+        const winRatio = calculateWinRatio(this.profil_info.games, getCookie('user42'));
+
         return `
             +${'-'.repeat(lineLength)}+
-            | ${pad(`User ${profile.name}`, lineLength - 2)} |
-            +${'-'.repeat(lineLength)}+
-            | ${pad(`Pong ratio: ${profile.pongRatio}`, lineLength - 2)} |
-            | ${pad(`Connect4 ratio: ${profile.connect4Ratio}`, lineLength - 2)} |
-            | ${pad(`Tournament ratio: ${profile.tournamentRatio}`, lineLength - 2)} |
-            +${'-'.repeat(lineLength)}+
+            | ${center(`User ${getCookie('user42')}`, lineLength - 2)} |
+            | ${center(`Win ratio of the last 10 games: ${winRatio}%`, lineLength - 2)} |
+${infos(this.profil_info.games)}            +${'-'.repeat(lineLength)}+
             `;
     }
 
@@ -213,13 +282,4 @@ export class IndexConnected extends Component{
             terminal_out.innerText += '\n' + matchingCommands.join(' ');
         }
     }
-    
-    getCookie(name) {
-        const cookieString = document.cookie.split(';').find(cookie => cookie.includes(name));
-        if (cookieString) {
-            return cookieString.split('=')[1];
-        }
-        return null;
-    }
-
 }

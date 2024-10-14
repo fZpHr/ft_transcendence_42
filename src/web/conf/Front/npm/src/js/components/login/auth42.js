@@ -96,6 +96,7 @@ export class Auth42 extends Component {
 
         const credits = document.getElementById('credits');
         this.terminal_out = document.getElementById('terminal-out');
+        document.getElementById('terminal-in').focus()
 
         credits.addEventListener('click', () => {
             this.terminal_out.innerText += '\n' + 'Credits page only available for connected users.\n';
