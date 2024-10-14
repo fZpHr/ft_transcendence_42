@@ -17,6 +17,7 @@ const router = new Router(target, {
   '/tournament': new Route(`/tournament`, 'tournament-component'),
   '/credits': new Route(`/credits`, 'credits-component'),
   '/pong/multiplayer': new Route('/pong/multiplayer', 'multiplayer-pong-component'),
+  '/pong/3d': new Route('/pong/3d', 'p3d-pong-component'),
 });
 
 window.router = router;

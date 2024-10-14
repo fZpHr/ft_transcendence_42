@@ -1,34 +1,11 @@
 services:  
-  web-game_server:
-    build:
-      context: conf/GameServer
-      dockerfile: Dockerfile
-    container_name: web-game_server
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "8001"
-    env_file:
-      - ../../.env
-    volumes:
-      - ./conf/GameServer/:/usr/src/app/logs/
-      - ./conf/GameServer/conf/:/usr/src/app/
-    networks:
-      transcendence:
-    healthcheck:
-      test: ["CMD", "curl", "-f", "localhost:8001"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   web-user_management:
     build:
       context: conf/UserManagement
       dockerfile: Dockerfile
     container_name: web-user_management
     depends_on:
-      web-game_server:
+      postgres:
         condition: service_healthy
     ports:
       - "8003"
@@ -37,6 +14,23 @@ services:
     volumes:
       - ./conf/UserManagement/:/usr/src/app/logs/
       - ./conf/UserManagement/conf/:/usr/src/app/
+    networks:
+      transcendence:
+
+  web-game_server:
+    build:
+      context: conf/GameServer
+      dockerfile: Dockerfile
+    container_name: web-game_server
+    depends_on:
+      - web-user_management
+    ports:
+      - "8001"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./conf/GameServer/:/usr/src/app/logs/
+      - ./conf/GameServer/conf/:/usr/src/app/
     networks:
       transcendence:
 
@@ -54,7 +48,7 @@ services:
     env_file:
       - ../../.env
     depends_on:
-      - web-user_management
+      - web-game_server
     networks:
       - transcendence
 

@@ -15,6 +15,7 @@ export class PongMain extends Component{
                     <button id="pong-local" class="pixel-corners">Pong 1v1 Local</button>
                     <button id="pong-remote" class="pixel-corners">Pong 1v1 Remote</button>
                     <button id="pong-multiplayer" class="pixel-corners">Pong Multiplayer</button>
+                    <button id="pong-3d" class="pixel-corners">Pong 3D</button>
                     <button id="reset-button" class="pixel-corners">Quit</button>
                 </div>
             </div>
@@ -492,6 +493,9 @@ export class PongMain extends Component{
         }
         else if (e.target.id === "pong-multiplayer") {
             window.router.navigate("/pong/multiplayer");
+        }
+        else if (e.target.id === "pong-3d") {
+            window.router.navigate("/pong/3d");
         }
         else if (e.target.id === "reset-button") {
             window.router.navigate("/");

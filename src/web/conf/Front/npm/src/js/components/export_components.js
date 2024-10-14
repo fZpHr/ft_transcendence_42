@@ -10,6 +10,7 @@ import { MatchMaking } from "@components/connect4/matchMaking";
 import { Connect4 } from "@components/connect4/connect4";
 import { Credits } from "@components/credits/credits";
 import { Multiplayer } from "@components/pong/pongMultiplayer";
+import { P3d } from "@components/pong/pong3d";
 
 window.customElements.define('tournament-component', Tournament);
 window.customElements.define('index-connected-component', IndexConnected);
@@ -23,6 +24,7 @@ window.customElements.define('matchmaking-component', MatchMaking);
 window.customElements.define('connect4-component', Connect4);
 window.customElements.define('credits-component', Credits);
 window.customElements.define('multiplayer-pong-component', Multiplayer);
+window.customElements.define('p3d-pong-component', P3d);
 
 export default {
     NavBar,
@@ -35,5 +37,7 @@ export default {
     Connect4,
     IndexConnected,
     Tournament,
-    Credits
+    Credits,
+    Multiplayer,
+    P3d
 };
