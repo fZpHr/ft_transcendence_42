@@ -9,30 +9,11 @@ from django.db import connection
 
 logger = logging.getLogger('print')
 
-# @require_POST
-# @csrf_exempt
 def check_user(request):
     if request.user.is_authenticated:
         return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'status': 'error'})
-    # token = request.COOKIES.get("token")
-    # if not token:
-    #     return JsonResponse({'status': 'error'})
-    # logger.info('token: ' + token)
-    
-    # headers = {
-    #     'Authorization': 'Bearer ' + token,
-    # }
-    # r = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-    # data = r.json()
-    
-    # if data['login'] != request.COOKIES.get('user42'):
-    #     return JsonResponse({'status': 'error'})
-    # if r.status_code == 200:
-    #     return JsonResponse({'status': 'success'})
-    # else:
-    #     return JsonResponse({'status': 'error'})
 
 def get_user_game(user_id):
     with connection.cursor() as cursor:

@@ -56,7 +56,13 @@ export class MatchMaking extends Component{
         
     }
 
-    CustomDOMContentLoaded(){
+    escape(event) {
+        if (event.key === 'Escape')
+            window.router.navigate('/');
+    }
+
+    CustomDOMContentLoaded() {
+        document.addEventListener('keydown', this.escape);
         const user42 = getCookie("user42");
         try {
             this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/matchmaking`);
@@ -106,6 +112,7 @@ export class MatchMaking extends Component{
         this.ws.close();
         clearInterval(this.interval);
         clearTimeout(this.redirection);
+        document.removeEventListener('keydown', this.escape);
     }
 
     counter() {

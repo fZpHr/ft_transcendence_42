@@ -180,6 +180,9 @@ export class IndexConnected extends Component{
                         },
                     }).then((response) => {
                         console.log(response)
+                        if (response.ok) {
+                            window.router.navigate('/');
+                        }
                     });
                 }, 1000);
                 break;
@@ -204,9 +207,10 @@ export class IndexConnected extends Component{
             if (event.key === 'Enter') {
                 const input = terminal_in.value.trim();
                 terminal_in.value = '';
-                const terminal_out = document.getElementById('terminal-out')
-                terminal_out.scrollTop = terminal_out.scrollHeight 
                 this.command_handler(input);
+                const terminal_out = document.getElementById('terminal-out')
+                if (terminal_out)
+                    terminal_out.scrollTop = terminal_out.scrollHeight 
             } else if (event.key === 'Tab') {
                 event.preventDefault();
                 this.autocomplete(terminal_in);
