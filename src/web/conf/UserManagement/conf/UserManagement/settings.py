@@ -178,8 +178,12 @@ ALLOWED_HOSTS = [
     'localhost:42424',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost/',
+    'https://localhost/',
+]
 
-
+AUTH_USER_MODEL = "Register42.User"
 # Application definition
 
 INSTALLED_APPS = [
