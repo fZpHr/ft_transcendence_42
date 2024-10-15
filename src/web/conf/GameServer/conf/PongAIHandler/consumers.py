@@ -1,8 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import logging
 import json
-from .models import UserProxy 
-from .serializer import UserProxySerializer
+from Connect4Handler.models import UserProxy 
 from asgiref.sync import sync_to_async
 from urllib.parse import parse_qs
 import asyncio
@@ -29,8 +28,32 @@ class PongAIConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         logger.info(f"Received message: {text_data_json}")
         if text_data_json['type'] == 'pongInfos':
-            logger.info(f"Paddle position as to be: {self.calculate_paddle_position(text_data_json)}")
+            delta = text_data_json['paddle2Position'] - self.calculate_paddle_position(text_data_json)
+            paddleSpeed = text_data_json['paddleSpeed']
+            logger.info(f"bally: {self.calculate_paddle_position(text_data_json)}")
+            logger.info(f"paddle2Position: {text_data_json['paddle2Position']}")
+            logger.info(f"delta: {delta}")
+            #paddle pos = centre du paddle
+            #donc si le delta est entre 50 et -50 ne pas bouger
+            if (delta < 50 and delta > -50):
+                await self.send(text_data=json.dumps({
+                    'type': "moveAi",
+                    'keyPressed': 'none'
+                }))
+            if (delta > 0):
+                await self.send(text_data=json.dumps({
+                    'type': "moveAi",
+                    'keyPressed': 'ArrowUp',
+                    'duration': self.calculate_duration(delta, paddleSpeed),
+                }))
+            elif (delta < 0):
+                await self.send(text_data=json.dumps({
+                    'type': "moveAi",
+                    'keyPressed': 'ArrowDown',
+                    'duration': self.calculate_duration(delta, paddleSpeed),
+                }))
     
+    #Calcul la position ball_y final (un peu precis ca va)
     def calculate_paddle_position(self, ball_info):
         ball_pos = ball_info['ballPosition']
         ball_speed_x = ball_info['ballSpeedX']
@@ -50,21 +73,23 @@ class PongAIConsumer(AsyncWebsocketConsumer):
             ball_x += ball_speed_x
             ball_y += ball_speed_y
             
-            if ball_y <= 0 or ball_y + ball_radius * 2 >= court_height:
+            if ball_y <= 0:
                 ball_speed_y = -ball_speed_y
-                ball_y = max(0, min(ball_y, court_height - ball_radius * 2))
+                ball_y = 0
+            if ball_y + ball_radius * 2 >= court_height:
+                ball_speed_y = -ball_speed_y
+                ball_y = court_height - ball_radius * 2
 
-            if ball_x <= paddle1_position + 15 and ball_x >= 0:
-                return min(max(ball_y - ball_radius, 0), court_height - 15)
+            if ball_x <= 0:
+                ball_speed_x = -ball_speed_x
+                ball_x = 0
 
-            if ball_x >= court_width - (paddle2_position + 15) and ball_x <= court_width:
-                return min(max(ball_y - ball_radius, 0), court_height - 15)
+            #Peut etre mettre court_width - 15 pour avoir la pos y de la balle au paddle
+            if ball_x >= court_width:
+                return ball_y
+        return court_height / 2
 
-            if ball_x < 0 or ball_x > court_width:
-                break
-
-        return paddle1_position 
-
-
-
+    def calculate_duration(self, delta, paddleSpeed):
+        #Des maths vraiment randoms
+        return abs(delta) * (paddleSpeed / 5)
 
