@@ -18,7 +18,8 @@ export class MatchMaking extends Component{
 ██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║    ██║ ╚═╝ ██║██║  ██║██║  ██╗██║██║ ╚████║╚██████╔╝
 ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
                 </pre>
-                <div id="overlay-text">Waiting for an opponent</div>
+                <div id="overlay-text" class="overlay-text">Waiting for an opponent</div>
+                <div id="escape" class="overlay-text">Press ESCAPE to return to the Home Page</div>
             </div>
         `;
     }
@@ -48,7 +49,7 @@ export class MatchMaking extends Component{
                 margin: 0;
                 padding: 0;
             }
-            #overlay-text {
+            .overlay-text {
                 margin-bottom: 20px;
             }
         </style>
@@ -85,6 +86,8 @@ export class MatchMaking extends Component{
                 case "match_found":
                     clearInterval(this.interval);
                     document.getElementById("overlay-text").innerText = "Opponent found";
+                    document.getElementById("escape").innerText = "";
+                    document.removeEventListener('keydown', this.escape);
                     this.redirection = setTimeout(() => {
                         window.router.navigate(`/connect4?id=${message.game_id}`);
                     }, 3000);

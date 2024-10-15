@@ -37,14 +37,12 @@ export class Router {
             }
             const data = await response.json();
             if (data.status === 'error')
-                this.updateCookies(false, null, null);
-            else if (data.status === 'success')
-                this.updateCookies(true, getCookie('token'), getCookie('user42'));
+                this.updateCookies(false, null);
         }
         catch (error)
         {
             console.log('Fetch request failed');
-            this.updateCookies(false, null, null);
+            this.updateCookies(false, null);
             return;
         }
         if (regex && route.extraRegex) {
@@ -69,16 +67,12 @@ export class Router {
         this.target.append(customElement);
     }
 
-    async updateCookies(connected, token, user42)
+    async updateCookies(connected, user42)
     {
         if (connected == false)
             deleteCookie('connected');
         else
             setCookie('connected', connected);
-        if (token === null)
-            deleteCookie('token');
-        else
-            setCookie('token', token);
         if (user42 === null)
             deleteCookie('user42');
         else

@@ -11,7 +11,11 @@ logger = logging.getLogger('print')
 
 def check_user(request):
     if request.user.is_authenticated:
-        return JsonResponse({'status': 'success'})
+        response = JsonResponse({'status': 'success'})
+        response.set_cookie("user42", request.user.get_username())
+        logger.info(request.user.get_username())
+        response.set_cookie("connected", "true")
+        return response
     else:
         return JsonResponse({'status': 'error'})
 

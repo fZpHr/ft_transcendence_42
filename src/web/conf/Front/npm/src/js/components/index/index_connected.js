@@ -110,7 +110,6 @@ export class IndexConnected extends Component{
     {
         console.log("get user")
         const getUserURL = "https://" + window.location.host + "/users/get-info/";
-        const token = getCookie('token');
         const csrftoken = getCookie('csrftoken'); 
         fetch(getUserURL, {
             method: 'GET',
@@ -118,7 +117,6 @@ export class IndexConnected extends Component{
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken, // Include CSRF token if needed
-                'Authorization': `Bearer ${token}`, // Include token if needed
             },
         }).then((response) => {
             if (response.ok) {

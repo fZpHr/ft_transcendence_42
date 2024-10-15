@@ -105,7 +105,7 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
             elif self.player == Connect4GameConsumer.games[self.room_name].players[2]:
                 Connect4GameConsumer.games[self.room_name].players[2] = None
         if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None \
-        and Connect4GameConsumer.games[self.room_name].isFinished == True:
+        and Connect4GameConsumer.games[self.room_name].gameFinished == True:
             Connect4GameConsumer.games.pop(self.room_name)
 
     async def receive(self, text_data):
