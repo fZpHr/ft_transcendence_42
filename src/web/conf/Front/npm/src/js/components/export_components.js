@@ -11,6 +11,7 @@ import { Connect4 } from "@components/connect4/connect4";
 import { Credits } from "@components/credits/credits";
 import { Multiplayer } from "@components/pong/pongMultiplayer";
 import { P3d } from "@components/pong/pong3d";
+import { PongAI} from "@components/pong/pongAI";
 
 window.customElements.define('tournament-component', Tournament);
 window.customElements.define('index-connected-component', IndexConnected);
@@ -25,6 +26,7 @@ window.customElements.define('connect4-component', Connect4);
 window.customElements.define('credits-component', Credits);
 window.customElements.define('multiplayer-pong-component', Multiplayer);
 window.customElements.define('p3d-pong-component', P3d);
+window.customElements.define('pong-ai-component', PongAI);
 
 export default {
     NavBar,
@@ -39,5 +41,6 @@ export default {
     Tournament,
     Credits,
     Multiplayer,
-    P3d
+    P3d,
+    PongAI
 };
