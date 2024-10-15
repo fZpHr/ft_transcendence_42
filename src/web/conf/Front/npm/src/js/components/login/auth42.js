@@ -15,7 +15,7 @@ export class Auth42 extends Component {
                         <pre id="terminal-out">Welcome Guest.\nType 'help' to see available commands.\nYou are not connected. Please ./login42.sh to continue, and access to all features.</pre>
                         <div id="input-container">
                             <span id="prompt">></span>
-                            <input type="text" id="terminal-in" autofocus />
+                            <input type="text" id="terminal-in" autofocus maxlength="100"/>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ export class Auth42 extends Component {
                 margin: 5;
                 white-space: pre-wrap;
                 font-size: 1.2em;
-                overflow-y: auto;
+                overflow: hidden;
                 scrollbar-width: none;
             }
 
