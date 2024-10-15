@@ -474,7 +474,10 @@ export class Multiplayer extends Component {
                 "KeyI": () => iPressed = isKeyDown,
                 "KeyK": () => kPressed = isKeyDown
             };
-            if (keyMap[event.code]) keyMap[event.code]();
+            if (keyMap[event.code]) {
+                event.preventDefault();
+                keyMap[event.code]();
+            }
         }
 
         function handleKeyUp(e) {
