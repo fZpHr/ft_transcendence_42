@@ -21,13 +21,19 @@ export class Connect4 extends Component{
             <div id="infos">
                 <div id="player-info">
                     <div id="player1">
-                        <img id="player1-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                        <img id="player1-img" src="./img/default.png"></img>
                         <div id="player1-name"></div>
                     </div>
                     <div id="vs">VS</div>
                     <div id="player2">
+                        <img id="player2-img" src="./img/default.png"></img>
                         <div id="player2-name"></div>
-                        <img id="player2-img" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"></img>
+                    </div>
+                </div>
+                <div>
+                    <div id="toggle-settings">
+                        <label for="color-picker" >Choose Color for map:</label>
+                        <input type="color" id="color-picker" name="color-picker">
                     </div>
                 </div>
             </div>
@@ -64,7 +70,13 @@ export class Connect4 extends Component{
         // MON CSS
         return `
         <style>
-
+            #toggle-settings {
+                font-family: 'Press Start 2P', cursive;
+                color: white;
+                font-size: 0.8em;
+                text-align: center;
+                margin-top: 30px;
+            }
             #keyboard {
                 display: flex;
                 flex-direction: row;
@@ -715,6 +727,69 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentLoaded(){
+        const seed = Date.now(); 
+        const images = [
+            './img/profil.png',
+            './img/profil1.png',
+            './img/profil2.png',
+            './img/profil3.png',
+            './img/profil4.png',
+            './img/profil5.png',
+            './img/profil6.png',
+            './img/profil7.png',
+            './img/profil8.png',
+            './img/profil9.png',
+            './img/profil10.png',
+            './img/profil11.png',
+            './img/profil12.png',
+            './img/profil13.png',
+            './img/profil14.png'
+        ];
+        const randomIndex = Math.floor(seededRandom(seed) * images.length);
+        const randomIndex2 = randomIndex == 0 ? 1 : randomIndex - 1; 
+        const imgElement = document.getElementById("player1-img");
+        const imgElement2 = document.getElementById("player2-img");
+
+        if (!localStorage.getItem("player1-img") && !localStorage.getItem("player2-img")) {
+            changeImage(randomIndex, imgElement);
+            changeImage(randomIndex2, imgElement2);
+            localStorage.setItem("player1-img", randomIndex);
+            localStorage.setItem("player2-img", randomIndex2);
+        }
+        else {
+            changeImage(localStorage.getItem("player1-img"), imgElement);
+            changeImage(localStorage.getItem("player2-img"), imgElement2);
+        }
+
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 5;
+            return x - Math.floor(x);
+        }
+
+        
+        function changeImage(index, element)
+        {
+            if (element)
+            {
+                element.src = images[index];
+            }
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+    
+        document.getElementById('color-picker').addEventListener('input', debounce(function(event) {
+            var chosenColor = event.target.value;
+            document.getElementById('connect-four').style.backgroundColor = chosenColor;
+        }, 1));
+
+
+
         const userName = getCookie("user42");
         const searchParams = new URLSearchParams(window.location.search);
         const gameId = searchParams.get("id");
@@ -1021,6 +1096,9 @@ export class Connect4 extends Component{
     CustomDOMContentUnload(){
         if (this.ws.readyState === WebSocket.OPEN)
             this.ws.close();
+        localStorage.removeItem("player1-img");
+        localStorage.removeItem("player2-img");
+        localStorage.removeItem("lastFetchTime");
         document.removeEventListener("keydown", this.handleKeyDown);
         document.removeEventListener("keydown", this.handleEndGame);
     }
