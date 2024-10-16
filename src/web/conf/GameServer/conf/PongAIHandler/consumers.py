@@ -91,5 +91,8 @@ class PongAIConsumer(AsyncWebsocketConsumer):
 
     def calculate_duration(self, delta, paddleSpeed):
         #Des maths vraiment randoms
-        return abs(delta) * (paddleSpeed / 5)
+        duration = abs(delta) * (1000 / (60 * paddleSpeed))
+        if (duration >= 1000):
+            duration = 999
+        return duration
 

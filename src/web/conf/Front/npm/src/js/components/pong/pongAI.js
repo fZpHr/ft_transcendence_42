@@ -463,8 +463,6 @@ export class PongAI extends Component {
         
         function handleKey(event, isKeyDown) {
             const keyMap = {
-                "ArrowUp": () => upPressed = isKeyDown,
-                "ArrowDown": () => downPressed = isKeyDown,
                 "KeyW": () => wPressed = isKeyDown,
                 "KeyS": () => sPressed = isKeyDown
             };
@@ -515,18 +513,6 @@ export class PongAI extends Component {
         }
     
         this.gameReset = resetGame;
-        
-        function getBallPosition() {
-            const ball = document.getElementById('ball');
-            const rect = ball.getBoundingClientRect();
-        
-            return {
-                top: rect.top + window.scrollY,
-                left: rect.left + window.scrollX,
-                width: rect.width,
-                height: rect.height
-            };
-        }
 
         function resetBall() {
             ballPositionX = initialBallPos.left;
@@ -557,7 +543,6 @@ export class PongAI extends Component {
                 { rect: paddle1Rect, speedMultiplier: -1, positionX: paddle1Rect.right },
                 { rect: paddle2Rect, speedMultiplier: -1, positionX: paddle2Rect.left - ballRect.width }
             ];
-
             for (const paddle of paddles) {
                 if (ballRect.left < paddle.rect.right && ballRect.right > paddle.rect.left &&
                     ballRect.top < paddle.rect.bottom && ballRect.bottom > paddle.rect.top) {
@@ -724,11 +709,17 @@ export class PongAI extends Component {
         }
         // AI PART 
         function sendInfoToAI() {
-            console.log("paddle2 top", parseFloat(window.getComputedStyle(paddle_2).top) + 50)
+            console.log("paddle2 top", parseFloat(window.getComputedStyle(paddle_1).top) + 50)
+            console.log("ball top", parseFloat(window.getComputedStyle(ball).top))
             this.ws.send(JSON.stringify({
                 type: "pongInfos",
                 user: this.user,
-                ballPosition: getBallPosition(),
+                ballPosition: {
+                    top: parseFloat(window.getComputedStyle(ball).top),
+                    left: parseFloat(window.getComputedStyle(ball).left),
+                    width: 15,
+                    height: 15
+                },
                 paddle1Position: parseFloat(window.getComputedStyle(paddle_1).top),
                 paddle2Position: parseFloat(window.getComputedStyle(paddle_2).top) + 50,
                 ballSpeedX: ballSpeedX,
