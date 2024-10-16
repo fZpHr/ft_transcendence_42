@@ -3,7 +3,7 @@ import { Component } from "@js/component";
 export class Auth42 extends Component {
     constructor() {
         super();
-        this.commands = ['help', 'ls', 'pwd', 'whoami', 'exit', 'clear', './login42.sh'];
+        this.commands = ['help', 'ls', 'pwd', 'whoami', 'exit', 'clear', './login42.sh', 'bash login42.sh'];
         const terminal_out = [];
     }
 
@@ -143,6 +143,9 @@ export class Auth42 extends Component {
                 
                 window.location.href = authUrl;
                 break;
+            case 'bash login42.sh':
+                this.terminal_out.innerText += '\n' + 'bash: login42.sh: Permission denied';
+                break
             default:
                 this.terminal_out.innerText += '\n' + 'Command not found: ' + input;
                 break;

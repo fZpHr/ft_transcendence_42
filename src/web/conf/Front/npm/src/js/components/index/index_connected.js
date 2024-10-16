@@ -4,7 +4,7 @@ import { getCookie } from "@js/utils/cookie";
 export class IndexConnected extends Component{
     constructor(){
         super();
-        this.commands = ['help', 'ls', './pong.sh', './connect4.sh', './tournament.sh', 'pwd', 'whoami', 'exit', 'clear', 'cat', './profil.txt', 'cat ./profil.txt'];
+        this.commands = ['help', 'ls', './pong.sh', './connect4.sh', './tournament.sh', 'pwd', 'whoami', 'exit', 'clear', 'cat', './profil.txt', 'cat ./profil.txt', 'cat profil.txt', 'cat ./pong.sh', 'cat pong.sh', 'cat ./connect4.sh', 'cat connect4.sh', 'cat ./tournament.sh', 'cat tournament.sh', 'bash pong.sh', 'bash connect4.sh', 'bash tournament.sh', 'bash profil.txt'];
         this.profil_info = {}
     }
 
@@ -147,13 +147,25 @@ export class IndexConnected extends Component{
             case './pong.sh':
                 window.router.navigate('/pong');
                 break;
+            case 'bash pong.sh':
+                window.router.navigate('/pong');
+                break;
             case './connect4.sh':
+                window.router.navigate('/matchmaking');
+                break;
+            case 'bash connect4.sh':
                 window.router.navigate('/matchmaking');
                 break;
             case './tournament.sh':
                 window.router.navigate('/tournament');
                 break;
+            case 'bash tournament.sh':
+                window.router.navigate('/tournament');
+                break;
             case './profil.txt':
+                terminal_out.innerText += '\n' + 'Use cat command to see inside the file'
+                break;
+            case 'bash profil.txt':
                 terminal_out.innerText += '\n' + 'Use cat command to see inside the file'
                 break;
             case 'pwd':
@@ -193,6 +205,27 @@ export class IndexConnected extends Component{
             case 'cat ./profil.txt':
                 terminal_out.innerText += '\n' + this.formatProfile();
                 break;
+            case 'cat profil.txt':
+                terminal_out.innerText += '\n' + this.formatProfile();
+                break;
+            case 'cat ./pong.sh':
+                terminal_out.innerText += '\n' + '2�<,<O,:����5�M�?4C;���H       \n[�m�iq      53�=M/i�Z*g��ĩإ)܎�f�/yo�/&"c6X�K#V.�+�����!gU/y�"6)Ő������l���M�lT�d     K�f���|�S�K��#��ke���1��#��Z]�(���a��If��A��v��v�4�M,���u�3�� ����1��o���2f1s��_É�o?I��s�$ \n�F�9��=n�L��߄���1�`j���2�7meu����2v�i�'
+                break;
+            case 'cat pong.sh':
+                terminal_out.innerText += '\n' + '2�<,<O,:����5�M�?4C;���H       \n[�m�iq      53�=M/i�Z*g��ĩإ)܎�f�/yo�/&"c6X�K#V.�+�����!gU/y�"6)Ő������l���M�lT�d     K�f���|�S�K��#��ke���1��#��Z]�(���a��If��A��v��v�4�M,���u�3�� ����1��o���2f1s��_É�o?I��s�$ \n�F�9��=n�L��߄���1�`j���2�7meu����2v�i�'
+                break;
+            case 'cat ./connect4.sh':
+                terminal_out.innerText += '\n' + '�                 ����� +j��]$\Pj(�}e(�D�����{���\�v񻰉��g�!G6�1�71*w�-z��͸�m&��j�����Xj�#�;L�*��\�4PL�b.H7g��n��*�,q�g��B�RH���?�s?չ��1SNJ�\n              ���d��I����;�{>W=�:BS\n�J�<j�mh��V�+A�ml���1vl�'
+                break;
+            case 'cat connect4.sh':
+                terminal_out.innerText += '\n' + '�                 ����� +j��]$\Pj(�}e(�D�����{���\�v񻰉��g�!G6�1�71*w�-z��͸�m&��j�����Xj�#�;L�*��\�4PL�b.H7g��n��*�,q�g��B�RH���?�s?չ��1SNJ�\n              ���d��I����;�{>W=�:BS\n�J�<j�mh��V�+A�ml���1vl�'
+                break;
+            case 'cat ./tournament.sh':
+                terminal_out.innerText += '\n' + '��Wü�xՊ�JN�˙��?�V��>�%q2�N����Qr6ܵA݆���0[�p�B<xB�ʑ�s������            \n��_| ����8��.?#sq�Ȍ   ��1��y��%Ddz�_�F���xގjLS/���t��^J<(=\����e{����5V��                             \n����o�����h�@�Q�����7ɷG>��16��ϙugp�������)2ZR��8+���i �bo�v'
+                break
+            case 'cat tournament.sh':
+                terminal_out.innerText += '\n' + '��Wü�xՊ�JN�˙��?�V��>�%q2�N����Qr6ܵA݆���0[�p�B<xB�ʑ�s������            \n��_| ����8��.?#sq�Ȍ   ��1��y��%Ddz�_�F���xގjLS/���t��^J<(=\����e{����5V��                             \n����o�����h�@�Q�����7ɷG>��16��ϙugp�������)2ZR��8+���i �bo�v'
+                break
             default:
                 terminal_out.innerText += '\n' + 'Command not found: ' + input;
                 break;
