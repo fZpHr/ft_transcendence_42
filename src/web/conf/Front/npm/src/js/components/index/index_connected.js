@@ -209,22 +209,22 @@ export class IndexConnected extends Component{
                 terminal_out.innerText += '\n' + this.formatProfile();
                 break;
             case 'cat ./pong.sh':
-                terminal_out.innerText += '\n' + '2�<,<O,:����5�M�?4C;���H       \n[�m�iq      53�=M/i�Z*g��ĩإ)܎�f�/yo�/&"c6X�K#V.�+�����!gU/y�"6)Ő������l���M�lT�d     K�f���|�S�K��#��ke���1��#��Z]�(���a��If��A��v��v�4�M,���u�3�� ����1��o���2f1s��_É�o?I��s�$ \n�F�9��=n�L��߄���1�`j���2�7meu����2v�i�'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/pong-main" ]; then \n    /usr/bin/pong-main \nelse\n    echo "Le binaire pong-main n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break;
             case 'cat pong.sh':
-                terminal_out.innerText += '\n' + '2�<,<O,:����5�M�?4C;���H       \n[�m�iq      53�=M/i�Z*g��ĩإ)܎�f�/yo�/&"c6X�K#V.�+�����!gU/y�"6)Ő������l���M�lT�d     K�f���|�S�K��#��ke���1��#��Z]�(���a��If��A��v��v�4�M,���u�3�� ����1��o���2f1s��_É�o?I��s�$ \n�F�9��=n�L��߄���1�`j���2�7meu����2v�i�'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/pong-main" ]; then \n    /usr/bin/pong-main \nelse\n    echo "Le binaire pong-main n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break;
             case 'cat ./connect4.sh':
-                terminal_out.innerText += '\n' + '�                 ����� +j��]$\Pj(�}e(�D�����{���\�v񻰉��g�!G6�1�71*w�-z��͸�m&��j�����Xj�#�;L�*��\�4PL�b.H7g��n��*�,q�g��B�RH���?�s?չ��1SNJ�\n              ���d��I����;�{>W=�:BS\n�J�<j�mh��V�+A�ml���1vl�'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/matchmaking" ]; then \n    /usr/bin/matchmaking \n    if [ -z "Match Found" ]; then\n       /usr/bin/connect4\nelse\n    echo "Le binaire matchmaking n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break;
             case 'cat connect4.sh':
-                terminal_out.innerText += '\n' + '�                 ����� +j��]$\Pj(�}e(�D�����{���\�v񻰉��g�!G6�1�71*w�-z��͸�m&��j�����Xj�#�;L�*��\�4PL�b.H7g��n��*�,q�g��B�RH���?�s?չ��1SNJ�\n              ���d��I����;�{>W=�:BS\n�J�<j�mh��V�+A�ml���1vl�'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/matchmaking" ]; then \n    /usr/bin/matchmaking \n    if [ -z "Match Found" ]; then\n       /usr/bin/connect4\nelse\n    echo "Le binaire matchmaking n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break;
             case 'cat ./tournament.sh':
-                terminal_out.innerText += '\n' + '��Wü�xՊ�JN�˙��?�V��>�%q2�N����Qr6ܵA݆���0[�p�B<xB�ʑ�s������            \n��_| ����8��.?#sq�Ȍ   ��1��y��%Ddz�_�F���xގjLS/���t��^J<(=\����e{����5V��                             \n����o�����h�@�Q�����7ɷG>��16��ϙugp�������)2ZR��8+���i �bo�v'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/tournament" ]; then \n    /usr/bin/tournament \nelse\n    echo "Le binaire tournament n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break
             case 'cat tournament.sh':
-                terminal_out.innerText += '\n' + '��Wü�xՊ�JN�˙��?�V��>�%q2�N����Qr6ܵA݆���0[�p�B<xB�ʑ�s������            \n��_| ����8��.?#sq�Ȍ   ��1��y��%Ddz�_�F���xގjLS/���t��^J<(=\����e{����5V��                             \n����o�����h�@�Q�����7ɷG>��16��ϙugp�������)2ZR��8+���i �bo�v'
+                terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/tournament" ]; then \n    /usr/bin/tournament \nelse\n    echo "Le binaire tournament n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi'
                 break
             default:
                 terminal_out.innerText += '\n' + 'Command not found: ' + input;
