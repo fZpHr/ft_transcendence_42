@@ -505,7 +505,7 @@ export class Tournament extends Component {
             this.updateUIWithTournamentState();
        }
 
-       const WINNING_SCORE = 1;
+       const WINNING_SCORE = 3;
        const OVERLAY_DISPLAY_TIME = 3000;
   
        
