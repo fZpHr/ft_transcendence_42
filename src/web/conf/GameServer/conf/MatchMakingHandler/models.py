@@ -9,3 +9,4 @@ class Game(models.Model):
     player2 = models.ForeignKey(UserProxy, on_delete=models.CASCADE, related_name='player2')
     winner = models.ForeignKey(UserProxy, on_delete=models.CASCADE, null=True)
     isFinished = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)

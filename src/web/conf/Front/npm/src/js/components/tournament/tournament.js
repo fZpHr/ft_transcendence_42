@@ -559,7 +559,10 @@ export class Tournament extends Component {
                 "KeyW": () => wPressed = isKeyDown,
                 "KeyS": () => sPressed = isKeyDown
             };
-            if (keyMap[event.code]) keyMap[event.code]();
+            if (keyMap[event.code]) {
+                event.preventDefault();
+                keyMap[event.code]();
+            }
         }
 
         function handleKeyUp(e) {

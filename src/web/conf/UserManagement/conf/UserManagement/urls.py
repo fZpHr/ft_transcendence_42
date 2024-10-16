@@ -24,4 +24,5 @@ urlpatterns = [
     path('users/register-42/', Register42_views.register_42),
     path('users/logout/', Register42_views.logout_view),
     path('users/me/', CheckUser_views.check_user),
+    path('users/get-info/', CheckUser_views.get_user)
 ]

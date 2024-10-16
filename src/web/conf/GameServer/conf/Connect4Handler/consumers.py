@@ -95,7 +95,6 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
         logger.info(f"Disconnecting {close_code}")
         if close_code == 3845:
             return
-        
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -105,7 +104,8 @@ class Connect4GameConsumer(AsyncWebsocketConsumer):
                 Connect4GameConsumer.games[self.room_name].players[1] = None
             elif self.player == Connect4GameConsumer.games[self.room_name].players[2]:
                 Connect4GameConsumer.games[self.room_name].players[2] = None
-        if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None:  
+        if Connect4GameConsumer.games[self.room_name] and Connect4GameConsumer.games[self.room_name].players[1] == None and Connect4GameConsumer.games[self.room_name].players[2] == None \
+        and Connect4GameConsumer.games[self.room_name].gameFinished == True:
             Connect4GameConsumer.games.pop(self.room_name)
 
     async def receive(self, text_data):
