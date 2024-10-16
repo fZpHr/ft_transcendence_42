@@ -14,7 +14,7 @@ export class PongAI extends Component {
 
     render() {
         return `
-            <h2 id="hd">Mode local</h2>
+            <h2 id="hd">Mode AI</h2>
             <div id="basePong">
                 <div id="middleLine"></div>
                 <div class="ball" id="ball">

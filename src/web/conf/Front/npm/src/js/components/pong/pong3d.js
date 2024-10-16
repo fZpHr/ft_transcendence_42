@@ -356,7 +356,6 @@ export class P3d extends Component {
             "KeyA": () => this.sPressed = isKeyDown
         };
         if (keyMap[event.code]) {
-            event.preventDefault();
             keyMap[event.code]();
         }
     }
@@ -585,6 +584,8 @@ export class P3d extends Component {
     CustomDOMContentUnload() {
         console.log("P3D unloaded");
         document.removeEventListener('keydown', this.escape);
+        window.removeEventListener('keydown', (event) => this.handleKeyDown(event));
+        window.removeEventListener('keyup', (event) => this.handleKeyUp(event));
         this.cleanup();
     }
 }
