@@ -586,8 +586,11 @@ export class Tournament extends Component {
         function resetBall() {
             ballPositionX = initialBallPos.left;
             ballPositionY = initialBallPos.top;
-            ball.style.left = ballPositionX + "px";
-            ball.style.top = ballPositionY + "px";
+            if (ball)
+            {
+                ball.style.left = ballPositionX + "px";
+                ball.style.top = ballPositionY + "px";
+            }
             ballSpeedX = ballSpeedX > 0 ? -BALL_SPEED_X : BALL_SPEED_X;
             ballSpeedY = 0;
         }

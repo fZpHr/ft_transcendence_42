@@ -13,7 +13,6 @@ export class PongMain extends Component{
                 <div class="buttons">
                     <button id="pong-ai" class="pixel-corners-active">Pong against AI</button>
                     <button id="pong-local" class="pixel-corners">Pong 1v1 Local</button>
-                    <button id="pong-remote" class="pixel-corners">Pong 1v1 Remote</button>
                     <button id="pong-multiplayer" class="pixel-corners">Pong Multiplayer</button>
                     <button id="pong-3d" class="pixel-corners">Pong 3D</button>
                     <button id="reset-button" class="pixel-corners">Quit</button>
@@ -488,9 +487,6 @@ export class PongMain extends Component{
         else if (e.target.id === "pong-ai") {
             window.router.navigate("/pong/ai");
         }
-        else if (e.target.id === "pong-remote") {
-            window.router.navigate("/pong/remote");
-        }
         else if (e.target.id === "pong-multiplayer") {
             window.router.navigate("/pong/multiplayer");
         }
@@ -540,8 +536,14 @@ export class PongMain extends Component{
                     else if (element.id == "pong-ai") {
                         window.router.navigate("/pong/ai");
                     }
-                    else if (element.id == "pong-remote") {
-                        window.router.navigate("/pong/remote");
+                    else if (element.id == "pong-multiplayer"){
+                        window.router.navigate("/pong/multiplayer");
+                    }
+                    else if (element.id == "pong-3d") {
+                        window.router.navigate("/pong/3d");
+                    }
+                    else if (element.id == "reset-button") {
+                        window.router.navigate("/");
                     }
                 }
             });
