@@ -61,277 +61,257 @@ export class PongLocal extends Component {
 
     style() {
         return `
-        <style>
-            html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                background-color: black;
-                color: #ffffff;
-                font-family: 'Press Start 2P', cursive;
-            }
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: rgb(9,9,121);
+            background: radial-gradient(circle, rgba(9,9,121,1) 10%, rgba(2,0,36,1) 80%);
+            color: #ffffff;
+            font-family: 'Press Start 2P', cursive;
+            user-select: none;
+        }
 
-            .hidden {
-                display: none !important;
-            }
-            
-            #options-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                position: absolute;
-                top: 85%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: black;
-                color: white;
-                padding: 20px;
-                border: 2px solid white;
-            }
+        .hidden {
+            display: none !important;
+        }
 
-            #hd {
-                color: #ffffff;
-                text-align: center;
-                padding: 20px;
-                background-color: black;
-                border-bottom: 2px solid #333;
-            }
-            #basePong {
-                height: 831px;
-                width: 1920px;
-                position: relative;
-                background: black;
-                font-family: 'Press Start 2P', cursive;
-                user-select: none;
-                overflow: hidden;
-            }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 85%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
 
-            .paddle_1,
-            .paddle_2 {
-                height: 100px;
-                width: 18px;
-                position: absolute;
-                background: white;
-            }
+        #hd {
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid #333;
+            letter-spacing: 2px;
+        }
 
-            .paddle_1 {
-                top: calc(50% - 50px);
-                left: 40px;
-            }
+        #basePong {
+            height: 700px;
+            width: 1480px;
+            position: relative;
+            background: black;
+            user-select: none;
+            overflow: hidden;
+            left: 50%;
+            top: 45%;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
 
-            .paddle_2 {
-                top: calc(50% - 50px); 
-                right: 40px;
-            }
+        .paddle_1,
+        .paddle_2 {
+            height: 100px;
+            width: 18px;
+            position: absolute;
+            background: linear-gradient(180deg, #ffffff, #cccccc);
+            border-radius: 5px;
+            transition: transform 0.2s ease;
+        }
 
-            .ball {
-                height: 15px;
-                width: 15px;
-                background: white;
-                position: absolute;
-                top: 50%;
-                left: calc(50% - 7.5px);
-            }
+        .paddle_1 {
+            top: calc(50% - 50px);
+            left: 40px;
+        }
 
-            .score_1,
-            .score_2,
-            .tild,
-            #message {
-                color: grey;
-                position: absolute;
-                font-weight: 500px;
-                top: 10%;
-                font-size: 50px;
-            }
+        .paddle_2 {
+            top: calc(50% - 50px); 
+            right: 40px;
+        }
 
-            #middleLine {
-                position: absolute;
-                width: 0;
-                height: 100%;
-                left: 50%;
-                border-left: 10px dashed grey;
-                transform: translateX(-50%);
-            }   
+        .paddle_1:hover,
+        .paddle_2:hover {
+            transform: scale(1.1);
+        }
 
-            .score_1 {
-                left: 35%; 
-            }
+        .ball {
+            height: 15px;
+            width: 15px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: calc(50% - 7.5px);
+            transition: transform 0.1s ease-out;
+        }
 
-            .tild {
-                left: 50%;
-            }
+        .score_1,
+        .score_2,
+        #message {
+            color: grey;
+            position: absolute;
+            font-weight: 500;
+            top: 10%;
+            font-size: 50px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
 
-            .score_2 {
-                left: 65%;
-            }
+        #middleLine {
+            position: absolute;
+            width: 0;
+            height: 100%;
+            left: 50%;
+            border-left: 10px dashed grey;
+            transform: translateX(-50%);
+            opacity: 0.5;
+        }   
 
-            #message {
-                color: white;
-                left: 49%;
-                top: 30%;
-            }
+        .score_1 {
+            left: 35%; 
+        }
 
-            #overlay-before-start {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                font-family: 'Press Start 2P', cursive;
-                font-size: 30px;
-                color: white;
-                user-select: none;
-            }
+        .score_2 {
+            left: 65%;
+        }
 
-            #settings-menu {
-                font-size: 20px;
-                padding: 10px;
-                background: black;
-                color: white;
-                border: 2px solid white;
-                cursor: pointer;
-                position: absolute;
-                top: 50%;
-            }
+        #message {
+            color: white;
+            left: 49%;
+            top: 30%;
+        }
 
-            #settings-menu {
-                font-size: 20px;
-                padding: 10px;
-                text-align: center;
-            }
+        #overlay-before-start {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 30px;
+            color: white;
+            user-select: none;
+            animation: fadeIn 0.5s ease;
+        }
 
-            #settings-menu button, #settings-menu input[type="color"] {
-                margin: 5px;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
             }
+            100% {
+                opacity: 1;
+            }
+        }
 
-            #settings-option1.on {
-                background-color: green;
-                color: white;
-            }
+        #start-button,
+        #toggle-settings {
+            font-size: 20px;
+            padding: 10px;
+            background: black;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            position: absolute;
+            transition: 0.3s;
+            transform: scale(1);
+        }
 
-            #settings-option1.off {
-                background-color: red;
-                color: white;
-            }
+        #start-button {
+            top: 50%;
+            left: calc(50% - 62px);
+        }
 
-            #settings-option1 {
-                font-size: 20px;
-                padding: 10px;
-                background: black;
-                color: white;
-                border: 2px solid white;
-                cursor: pointer;
-                margin: 15px;
-               
-            }
+        #toggle-settings {
+            top: 60%;
+            left: calc(48% - 45px);
+        }
 
-            #toggle-settings {
-                font-size: 20px;
-                padding: 10px;
-                background: black;
-                color: white;
-                border: 2px solid white;
-                cursor: pointer;
-                position: absolute;
-                top: 60%;
-                left: calc(48% - 45px);
-            }
-            
-            #start-button {
-                font-size: 20px;
-                padding: 10px;
-                background: black;
-                color: white;
-                border: 2px solid white;
-                cursor: pointer;
-                position: absolute;
-                top: 50%;
-                left: calc(50% - 62px);
-            }
+        #start-button:hover,
+        #toggle-settings:hover {
+            background: white;
+            color: black;
+            transform: scale(1.1);
+        }
 
-            #toggle-settings:hover,
-            #start-button:hover {
-                background: white;
-                color: black;
-                transition: 0.3s;
-                transform: scale(1.1);
-            }
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+        }
 
-            .controls {
-                display: flex;
-                justify-content: space-around;
-                width: 100%;
-                margin-bottom: 20px;
-            }
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-            .player-controls {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
+        .player-name {
+            font-size: 40px;
+            margin-bottom: 5px;
+            border-bottom: 5px solid white;
+            padding-bottom: 5px;
+        }
 
-            .player-controls div {
-                margin: 5px 0;
-            }
+        .key {
+            font-size: 24px;
+            border: 1px solid white;
+            padding: 10px;
+            margin: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s;
+        }
 
-            .player-name {
-                font-size: 40px;
-                margin-bottom: 5px;
-                border-bottom: 5px solid white;
-                padding-bottom: 5px;
-            }
+        .key:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
 
-            .key {
-                font-size: 24px;
-                border: 1px solid white;
-                padding: 10px;
-                margin: 20px;
-                text-align: center;
-                background-color: rgba(255, 255, 255, 0.1);
-                border-radius: 5px;
-                color: white;
-            }
+        .text-before {
+            font-size: 30px;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        #overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 30px;
+            color: white;
+            display: none;
+            user-select: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
 
-            .text-before {
-                font-size: 30px;
-                margin-bottom: 20px;
-                position: absolute;
-                top: 20%;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            
-            #overlay {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background: black;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                font-family: 'Press Start 2P', cursive;
-                font-size: 30px;
-                color: white;
-                display: none;
-                user-select: none;
-                text-align: center;
-            }
+        #overlay-title {
+            font-size: 50px;
+            margin-bottom: 100px;
+            border-bottom: 5px solid white;
+        }
+    </style>
 
-            #overlay-message {
-                margin-bottom: 20px; 
-            }
-
-            #overlay-title {
-                font-size: 50px;
-                margin-bottom: 100px;
-                border-bottom: 5px solid white;
-            }
-
-        </style>
         `;
     }
     escape(event) {
@@ -415,12 +395,13 @@ export class PongLocal extends Component {
         
         let ballScored = false;
     
-        let ballPositionX = getBallPosition().left;
-        let ballPositionY = getBallPosition().top;
-        const initialBallPos = { left: ballPositionX, top: ballPositionY };
+        let ballPositionX = 732.5;
+        let ballPositionY = 350;
+        const initialBallPos = { left:  732.5, top:  350 };
         
         let score_1 = 0;
         let score_2 = 0;
+        ballSpeedY  = 0;
     
         let upPressed = false, downPressed = false, wPressed = false, sPressed = false;
         let intervalGameStart = null;
@@ -430,11 +411,13 @@ export class PongLocal extends Component {
             if (paddle) {
                 let currentTop = parseFloat(window.getComputedStyle(paddle).top);
                 const parent = paddle.parentElement;
-                const maxBottom = parent.clientHeight - paddle.clientHeight - 5;
-                const newTop = currentTop + direction * PADDLE_SPEED;
-                if (newTop > 3 && newTop < maxBottom - 10) {
-                    paddle.style.top = newTop + "px";
-                }
+                const maxBottom = parent.clientHeight - paddle.clientHeight;
+                let newTop = currentTop + direction * PADDLE_SPEED;
+                if (newTop < 0)
+                    newTop = 0;
+                else if (newTop > maxBottom)
+                    newTop = maxBottom;
+                paddle.style.top = newTop + "px";
             }
         }
         
@@ -543,49 +526,53 @@ export class PongLocal extends Component {
                     ballRect.top < paddle.rect.bottom && ballRect.bottom > paddle.rect.top) {
                     
                     ballSpeedX *= paddle.speedMultiplier;
-                    ballPositionX = paddle.positionX;
             
                     let relativeIntersectY = (ballRect.top + (ballRect.height / 2)) - (paddle.rect.top + (paddle.rect.height / 2));
-                    let normalizedRelativeIntersectionY = (relativeIntersectY / (paddle.rect.height / 2)) * 10;
-                    
+                    let normalizedRelativeIntersectionY = (relativeIntersectY / (paddle.rect.height / 2)) * 5; // ou 2
+
                     ballSpeedY = normalizedRelativeIntersectionY;
             
                     const paddleElement = paddle.rect === paddle1Rect ? paddle_1 : paddle_2;
                     paddleElement.style.transform = "scale(1.1)";
-            
+                    
                     setTimeout(() => {
                         paddleElement.style.transform = "scale(1)";
                     }, 100);
                 }
             }
             
-            if (ballRect.left < 1 && !ballScored) {
+            const basePong = document.getElementById("basePong");
+            const basePongRect = basePong.getBoundingClientRect();
+
+            if (ballRect.left <= basePongRect.left + 5 && !ballScored) {
                 score_2 += 1;
                 ballScored = true;
                 var score = document.getElementById("player_2_score");
                 if (score !== null) score.textContent = score_2;
-                
+
                 showOverlay("Player 2 scores!", score_1, score_2);
-                setTimeout(function() {
+                setTimeout(function () {
                     hideOverlay();
                     resetBall();
                     ballScored = false;
                 }, OVERLAY_DISPLAY_TIME);
             }
-            
-            if (ballRect.right > 1920 && !ballScored) {
+
+            if (ballRect.right >= basePongRect.right - 5 && !ballScored) {
                 score_1 += 1;
                 ballScored = true;
                 var score = document.getElementById("player_1_score");
                 if (score !== null) score.textContent = score_1;
-                
+
                 showOverlay("Player 1 scores!", score_1, score_2);
-                setTimeout(function() {
+                setTimeout(function () {
                     hideOverlay();
                     resetBall();
                     ballScored = false;
                 }, OVERLAY_DISPLAY_TIME);
             }
+
+
         }
     
         function counter(text) {
@@ -619,11 +606,11 @@ export class PongLocal extends Component {
             if (basePong === null) return;
     
             checkCollision();
-            if (ballPositionX >= 1920 - ball.offsetWidth || ballPositionX <= 0) {
-                ballSpeedX *= -1;
-            }
+            // if (ballPositionX >= basePong.clientWidth - ball.offsetWidth - 1 || ballPositionX <= 0) {
+            //     ballSpeedX *= -1;
+            // 
     
-            if (ballPositionY >= 831 - ball.offsetHeight - 1 || ballPositionY <= 0) {
+            if (ballPositionY >= basePong.clientHeight - ball.offsetHeight - 1 || ballPositionY <= 0) {
                 ballSpeedY *= -1;
             }
             if (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE) {
@@ -649,10 +636,13 @@ export class PongLocal extends Component {
             }
             requestAnimationFrame(gameLoop);
         }
-        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
         async function initGame() {
             await startGame();
             gameLoop();
+            await sleep(300);
             moveBall();
         } 
         document.addEventListener('keydown', handleEndGame);

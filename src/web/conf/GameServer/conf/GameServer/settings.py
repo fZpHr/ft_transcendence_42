@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Connect4Handler',
     'MatchMakingHandler',
+    'PongAIHandler',
 ]
 
 MIDDLEWARE = [
