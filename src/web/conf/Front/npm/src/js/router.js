@@ -7,41 +7,7 @@ export class Router {
     }
 
     async init() {
-        const deltaTime = 2500;
-        const lastFetchTime = localStorage.getItem('lastFetchTime');
-        const currentTime = new Date().getTime();
-        
-        if (lastFetchTime && (currentTime - lastFetchTime < deltaTime)) {
-            console.log('Fetch request debounced');
-            window.router.navigate('/')
-            return;
-        }
-        localStorage.setItem('lastFetchTime', currentTime);
         let route = window.location.pathname + window.location.search;  
-        try
-        {
-            const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log(data);
-            if (data.status === 'error')
-                this.updateCookies(false, null, null);
-            else if (data.status === 'success')
-                this.updateCookies(true, getCookie('token'), getCookie('user42'));
-        }
-        catch (error)
-        {
-            console.log('Fetch request failed');
-            this.updateCookies(false, null, null);
-            return;
-        }
         this.navigate(route);
         this.popStateHandler();
     }
@@ -56,6 +22,27 @@ export class Router {
         const route = this.routes[path];
         if (!route) {
             this.navigate('/404');
+            return;
+        }
+        try
+        {
+            const response = await fetch(`https://${window.location.hostname}:${window.location.port}/users/me/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.status === 'error')
+                this.updateCookies(false, null);
+        }
+        catch (error)
+        {
+            console.log('Fetch request failed');
+            this.updateCookies(false, null);
             return;
         }
         if (regex && route.extraRegex) {
@@ -80,16 +67,12 @@ export class Router {
         this.target.append(customElement);
     }
 
-    async updateCookies(connected, token, user42)
+    async updateCookies(connected, user42)
     {
         if (connected == false)
             deleteCookie('connected');
         else
             setCookie('connected', connected);
-        if (token === null)
-            deleteCookie('token');
-        else
-            setCookie('token', token);
         if (user42 === null)
             deleteCookie('user42');
         else

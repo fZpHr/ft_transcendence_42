@@ -3,7 +3,7 @@ import { Component } from "@js/component";
 export class Auth42 extends Component {
     constructor() {
         super();
-        this.commands = ['help', 'ls', 'pwd', 'whoami', 'exit', 'clear', './login42.sh'];
+        this.commands = ['help', 'ls', 'pwd', 'whoami', 'exit', 'clear', './login42.sh', 'bash login42.sh'];
         const terminal_out = [];
     }
 
@@ -15,7 +15,7 @@ export class Auth42 extends Component {
                         <pre id="terminal-out">Welcome Guest.\nType 'help' to see available commands.\nYou are not connected. Please ./login42.sh to continue, and access to all features.</pre>
                         <div id="input-container">
                             <span id="prompt">></span>
-                            <input type="text" id="terminal-in" autofocus />
+                            <input type="text" id="terminal-in" autofocus maxlength="100"/>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ export class Auth42 extends Component {
                 margin: 5;
                 white-space: pre-wrap;
                 font-size: 1.2em;
-                overflow-y: auto;
+                overflow: hidden;
                 scrollbar-width: none;
             }
 
@@ -96,6 +96,7 @@ export class Auth42 extends Component {
 
         const credits = document.getElementById('credits');
         this.terminal_out = document.getElementById('terminal-out');
+        document.getElementById('terminal-in').focus()
 
         credits.addEventListener('click', () => {
             this.terminal_out.innerText += '\n' + 'Credits page only available for connected users.\n';
@@ -142,6 +143,9 @@ export class Auth42 extends Component {
                 
                 window.location.href = authUrl;
                 break;
+            case 'bash login42.sh':
+                this.terminal_out.innerText += '\n' + 'bash: login42.sh: Permission denied';
+                break
             default:
                 this.terminal_out.innerText += '\n' + 'Command not found: ' + input;
                 break;

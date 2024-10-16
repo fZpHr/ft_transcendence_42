@@ -218,7 +218,6 @@ def register_42(request):
     login(request, user)
 
     response = redirect(successful_redirect_uri.replace('/users/register-42', ''))
-    response.set_cookie('token', token)
     response.set_cookie('user42', r.json()["login"])
     response.set_cookie('connected', 'true')
     

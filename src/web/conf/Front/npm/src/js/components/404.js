@@ -16,7 +16,8 @@ export class NotFound extends Component {
      ██║ ╚██████╔╝      ██║
      ╚═╝  ╚═════╝       ╚═╝
                 </pre>
-                <div id="overlay-text">Page not found</div>
+                <div class="overlay-text">Page not found</div>
+                <div class="overlay-text">Press ESCAPE to return to the Home Page</div>
             </div>
         `;
     }
@@ -44,14 +45,24 @@ export class NotFound extends Component {
                     margin: 0;
                     padding: 0;
                 }
-                #overlay-text {
+                .overlay-text {
                     margin-top: 20px;
                 }
             </style>
         `;
     }
 
+    escape(event) {
+        if (event.key === 'Escape')
+            window.router.navigate('/');
+    }
+
     CustomDOMContentLoaded() {
+        document.addEventListener('keydown', this.escape);
         console.log("404 added to page.");
+    }
+
+    CustomDOMContentUnload(){
+        document.removeEventListener('keydown', this.escape);
     }
 }
