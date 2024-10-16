@@ -593,14 +593,14 @@ export class Multiplayer extends Component {
         }
         
         function gameLoop() {
-            if (upPressed) movePaddle('2', -1);
-            if (downPressed) movePaddle('2', 1);
+            if (upPressed) movePaddle('4', -1);
+            if (downPressed) movePaddle('4', 1);
             if (wPressed) movePaddle('1', -1);
             if (sPressed) movePaddle('1', 1);
             if (iPressed) movePaddle('3', -1);
             if (kPressed) movePaddle('3', 1);
-            if (tPressed) movePaddle('4', -1);
-            if (pPressed) movePaddle('4', 1);
+            if (tPressed) movePaddle('2', -1);
+            if (pPressed) movePaddle('2', 1);
             
             if (!ballScored && (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE)) {
                 showOverlay(`Player ${score_1 === WINNING_SCORE ? "1" : "2"} wins!`, score_1, score_2);
