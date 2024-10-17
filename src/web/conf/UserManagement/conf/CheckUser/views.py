@@ -26,7 +26,7 @@ def get_user_game(user_id):
             FROM public."MatchMakingHandler_game"
             WHERE player1_id = %s OR player2_id = %s
             ORDER BY created_at DESC
-            LIMIT 10
+            LIMIT 5
         """, [user_id, user_id])
         rows = cursor.fetchall()
         columns = [col[0] for col in cursor.description]

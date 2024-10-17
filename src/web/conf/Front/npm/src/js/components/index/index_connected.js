@@ -245,6 +245,9 @@ export class IndexConnected extends Component{
             } else if (event.key === 'Tab') {
                 event.preventDefault();
                 this.autocomplete(terminal_in);
+                const terminal_out = document.getElementById('terminal-out')
+                if (terminal_out)
+                    terminal_out.scrollTop = terminal_out.scrollHeight 
             }
         });
     }
@@ -301,7 +304,7 @@ export class IndexConnected extends Component{
         return `
             +${'-'.repeat(lineLength)}+
             | ${center(`User ${getCookie('user42')}`, lineLength - 2)} |
-            | ${center(`Win ratio of the last 10 games: ${winRatio}%`, lineLength - 2)} |
+            | ${center(`Win ratio of the last 5 games: ${winRatio}%`, lineLength - 2)} |
 ${infos(this.profil_info.games)}            +${'-'.repeat(lineLength)}+
             `;
     }

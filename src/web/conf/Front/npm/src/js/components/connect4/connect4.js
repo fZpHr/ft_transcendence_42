@@ -46,13 +46,13 @@ export class Connect4 extends Component{
             <div id="connect-four"></div>
             <div id="keyboard" class="keycaps">
                 <button id="arrow-left" class="arrows pixel-corners">
-                    <img src="/public/img/arrow-left-button.png" style="width: 100%; height:100%"></img>
+                    <img src="./img/arrow-left-button.png" style="width: 100%; height:100%"></img>
                 </button>
                 <button id="space" class="pixel-corners">
-                    <img src="/public/img/space-bar-icon.png" style="width: 80%; height:75%"></img>
+                    <img src="./img/space-bar-icon.png" style="width: 80%; height:75%"></img>
                 </button>
                 <button id="arrow-right" class="arrows pixel-corners">
-                    <img src="/public/img/arrow-right-button.png" style="width: 100%; height:100%"></img>
+                    <img src="./img/arrow-right-button.png" style="width: 100%; height:100%"></img>
                 </button>
             </div>
         </div>

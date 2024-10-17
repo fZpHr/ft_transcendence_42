@@ -325,12 +325,10 @@ export class PongAI extends Component {
         this.user = getCookie("user42");
 
         this.ws.onopen = () => {
-            console.log("WS OPEN");
         }
          
         this.ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log(data);
             this.ws.send(JSON.stringify({type: "pong", user: this.user, paddleSpeed: PADDLE_SPEED}));
             if (data.type === "moveAi") {
                 const time_to_move = data.duration;
@@ -340,14 +338,12 @@ export class PongAI extends Component {
                     setTimeout(() => {
                         upPressed = false;
                     }, time_to_move);
-                    console.log("up AI");
                 } else if (data.keyPressed === "ArrowDown") {
                     downPressed = true;
                     upPressed = false;
                     setTimeout(() => {
                         downPressed = false;
                     }, time_to_move);
-                    console.log("down AI");
                 }
                 else if (data.keyPressed === "none") {
                     upPressed = false;
@@ -357,7 +353,6 @@ export class PongAI extends Component {
         }
 
         this.ws.onclose = () => {
-            console.log("WS CLOSE");
         }
         
 
@@ -569,7 +564,6 @@ export class PongAI extends Component {
             if (ballRect.left <= basePongRect.left + 5 && !ballScored) {
                 score_2 += 1;
                 ballScored = true;
-                console.log("goal", ballRect.top)
                 var score = document.getElementById("player_2_score");
                 if (score !== null) score.textContent = score_2;
 
@@ -584,7 +578,6 @@ export class PongAI extends Component {
             if (ballRect.right >= basePongRect.right - 5 && !ballScored) {
                 score_1 += 1;
                 ballScored = true;
-                console.log("goal", ballRect.top)
                 var score = document.getElementById("player_1_score");
                 if (score !== null) score.textContent = score_1;
 
@@ -709,8 +702,6 @@ export class PongAI extends Component {
         }
         // AI PART 
         function sendInfoToAI() {
-            console.log("paddle2 top", parseFloat(window.getComputedStyle(paddle_1).top) + 50)
-            console.log("ball top", parseFloat(window.getComputedStyle(ball).top))
             this.ws.send(JSON.stringify({
                 type: "pongInfos",
                 user: this.user,

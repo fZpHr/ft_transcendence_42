@@ -437,7 +437,6 @@ export class Multiplayer extends Component {
         let intervalGameStart = null;
         
         function handleKey(event, isKeyDown) {
-            console.log(`Key: ${event.code}, isKeyDown: ${isKeyDown}`); // Log the key event
             const keyMap = {
                 "ArrowUp": () => upPressed = isKeyDown,
                 "ArrowDown": () => downPressed = isKeyDown,

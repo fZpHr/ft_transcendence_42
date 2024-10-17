@@ -146,6 +146,9 @@ export class Auth42 extends Component {
             case 'bash login42.sh':
                 this.terminal_out.innerText += '\n' + 'bash: login42.sh: Permission denied';
                 break
+            case 'cat ./login.sh':
+                this.terminal_out.innerText += '\n' + '#!/bin/bash\nif [ -x "/usr/bin/login_42" ]; then \n    /usr/bin/login_42 ${USER}\nelse\n    echo "Le binaire login_42 n\'a pas été trouvé dans /usr/bin.\"\n    exit 1\nfi';
+                break;
             default:
                 this.terminal_out.innerText += '\n' + 'Command not found: ' + input;
                 break;
