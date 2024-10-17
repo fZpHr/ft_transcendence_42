@@ -866,10 +866,10 @@ export class Connect4 extends Component{
             document.getElementById("winnerText").innerText = data.winner + " wins!";
         document.getElementById("player1-turn").innerHTML = ""
         document.getElementById("player2-turn").innerHTML = ""
-        console.log("remove event keydown")
+        //console.log("remove event keydown")
         
         document.removeEventListener("keydown", this.eventKeyDown);
-        console.log("add event endGame")
+        //console.log("add event endGame")
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -980,12 +980,12 @@ export class Connect4 extends Component{
                 tile.classList.add("active-column");
             }
             
-            console.log("add event keydown")
+            //console.log("add event keydown")
             document.addEventListener("keydown", this.eventKeyDown);
         }
         else
         {
-            console.log("remove event keydown")
+            //console.log("remove event keydown")
             
             document.removeEventListener("keydown", this.eventKeyDown);
         }
@@ -1060,7 +1060,7 @@ export class Connect4 extends Component{
                 let tile = document.getElementById(row + " " + this.column);
                 tile.classList.add(this.player);
                 this.ws.send(JSON.stringify({ type: "move", player_id: this.player, column: this.column }));
-                console.log("remove event keydown")
+                //console.log("remove event keydown")
                 
                 document.removeEventListener("keydown", this.eventKeyDown);
                 for (var roww = 0; roww < 6; roww++) {
@@ -1089,9 +1089,9 @@ export class Connect4 extends Component{
     game_full(data) {
         document.getElementById("overlay").style.display = "flex";
         document.getElementById("winnerText").innerText = data.message;
-        console.log("remove event keydown")
+        //console.log("remove event keydown")
         document.removeEventListener("keydown", this.eventKeyDown);
-        console.log("add event endGame")
+        //console.log("add event endGame")
         document.addEventListener("keydown", this.handleEndGame);
     }
 
@@ -1106,9 +1106,9 @@ export class Connect4 extends Component{
     }
 
     CustomDOMContentUnload(){
-        console.log("removing event keyDown")
+        //console.log("removing event keyDown")
         document.removeEventListener("keydown", this.eventKeyDown);
-        console.log("removing event endGame")
+        //console.log("removing event endGame")
         document.removeEventListener("keydown", this.handleEndGame);
         if (this.ws.readyState === WebSocket.OPEN)
             this.ws.close();

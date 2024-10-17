@@ -14,7 +14,7 @@ export class Router {
 
     async navigate(path, windowHistory = true) {  
         let regex = null;
-        console.log(path);
+        //console.log(path);
         if (path.includes('?')) {
             regex = path.split('?')[1];
             path = path.split('?')[0];
@@ -41,15 +41,15 @@ export class Router {
         }
         catch (error)
         {
-            console.log('Fetch request failed');
+            //console.log('Fetch request failed');
             this.updateCookies(false, null);
             return;
         }
         if (regex && route.extraRegex) {
-            console.log(regex, route.extraRegex);
+            //console.log(regex, route.extraRegex);
             const regexPattern = new RegExp(route.extraRegex);
             if (!regexPattern.test(regex)) {
-                console.log('Regex does not match');
+                //console.log('Regex does not match');
                 this.navigate('/404');
                 return;
             }
@@ -59,7 +59,7 @@ export class Router {
             this.navigate('/');
             return;
         }
-        console.log("Navigate to", path, window.location.origin + path + (regex ? '?' + regex : ''));
+        //console.log("Navigate to", path, window.location.origin + path + (regex ? '?' + regex : ''));
         if (windowHistory)
             window.history.pushState({}, path, window.location.origin + path + (regex ? '?' + regex : ''));
         this.target.innerHTML = ''

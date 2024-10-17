@@ -103,12 +103,12 @@ export class IndexConnected extends Component{
             window.router.navigate('/credits');
         });
         this.profil_info = this.get_user_info();  
-        console.log('test')  
+        //console.log('test')  
     }
 
     get_user_info()
     {
-        console.log("get user")
+        //console.log("get user")
         const getUserURL = "https://" + window.location.host + "/users/get-info/";
         const csrftoken = getCookie('csrftoken'); 
         fetch(getUserURL, {
@@ -126,7 +126,7 @@ export class IndexConnected extends Component{
             }
         }).then((data) => {
             this.profil_info = data;
-            console.log(this.profil_info)
+            //console.log(this.profil_info)
         }).catch((error) => {
             console.error('Error:', error);
         });
@@ -189,7 +189,7 @@ export class IndexConnected extends Component{
                             'Access-Control-Allow-Origin': '*',
                         },
                     }).then((response) => {
-                        console.log(response)
+                        //console.log(response)
                         if (response.ok) {
                             window.router.navigate('/');
                         }

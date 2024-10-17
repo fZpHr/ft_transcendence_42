@@ -59,7 +59,7 @@ export class NotFound extends Component {
 
     CustomDOMContentLoaded() {
         document.addEventListener('keydown', this.escape);
-        console.log("404 added to page.");
+        //console.log("404 added to page.");
     }
 
     CustomDOMContentUnload(){

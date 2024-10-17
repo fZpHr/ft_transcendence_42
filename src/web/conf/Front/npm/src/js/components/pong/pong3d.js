@@ -584,7 +584,7 @@ export class P3d extends Component {
     }
     
     CustomDOMContentUnload() {
-        console.log("P3D unloaded");
+        //console.log("P3D unloaded");
         document.removeEventListener('keydown', this.escape);
         window.removeEventListener('keydown', (event) => this.handleKeyDown(event));
         window.removeEventListener('keyup', (event) => this.handleKeyUp(event));

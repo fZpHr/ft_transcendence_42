@@ -512,8 +512,8 @@ export class PongMain extends Component{
                         buttons[nextIndex].classList.remove("pixel-corners");
                         break;
                     } else if (direction === "down" && index < buttons.length - 1) {
-                        console.log("index down", index);
-                        console.log("-----------------");
+                        //console.log("index down", index);
+                        //console.log("-----------------");
                         element.classList.remove("pixel-corners-active");
                         element.classList.add("pixel-corners");
                         const prevIndex = (index + 1) % buttons.length;

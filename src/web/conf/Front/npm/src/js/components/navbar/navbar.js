@@ -77,7 +77,7 @@ export class NavBar extends Component{
                     'Access-Control-Allow-Origin': '*',
                 },
             }).then((response) => {
-                console.log(response)
+                //console.log(response)
                 if (response.ok) {
                     window.location.reload();
                 }

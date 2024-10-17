@@ -26,12 +26,12 @@ export class Component extends HTMLElement {
     //Called when the element is moved to a new page
     adoptedCallback() {
         this.innerHTML = this.render() + this.style();
-        console.log("Custom element moved to new page.");
+        //console.log("Custom element moved to new page.");
     }
 
     //Called when an attribute is changed, appended, removed, or replaced on the element
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
+        //console.log(`Attribute ${name} has changed.`);
     }
 
     //For child classes, extra script after rendering the element (like adding event listeners)

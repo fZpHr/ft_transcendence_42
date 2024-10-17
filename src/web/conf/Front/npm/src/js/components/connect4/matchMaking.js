@@ -68,11 +68,11 @@ export class MatchMaking extends Component{
         try {
             this.ws = new WebSocket(`wss://${window.location.hostname}:${window.location.port}/wss-game/matchmaking`);
         } catch (error) {
-            console.log("Error: ", error);
+            //console.log("Error: ", error);
         }
 
         this.ws.onopen = () => {
-            console.log("Connected to the server");
+            //console.log("Connected to the server");
             this.ws.send(JSON.stringify({
                 "player_id": user42
             }));
@@ -81,7 +81,7 @@ export class MatchMaking extends Component{
 
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log(message);
+            //console.log(message);
             switch (message.type) {
                 case "match_found":
                     clearInterval(this.interval);
@@ -103,11 +103,11 @@ export class MatchMaking extends Component{
         };
 
         this.ws.onclose = () => {
-            console.log("Disconnected from the server");
+            //console.log("Disconnected from the server");
         };
 
         this.ws.onerror = (error) => {
-            console.log("Error: ", error);
+            //console.log("Error: ", error);
         }
     }
 
