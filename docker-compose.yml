@@ -101,7 +101,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data/logs/web/:/usr/share/logstash/logs/web
+      - ./data/logs/modsecurity/modsec_audit.log:/usr/share/logstash/logs/modsecurity/modsec_audit.log
       - ./data/logs/nginx/:/usr/share/logstash/logs/nginx
       - ./src/devops/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     # restart: on-failure
