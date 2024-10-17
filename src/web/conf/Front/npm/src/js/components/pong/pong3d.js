@@ -224,6 +224,7 @@ export class P3d extends Component {
         document.addEventListener('keydown', this.escape);
         
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x808080);
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -307,9 +308,10 @@ export class P3d extends Component {
 
         // Créer les paddles
         const paddleGeometry = new THREE.BoxGeometry(0.15, 0.85, 0.1);
-        const paddleMaterial = new THREE.MeshStandardMaterial({ color: 0x6200ea });
-        this.paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
-        this.paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
+        const paddleMaterial1 = new THREE.MeshStandardMaterial({ color: 0x6200ea });
+        const paddleMaterial2 = new THREE.MeshStandardMaterial({ color: 0xea6200 });
+        this.paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial1);
+        this.paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial2);
         this.paddle1.position.x = -4.75;
         this.paddle2.position.x = 4.75;
         this.scene.add(this.paddle1);
@@ -343,7 +345,7 @@ export class P3d extends Component {
         pointLight.position.set(10, 10, 10);
         this.scene.add(pointLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
         directionalLight.position.set(-10, 10, -10);
         this.scene.add(directionalLight);
     }
