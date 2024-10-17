@@ -1,7 +1,7 @@
 import { Component } from "@js/component";
 import { getCookie } from "@js/utils/cookie";
 
-let BALL_SPEED_X = 5;
+let BALL_SPEED_X = 7.5;
 let BALL_SPEED_Y = 1;
 let PADDLE_SPEED = 5;
 
@@ -31,14 +31,12 @@ export class PongAI extends Component {
                     <div class="controls">
                         <div class="text-before">Are you ready?</div>
                         <div class="player-controls">
-                            <div class="player-name">Player 1</div>
+                            <div class="player-name">You</div>
                             <div class="key">W</div>
                             <div class="key">S</div>
                         </div>
                         <div class="player-controls">
-                            <div class="player-name">Player 2</div>
-                            <div class="key">ArrowUp</div>
-                            <div class="key">ArrowDown</div>
+                            <div class="player-name">AI</div>
                         </div>
                     </div>
                     <div>
@@ -358,53 +356,31 @@ export class PongAI extends Component {
 
         document.addEventListener('keydown', this.escape);
 
-        let ballSpeedX = BALL_SPEED_X; 
-        let ballSpeedY = BALL_SPEED_Y;
-        const check = document.getElementById('settings-option1')
+        const check = document.getElementById('settings-option1');
+        const basePong = document.getElementById("basePong");
+        BALL_SPEED_X = check.classList.contains('on') ? 10 : 7.5;
+        let ballSpeedX = BALL_SPEED_X;
+        let ballSpeedY = 0;
+
         if (check.classList.contains('on')) {
-            BALL_SPEED_X = 10;
-            BALL_SPEED_Y = 1;
-            ballSpeedX = BALL_SPEED_X;
-            ballSpeedY = BALL_SPEED_Y;
             PADDLE_SPEED = 10;
         }
-        else {
-            BALL_SPEED_X = 5;
-            BALL_SPEED_Y = 1;
-            ballSpeedX = BALL_SPEED_X;
-            ballSpeedY = BALL_SPEED_Y;
-        }
-        
+
         document.getElementById('toggle-settings').addEventListener('click', function() {
-            var optionsContainer = document.getElementById('options-container');
-            optionsContainer.classList.toggle('hidden');
+            document.getElementById('options-container').classList.toggle('hidden');
         });
-        
+
         document.getElementById('settings-option1').addEventListener('click', function() {
-            var button = this;
-            if (button.classList.contains('off')) {
-                button.classList.remove('off');
-                button.classList.add('on');
-                button.textContent = 'X2 (On)';
-                BALL_SPEED_X = 10;
-                BALL_SPEED_Y = 1;
-                ballSpeedX = BALL_SPEED_X;
-                ballSpeedY = BALL_SPEED_Y;
-                PADDLE_SPEED = 10;
-
-
-            } else {
-                button.classList.remove('on');
-                button.classList.add('off');
-                button.textContent = 'X2 (Off)';
-                BALL_SPEED_X = 5;
-                BALL_SPEED_Y = 1;
-                ballSpeedX = BALL_SPEED_X;
-                ballSpeedY = BALL_SPEED_Y;
-                PADDLE_SPEED = 5;
-            }
+            const button = this;
+            const isOff = button.classList.contains('off');
+            button.classList.toggle('off', !isOff);
+            button.classList.toggle('on', isOff);
+            button.textContent = `X2 (${isOff ? 'On' : 'Off'})`;
+            
+            BALL_SPEED_X = isOff ? 10 : 5;
+            ballSpeedX = BALL_SPEED_X;
+            PADDLE_SPEED = isOff ? 10 : 5;
         });
-        
     
         function debounce(func, wait) {
             let timeout;
@@ -421,7 +397,7 @@ export class PongAI extends Component {
         }, 1));
 
         const WINNING_SCORE = 5;
-        const OVERLAY_DISPLAY_TIME = 3000;
+        const OVERLAY_DISPLAY_TIME = 1500;
    
         
         const ball = document.getElementById("ball");
@@ -436,25 +412,10 @@ export class PongAI extends Component {
         
         let score_1 = 0;
         let score_2 = 0;
-        ballSpeedY  = 0;
+
     
         let upPressed = false, downPressed = false, wPressed = false, sPressed = false;
         let intervalGameStart = null;
-        
-        function movePaddle(which, direction) {
-            const paddle = document.getElementById(`player_${which}_paddle`);
-            if (paddle) {
-                let currentTop = parseFloat(window.getComputedStyle(paddle).top);
-                const parent = paddle.parentElement;
-                const maxBottom = parent.clientHeight - paddle.clientHeight;
-                let newTop = currentTop + direction * PADDLE_SPEED;
-                if (newTop < 0)
-                    newTop = 0;
-                else if (newTop > maxBottom)
-                    newTop = maxBottom;
-                paddle.style.top = newTop + "px";
-            }
-        }
         
         function handleKey(event, isKeyDown) {
             const keyMap = {
@@ -492,8 +453,8 @@ export class PongAI extends Component {
             ballPositionY = initialBallPos.top;
             ball.style.left = ballPositionX + "px";
             ball.style.top = ballPositionY + "px";
-            ballSpeedX = BALL_SPEED_X;
-            ballSpeedY = BALL_SPEED_Y;
+            ballSpeedX = 0;
+            ballSpeedY = 0;
             score_1 = 0;
             score_2 = 0;
             wPressed = false;
@@ -503,8 +464,9 @@ export class PongAI extends Component {
             document.removeEventListener("keyup", handleKeyUp, true);
             document.removeEventListener("keydown", handleKeyDown, true);
             document.removeEventListener("click", handleClick);
-            cancelAnimationFrame(gameLoop);
+            resetBall();
             cancelAnimationFrame(moveBall);
+            cancelAnimationFrame(gameLoop);
         }
     
         this.gameReset = resetGame;
@@ -515,7 +477,7 @@ export class PongAI extends Component {
             ball.style.left = ballPositionX + "px";
             ball.style.top = ballPositionY + "px";
             ballSpeedX = ballSpeedX > 0 ? -BALL_SPEED_X : BALL_SPEED_X;
-            ballSpeedY = BALL_SPEED_Y;
+            ballSpeedY = 0;
         }
         
         function showOverlay(message, score1, score2) {
@@ -525,115 +487,75 @@ export class PongAI extends Component {
             overlay.style.display = "block";
         }
         
-        function hideOverlay() {
-            document.getElementById("overlay").style.display = "none";
-        }
+        function updateScore(score, scoreElementId, message, updatedScore1, updatedScore2) {
+            score += 1;
+            ballScored = true;
+            const scoreElement = document.getElementById(scoreElementId);
+            if (scoreElement) scoreElement.textContent = score;
         
+            showOverlay(message, updatedScore1, updatedScore2);
+            setTimeout(() => {
+                document.getElementById("overlay").style.display = "none";
+                resetBall();
+                ballScored = false;
+            }, OVERLAY_DISPLAY_TIME);
+            return score;
+        }
+
+        function movePaddle(which, direction) {
+            const paddle = document.getElementById(`player_${which}_paddle`);
+            if (paddle) {
+                let currentTop = parseFloat(window.getComputedStyle(paddle).top);
+                const parent = paddle.parentElement;
+                const maxBottom = parent.clientHeight - paddle.clientHeight;
+                let newTop = currentTop + direction * PADDLE_SPEED;
+                if (newTop < 0)
+                    newTop = 0;
+                else if (newTop > maxBottom)
+                    newTop = maxBottom;
+                paddle.style.top = newTop + "px";
+            }
+        }
+
         function checkCollision() {
+            if (!this.isGameRunning) return;
             const ballRect = ball.getBoundingClientRect();
             const paddle1Rect = paddle_1.getBoundingClientRect();
             const paddle2Rect = paddle_2.getBoundingClientRect();
-            
             const paddles = [
-                { rect: paddle1Rect, speedMultiplier: -1, positionX: paddle1Rect.right },
-                { rect: paddle2Rect, speedMultiplier: -1, positionX: paddle2Rect.left - ballRect.width }
+                { rect: paddle1Rect, element: paddle_1 },
+                { rect: paddle2Rect, element: paddle_2 }
             ];
-            for (const paddle of paddles) {
-                if (ballRect.left < paddle.rect.right && ballRect.right > paddle.rect.left &&
-                    ballRect.top < paddle.rect.bottom && ballRect.bottom > paddle.rect.top) {
-                    
-                    ballSpeedX *= paddle.speedMultiplier;
-            
-                    let relativeIntersectY = (ballRect.top + (ballRect.height / 2)) - (paddle.rect.top + (paddle.rect.height / 2));
-                    let normalizedRelativeIntersectionY = (relativeIntersectY / (paddle.rect.height / 2)) * 5; // ou 2
-
+            for (const { rect, element } of paddles) {
+                if (ballRect.left < rect.right && ballRect.right > rect.left &&
+                    ballRect.top < rect.bottom && ballRect.bottom > rect.top) {                  
+                    ballSpeedX *= -1;
+                    const relativeIntersectY = (ballRect.top + ballRect.height / 2) - (rect.top + rect.height / 2);
+                    const normalizedRelativeIntersectionY = (relativeIntersectY / (rect.height / 2)) * 5;
                     ballSpeedY = normalizedRelativeIntersectionY;
-            
-                    const paddleElement = paddle.rect === paddle1Rect ? paddle_1 : paddle_2;
-                    paddleElement.style.transform = "scale(1.1)";
-                    
+                    element.style.transform = "scale(1.1)";      
                     setTimeout(() => {
-                        paddleElement.style.transform = "scale(1)";
+                        element.style.transform = "scale(1)";
                     }, 100);
                 }
             }
-            
-            const basePong = document.getElementById("basePong");
             const basePongRect = basePong.getBoundingClientRect();
-
-            if (ballRect.left <= basePongRect.left + 5 && !ballScored) {
-                score_2 += 1;
-                ballScored = true;
-                var score = document.getElementById("player_2_score");
-                if (score !== null) score.textContent = score_2;
-
-                showOverlay("Player 2 scores!", score_1, score_2);
-                setTimeout(function () {
-                    hideOverlay();
-                    resetBall();
-                    ballScored = false;
-                }, OVERLAY_DISPLAY_TIME);
-            }
-
-            if (ballRect.right >= basePongRect.right - 5 && !ballScored) {
-                score_1 += 1;
-                ballScored = true;
-                var score = document.getElementById("player_1_score");
-                if (score !== null) score.textContent = score_1;
-
-                showOverlay("Player 1 scores!", score_1, score_2);
-                setTimeout(function () {
-                    hideOverlay();
-                    resetBall();
-                    ballScored = false;
-                }, OVERLAY_DISPLAY_TIME);
-            }
-
-
+            if (ballRect.left <= basePongRect.left + 5 && !ballScored) score_2 = updateScore(score_2, "player_2_score", "AI scores!", score_1, score_2 + 1);
+            if (ballRect.right >= basePongRect.right - 5 && !ballScored) score_1 = updateScore(score_1, "player_1_score", "Player 1 scores!", score_1 + 1, score_2);
         }
-    
-        function counter(text) {
-            var message = document.getElementById("message");
-            if (text == 0) text = "GO!";
-            if (text == -1) text = "";
-            if (message !== null) message.textContent = text;
-        }
-        
-        function startGame() {
-            return new Promise((resolve) => {
-                let i = 0;
-                intervalGameStart = setInterval(() => {
-                    counter(3 - i);
-                    if (i === 4) {
-                        clearInterval(intervalGameStart);
-                        resolve();
-                    }
-                    i++;
-                }, 1000);
-            });
-        }
-        
+
+        checkCollision = checkCollision.bind(this);
+
         function moveBall() {
             ballPositionX += ballSpeedX;
             ballPositionY += ballSpeedY;
     
             ball.style.left = ballPositionX + "px";
             ball.style.top = ballPositionY + "px";
-            const basePong = document.getElementById("basePong");
             if (basePong === null) return;
-    
             checkCollision();
-            // if (ballPositionX >= basePong.clientWidth - ball.offsetWidth - 1 || ballPositionX <= 0) {
-            //     ballSpeedX *= -1;
-            // 
-    
-            if (ballPositionY >= basePong.clientHeight - ball.offsetHeight - 1 || ballPositionY <= 0) {
-                ballSpeedY *= -1;
-            }
-            if (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE) {
-                return;
-            }
-    
+            if (ballPositionY >= basePong.clientHeight - ball.offsetHeight - 1 || ballPositionY <= 0) ballSpeedY *= -1;
+            if (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE) return;
             requestAnimationFrame(moveBall);
         }
         
@@ -645,6 +567,7 @@ export class PongAI extends Component {
             
             if (!ballScored && (score_1 === WINNING_SCORE || score_2 === WINNING_SCORE)) {
                 showOverlay(`Player ${score_1 === WINNING_SCORE ? "1" : "2"} wins!`, score_1, score_2);
+                this.isGameRunning = false;
                 setTimeout(() => {
                     resetGame();
                     window.router.navigate("/pong");
@@ -653,53 +576,41 @@ export class PongAI extends Component {
             }
             requestAnimationFrame(gameLoop);
         }
+
+        gameLoop = gameLoop.bind(this);
+
+        function counter(text) {
+            const message = document.getElementById("message");
+            if (message) message.textContent = text === 0 ? "GO!" : text === -1 ? "" : text;
+        }
+
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
+
+        function startGame() {
+            return new Promise((resolve) => {
+                let i = 0;
+                intervalGameStart = setInterval(() => {
+                    counter(3 - i);
+                    if (++i > 4) {
+                        clearInterval(intervalGameStart);
+                        resolve();
+                    }
+                }, 1000);
+            });
+        }
+
         async function initGame() {
             await startGame();
             gameLoop();
+            this.isGameRunning = true;
             await sleep(300);
             moveBall();
             this.IntervalAI = setInterval(sendInfoToAI, 1000);
-        } 
+        };
 
         initGame = initGame.bind(this);
-        document.addEventListener('keydown', handleEndGame);
-        
-        function handleEndGame(event) {
-            const buttons = document.querySelectorAll(".start-button");
-            const updateActiveButton = (direction) => {
-                for (let index = 0; index < buttons.length; index++) {
-                    const element = buttons[index];
-                    if (element.classList.contains("active")) {
-                        if (direction === "up" && index > 0) {
-                            element.classList.remove("active");
-                            const nextIndex = (index - 1) % buttons.length;
-                            buttons[nextIndex].classList.add("active");
-                            break;
-                        } else if (direction === "down" && index < buttons.length - 1) {
-                            element.classList.remove("active");
-                            const prevIndex = (index + 1) % buttons.length;
-                            buttons[prevIndex].classList.add("active");
-                            break;
-                        }
-                    }
-                }
-            };
-        
-            if (event.key === "Enter") {
-                buttons.forEach(element => {
-                    if (element.classList.contains("active")) {
-                        element.click();
-                    }
-                });
-            } else if (event.key === "ArrowUp") {
-                updateActiveButton("up");
-            } else if (event.key === "ArrowDown") {
-                updateActiveButton("down");
-            }
-        }
         // AI PART 
         function sendInfoToAI() {
             this.ws.send(JSON.stringify({
@@ -733,5 +644,6 @@ export class PongAI extends Component {
         if (this.ws && this.ws.readyState === WebSocket.OPEN)
             this.ws.close();
         document.removeEventListener('keydown', this.escape);
+        this.isGameRunning = false;
     }
 }
