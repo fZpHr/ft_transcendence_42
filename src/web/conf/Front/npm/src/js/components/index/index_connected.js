@@ -128,7 +128,7 @@ export class IndexConnected extends Component{
             this.profil_info = data;
             //console.log(this.profil_info)
         }).catch((error) => {
-            console.error('Error:', error);
+            console.log("Stop spamming f5 :)");
         });
         return null;
     }
@@ -254,6 +254,13 @@ export class IndexConnected extends Component{
 
 
     formatProfile() {
+        if (!this.profil_info)
+        {
+            return `
+            +${'-'.repeat(lineLength)}+
+            | ${center(`User ${getCookie('user42')}`, lineLength - 2)} |
+            +${'-'.repeat(lineLength)}+`
+        }
         const lineLength = 40;
         const pad = (str, length) => {
             const padding = ' '.repeat(length - str.length);
