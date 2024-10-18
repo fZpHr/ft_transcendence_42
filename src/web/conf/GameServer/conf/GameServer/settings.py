@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-497mrf)oq!e4n0di**%3gr1m528mbm@knxk_g4%*n4_d5#dxnw'
-
+# SECRET_KEY = 'django-insecure-497mrf)oq!e4n0di**%3gr1m528mbm@knxk_g4%*n4_d5#dxnw'
+SECRET_KEY = os.getenv('SECRET_KEY_GAME')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -82,11 +83,11 @@ ASGI_APPLICATION = 'GameServer.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'zeph',
-        'PASSWORD': 'zeph1234',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': 'postgres',
-        'PORT': '5432',
+        'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
 

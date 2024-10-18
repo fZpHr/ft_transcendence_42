@@ -60,7 +60,7 @@ export class Router {
             return;
         }
         //console.log("Navigate to", path, window.location.origin + path + (regex ? '?' + regex : ''));
-        if (windowHistory)
+        if (windowHistory && window.location.pathname + window.location.search !== path)
             window.history.pushState({}, path, window.location.origin + path + (regex ? '?' + regex : ''));
         this.target.innerHTML = ''
         const customElement = document.createElement(route.component);
