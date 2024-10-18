@@ -10,6 +10,7 @@ export class PongAI extends Component {
         super();
         this.gameReset = null;
         this.ws = null;
+        this.clearTimeout = null;
     }
 
     render() {
@@ -494,13 +495,15 @@ export class PongAI extends Component {
             if (scoreElement) scoreElement.textContent = score;
         
             showOverlay(message, updatedScore1, updatedScore2);
-            setTimeout(() => {
+            this.clearTimeout = setTimeout(() => {
                 document.getElementById("overlay").style.display = "none";
                 resetBall();
                 ballScored = false;
             }, OVERLAY_DISPLAY_TIME);
             return score;
         }
+
+        updateScore = updateScore.bind(this);
 
         function movePaddle(which, direction) {
             const paddle = document.getElementById(`player_${which}_paddle`);
@@ -645,5 +648,6 @@ export class PongAI extends Component {
             this.ws.close();
         document.removeEventListener('keydown', this.escape);
         this.isGameRunning = false;
+        clearTimeout(this.clearTimeout);
     }
 }

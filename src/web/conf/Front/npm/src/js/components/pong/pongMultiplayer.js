@@ -7,6 +7,7 @@ let PADDLE_SPEED = 5;
 export class Multiplayer extends Component {
     constructor() {
         super();
+        this.clearTimeout = null;
         this.gameReset = null;
 
     }
@@ -522,7 +523,7 @@ export class Multiplayer extends Component {
             if (scoreElement) scoreElement.textContent = score;
         
             showOverlay(message, updatedScore1, updatedScore2);
-            setTimeout(() => {
+            this.clearTimeout = setTimeout(() => {
                 document.getElementById("overlay").style.display = "none";
                 resetBall();
                 ballScored = false;
@@ -530,6 +531,8 @@ export class Multiplayer extends Component {
             return score;
         }
 
+        updateScore = updateScore.bind(this);
+        
         function movePaddle(which, direction) {
             const paddle = document.getElementById(`player_${which}_paddle`);
             if (paddle) {
@@ -652,5 +655,6 @@ export class Multiplayer extends Component {
         this.gameReset();
         this.isGameRunning = false;
         document.removeEventListener('keydown', this.escape);
+        clearTimeout(this.clearTimeout);
     }
 }

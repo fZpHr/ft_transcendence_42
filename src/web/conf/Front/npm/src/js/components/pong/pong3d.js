@@ -18,6 +18,7 @@ export class P3d extends Component {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+        this.clearTimeout = null;
     }
 
     render() {
@@ -539,7 +540,7 @@ export class P3d extends Component {
         document.getElementById('finish2').style.display = 'block';
         this.resetGame();
         this.CustomDOMContentUnload()
-        setTimeout(() => {
+        this.clearTimeout = setTimeout(() => {
             window.router.navigate('/pong');
         }, 3000);
     }
@@ -589,5 +590,6 @@ export class P3d extends Component {
         window.removeEventListener('keydown', (event) => this.handleKeyDown(event));
         window.removeEventListener('keyup', (event) => this.handleKeyUp(event));
         this.cleanup();
+        clearTimeout(this.clearTimeout);
     }
 }

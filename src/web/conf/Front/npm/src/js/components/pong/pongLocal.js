@@ -8,6 +8,7 @@ export class PongLocal extends Component {
         super();
         this.gameReset = null;
         this.isGameRunning = false;
+        this.clearTimeout = null;
     }
 
     render() {
@@ -485,13 +486,15 @@ export class PongLocal extends Component {
             if (scoreElement) scoreElement.textContent = score;
         
             showOverlay(message, updatedScore1, updatedScore2);
-            setTimeout(() => {
+            this.clearTimeout = setTimeout(() => {
                 document.getElementById("overlay").style.display = "none";
                 resetBall();
                 ballScored = false;
             }, OVERLAY_DISPLAY_TIME);
             return score;
         }
+
+        updateScore = updateScore.bind(this);
 
         function movePaddle(which, direction) {
             const paddle = document.getElementById(`player_${which}_paddle`);
@@ -607,5 +610,6 @@ export class PongLocal extends Component {
         this.gameReset();
         this.isGameRunning = false;
         document.removeEventListener('keydown', this.escape);
+        clearTimeout(this.clearTimeout);
     }
 }
