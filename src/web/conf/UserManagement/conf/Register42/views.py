@@ -190,8 +190,7 @@ def register_42(request):
     logger.info(f'request: {request}')
     code = request.GET.get("code")
     if code is None:
-        redirect_uri = request.build_absolute_uri()
-        return HttpResponseRedirect(f"https://api.intra.42.fr/oauth/authorize?client_id={os.getenv('client_id')}&redirect_uri={redirect_uri}&response_type=code")
+        return JsonResponse({"error": "accept data or you can't access to the website"}, status=400)
 
     response, successful_redirect_uri = try_all_redirect_uris(code)
     if response is None:
