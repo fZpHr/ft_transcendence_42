@@ -89,4 +89,4 @@ To monitor the application:
 - Grafana Dashboard: `http://localhost:3000`
 - Kibana (Logs): `http://localhost:5601`
 - Portainer: `https://localhsot:9443`
-
+ 
